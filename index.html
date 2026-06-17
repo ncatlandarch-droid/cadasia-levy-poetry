@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cadasia Levy — Words That Heal. Art That Speaks.</title>
+  <meta name="description" content="Poetry and art by Cadasia Levy. Explore her collection of raw, powerful poems about love, loss, faith, and self-discovery. Shop merch and support her creative journey.">
+  <meta name="author" content="Cadasia Levy">
+
+  <!-- Open Graph / Social Sharing -->
+  <meta property="og:title" content="Cadasia Levy — Words That Heal. Art That Speaks.">
+  <meta property="og:description" content="Raw, powerful poetry about love, loss, faith, and self-discovery. Explore the collection.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/cadasia.jpg">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Preconnect to Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+</head>
+<body>
+
+  <!-- ============================================
+       NAVIGATION
+       ============================================ -->
+  <nav class="nav" id="main-nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">Cadasia Levy</a>
+
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#hero" class="nav-link" data-i18n="nav.home">Home</a></li>
+        <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
+        <li><a href="#poetry" class="nav-link" data-i18n="nav.poetry">Poetry</a></li>
+        <li><a href="#merch" class="nav-link" data-i18n="nav.merch">Merch</a></li>
+        <li><a href="#support" class="nav-link" data-i18n="nav.support">Support</a></li>
+        <li>
+          <!-- Language Switcher -->
+          <div class="lang-switcher">
+            <button class="lang-btn" id="lang-btn">
+              <span class="globe-icon">🌍</span>
+              <span class="lang-btn-label">English</span>
+              <span>▾</span>
+            </button>
+            <div class="lang-dropdown" id="lang-dropdown">
+              <button class="lang-option active" data-lang="en">
+                <span class="flag">🇺🇸</span> English
+              </button>
+              <button class="lang-option" data-lang="es">
+                <span class="flag">🇪🇸</span> Español
+              </button>
+              <button class="lang-option" data-lang="zh">
+                <span class="flag">🇨🇳</span> 中文
+              </button>
+              <button class="lang-option" data-lang="sw">
+                <span class="flag">🇰🇪</span> Kiswahili
+              </button>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ============================================
+       HERO SECTION
+       ============================================ -->
+  <section class="hero" id="hero">
+    <canvas class="hero-canvas" id="hero-canvas"></canvas>
+    <div class="hero-gradient"></div>
+
+    <div class="hero-content">
+      <div class="hero-photo-wrapper">
+        <div class="hero-photo-ring"></div>
+        <img
+          src="assets/cadasia.jpg"
+          alt="Cadasia Levy"
+          class="hero-photo"
+        >
+      </div>
+
+      <h1 class="hero-name">Cadasia <span>Levy</span></h1>
+      <p class="hero-tagline" data-i18n="hero.tagline">Words That Heal. Art That Speaks.</p>
+      <p class="hero-quote" id="hero-quote"></p>
+      <a href="#poetry" class="hero-cta" data-i18n="hero.cta">Read Her Poetry</a>
+    </div>
+
+    <div class="hero-scroll">
+      <span>Scroll</span>
+      <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       ABOUT SECTION
+       ============================================ -->
+  <section class="section about" id="about">
+    <div class="container">
+      <div class="about-grid">
+        <div class="about-image-wrapper reveal">
+          <img
+            src="assets/cadasia.jpg"
+            alt="Cadasia Levy portrait"
+            class="about-image"
+            loading="lazy"
+          >
+          <div class="about-image-accent"></div>
+        </div>
+
+        <div class="about-text reveal reveal-delay-1">
+          <span class="about-label" data-i18n="about.label">About the Poet</span>
+          <h2 class="about-name" data-i18n="about.name">Cadasia Levy</h2>
+          <p class="about-bio" data-i18n="about.bio">
+            Cadasia Levy is a poet and artist whose words cut through the noise and speak directly to the soul. Her work explores the raw edges of love, loss, faith, and self-discovery — giving voice to the feelings we often carry in silence.
+          </p>
+          <p class="about-bio" data-i18n="about.bio2">
+            Through her poetry, Cadasia transforms pain into power and vulnerability into strength. Each piece is a mirror, a prayer, and a promise that you are not alone in what you feel.
+          </p>
+
+          <div class="about-social">
+            <a href="#" class="social-icon" aria-label="Instagram" title="Instagram">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="TikTok" title="TikTok">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.51a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.72a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg>
+            </a>
+            <a href="#" class="social-icon" aria-label="Twitter / X" title="Twitter / X">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       POETRY COLLECTION SECTION
+       ============================================ -->
+  <section class="section poetry" id="poetry">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title" data-i18n="poetry.title">Poetry Collection</h2>
+        <p class="section-subtitle" data-i18n="poetry.subtitle">Words written from the heart, for the heart</p>
+      </div>
+
+      <div class="poetry-grid" id="poetry-grid">
+        <!-- Poem cards rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       MERCH & ART SECTION
+       ============================================ -->
+  <section class="section merch" id="merch">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title" data-i18n="merch.title">Merch & Art</h2>
+        <p class="section-subtitle" data-i18n="merch.subtitle">Carry her words with you</p>
+      </div>
+
+      <div class="merch-grid" id="merch-grid">
+        <!-- Merch cards rendered by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       SUPPORT / DONATE SECTION
+       ============================================ -->
+  <section class="section support" id="support">
+    <div class="container">
+      <div class="support-content reveal">
+        <div class="support-icon">✨</div>
+        <h2 class="section-title" data-i18n="support.title">Support the Art</h2>
+        <p class="section-subtitle" data-i18n="support.subtitle" style="margin-bottom: 1.5rem;">
+          Fuel the fire. Every dollar supports Cadasia's creative journey.
+        </p>
+        <p class="support-description" data-i18n="support.description">
+          Your support helps bring more poetry, more art, and more healing into the world. Every contribution matters — whether it's a dollar or a share.
+        </p>
+
+        <a
+          href="https://cash.app/$cadasiata"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="cashapp-btn"
+          id="cashapp-btn"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M23.59 3.47A5.1 5.1 0 0 0 20.55.42 5.07 5.07 0 0 0 17.08 0H6.92A5.07 5.07 0 0 0 3.45.42 5.1 5.1 0 0 0 .41 3.47 5.06 5.06 0 0 0 0 6.91v10.17a5.06 5.06 0 0 0 .41 3.45 5.1 5.1 0 0 0 3.04 3.04 5.07 5.07 0 0 0 3.47.42h10.16a5.07 5.07 0 0 0 3.47-.42 5.1 5.1 0 0 0 3.04-3.04A5.06 5.06 0 0 0 24 17.08V6.91a5.06 5.06 0 0 0-.41-3.44zm-6.17 4.25l-.93.93a.5.5 0 0 1-.67.01 3.14 3.14 0 0 0-2.15-.79 1.88 1.88 0 0 0-1.63.56c-.23.28-.2.6.09.84a2.08 2.08 0 0 0 .66.36l1.52.5a5.09 5.09 0 0 1 1.56.84 2.63 2.63 0 0 1 .84 2.14 3.57 3.57 0 0 1-1.12 2.62 4.33 4.33 0 0 1-2.21 1.12l.1.77a.52.52 0 0 1-.51.58h-1.32a.52.52 0 0 1-.51-.44l-.11-.83a5.84 5.84 0 0 1-2.83-1.28.5.5 0 0 1-.03-.72l.93-.93a.5.5 0 0 1 .68-.02 3.82 3.82 0 0 0 2.54 1.07 2.05 2.05 0 0 0 1.7-.61c.26-.31.23-.68-.09-.94a2.32 2.32 0 0 0-.73-.4l-1.47-.47a4.74 4.74 0 0 1-1.49-.79 2.55 2.55 0 0 1-.82-2.07 3.36 3.36 0 0 1 1.05-2.49 4.12 4.12 0 0 1 2.1-1.06l-.1-.72a.52.52 0 0 1 .51-.59h1.33a.52.52 0 0 1 .51.44l.1.75a5.37 5.37 0 0 1 2.44 1.02.5.5 0 0 1 .04.72z"/>
+          </svg>
+          <span data-i18n="support.cta">Send Love via CashApp</span>
+        </a>
+        <span class="cashapp-tag" data-i18n="support.tag">$cadasiata</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       FOOTER
+       ============================================ -->
+  <footer class="footer" id="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <span class="footer-logo">Cadasia Levy</span>
+
+        <div class="footer-social">
+          <a href="#" class="social-icon" aria-label="Instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="TikTok">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1v-3.51a6.37 6.37 0 0 0-.79-.05A6.34 6.34 0 0 0 3.15 15a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.72a8.24 8.24 0 0 0 4.76 1.5v-3.4a4.85 4.85 0 0 1-1-.13z"/></svg>
+          </a>
+          <a href="#" class="social-icon" aria-label="Twitter / X">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+        </div>
+
+        <p class="footer-text">
+          <span data-i18n="footer.copyright">© 2026 Cadasia Levy. All rights reserved.</span>
+          <br>
+          <span data-i18n="footer.madeWith">Made with</span>
+          <span class="footer-heart">♥</span>
+          <span data-i18n="footer.forArt">for the art</span>
+        </p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ============================================
+       POEM READING MODAL
+       ============================================ -->
+  <div class="poem-modal-overlay" id="poem-modal-overlay">
+    <button class="poem-modal-close" id="poem-modal-close" aria-label="Close poem">✕</button>
+    <div class="poem-modal">
+      <h2 class="poem-modal-title" id="poem-modal-title"></h2>
+      <p class="poem-modal-date" id="poem-modal-date"></p>
+      <div class="poem-modal-divider"></div>
+      <div class="poem-modal-body" id="poem-modal-body"></div>
+
+      <div class="poem-modal-actions">
+        <button class="poem-action-btn" id="poem-share-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          <span data-i18n="poetry.share">Share</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================
+       SCRIPTS (order matters)
+       ============================================ -->
+  <script src="js/poems.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/merch.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

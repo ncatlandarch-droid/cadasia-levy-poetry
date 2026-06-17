@@ -1,0 +1,145 @@
+/* ============================================
+   CADASIA LEVY — POEMS DATA
+   All poem content transcribed from originals
+   ============================================ */
+
+window.LevyPoems = [
+  {
+    id: 'breathe',
+    title: 'Breathe',
+    date: 'June 2, 2026',
+    lines: [
+      'Just breathe love, why are you worried?',
+      'Why are you stressed?',
+      'God has his hand wrapped around you, trust me you\'re blessed.',
+      'Just breathe, even when you don\'t see it.',
+      'He\'s strengthening you day in and day out, to believe it.',
+      'The rage, the anger, the pain.',
+      'It all makes you want to break out in flames,',
+      'Show out, hate, and point the finger to blame.',
+      'Not while he is by your side',
+      'To remind you, it\'s ok, stay calm in this rip tide.',
+      '',
+      'Just breathe love, you\'re doing your absolute best,',
+      'Keep showing up, keep pushing forward, your',
+      'days are coming where your worries will soon be to rest...'
+    ],
+    preview: 'Just breathe love, why are you worried? Why are you stressed? God has his hand wrapped around you...',
+    featured: true
+  },
+  {
+    id: 'can-i-escape',
+    title: 'Can I escape?',
+    date: 'January 18, 2026',
+    lines: [
+      'Can I escape from the pain that keeps me from seeing,',
+      'Seeing who I truly am, past being a human being.',
+      'Loving on me, praising on me, holding myself tight,',
+      'Can I escape, from what\'s keeping me from',
+      'showing myself, how it\'s done right.',
+      'Do I run, do I stay, do I fight, or do I just follow.',
+      'To the end of the road, where it\'s nothing but fog',
+      '& everything seems hollow.',
+      'Can I escape? Will I escape? To a free mind,',
+      'open spirit, to see the world in different lenses.',
+      'To express that being trapped is a choice, so',
+      'consider escaping, listen to that voice.',
+      'That challenges me to sit still, and move out of',
+      'grace. To help me believe, that I already',
+      'escaped, everything takes time, & realizing that',
+      'it already happens at its own pace.'
+    ],
+    preview: 'Can I escape from the pain that keeps me from seeing, seeing who I truly am...',
+    featured: false
+  },
+  {
+    id: 'how-could-you',
+    title: 'How could you?',
+    date: 'January 15, 2026',
+    lines: [
+      'How could you leave me in the cold',
+      'To fight hard alone and be so bold',
+      'How could you watch me suffer, not reach out',
+      'Not a call, no hugs, or kisses, definitely made',
+      'me have a lot of doubt',
+      'How could you see the pain in my eyes, but look away',
+      'When I stare deep in your soul searching for an',
+      'answer that\'ll never make its way',
+      'How could you? Why would you? When I look',
+      'just like you, act like you, & smile just like you.',
+      'The split image of yourself, a human you',
+      'created, some you didn\'t have to do.',
+      'How could you allow anyone to break the bond',
+      'we shared, the connection I mourn for everyday.',
+      'How could you, why would you not allow',
+      'genuine love from your own flesh, but accepted',
+      'it from a stranger who made this mess anyway.',
+      'No blame, no shame, everyone has their own opinion.',
+      'But still I ask myself, how could you? I\'m just',
+      'praying I seek forgiveness.'
+    ],
+    preview: 'How could you leave me in the cold, to fight hard alone and be so bold...',
+    featured: false
+  },
+  {
+    id: 'am-i-the-reason',
+    title: 'Am I the reason?',
+    date: 'November 19, 2025',
+    lines: [
+      'Am I the reason it\'s so hard to love me?',
+      'Am I the reason I\'m alone and hurting?',
+      'Am I the reason for this pain that keeps me suffering?',
+      'Am I the reason I\'m sitting here thinking why me?',
+      'What can it be?',
+      'What is holding me, draining me, and not',
+      'allowing me to release.',
+      'The joy, the smile, the beauty I hold deep inside of me.',
+      '',
+      'Sometimes I cry, a lot of times I cry',
+      'Praying one day my wings will set free and just fly.',
+      '',
+      'Far away from misery, from pain',
+      'Praying I find a way to gain',
+      'Everything I lost, everything I always mourned for',
+      '',
+      'Nothing you can\'t buy',
+      'But something you can always hold close and',
+      'it\'ll never die.',
+      'I want to be set free from this, and breathe in',
+      'calmness and peace',
+      'So I can stop asking myself am I the reason no',
+      'one loves me.'
+    ],
+    preview: 'Am I the reason it\'s so hard to love me? Am I the reason I\'m alone and hurting?',
+    featured: false
+  },
+  {
+    id: 'the-idea-of-me',
+    title: 'The idea of me',
+    date: 'June 2, 2026',
+    lines: [
+      'You like me? You love me?',
+      'Or I just make things comfortable for where you',
+      'wanna be?',
+      'Do you think about me in a whole?',
+      'Or just enough to know you got my heart stole?',
+      'Am I genuinely enough? Am I too easy?',
+      'Too easy to love, too easy to hurt, too easy to give.',
+      'Too easy to let go, too easy to forgive.',
+      'Do you know how I truly feel? Have you figure it out?',
+      'Or is it just good to look at me, knowing there',
+      'are no doubts.',
+      'Do you only see the external me? Is that who you love?',
+      'The one who makes everything easier, go',
+      'beyond and above.',
+      'What about when I can\'t, would you still be around?',
+      'To give me the same hope, the same faith, to',
+      'keep me from falling to the ground?',
+      'Do you see me? Or just the idea of me?',
+      'Who you want me to be?',
+      'Or the idea of everything coming so easy, so free...'
+    ],
+    preview: 'You like me? You love me? Or I just make things comfortable for where you wanna be?',
+    featured: false
+  }
+];
