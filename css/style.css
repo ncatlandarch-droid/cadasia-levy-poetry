@@ -2533,8 +2533,8 @@ button {
 }
 
 .community-card-logo-wrap {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   margin: 0 auto var(--space-md);
   border-radius: 16px;
   background: rgba(255, 255, 255, 0.06);
@@ -3044,8 +3044,8 @@ body.now-playing-active .back-to-top {
   }
 
   .community-card-logo-wrap {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
     padding: 10px;
   }
 

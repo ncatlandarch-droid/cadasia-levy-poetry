@@ -86,7 +86,8 @@
 
         if (query) {
           var text = card.textContent.toLowerCase();
-          matchesSearch = text.indexOf(query) !== -1;
+          var keywords = (card.dataset.keywords || '').toLowerCase();
+          matchesSearch = text.indexOf(query) !== -1 || keywords.indexOf(query) !== -1;
         }
 
         if (matchesCategory && matchesSearch) {
