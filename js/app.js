@@ -67,29 +67,50 @@
   /* ---------- Community Filters ---------- */
   function initCommunityFilters() {
     var filtersEl = document.getElementById('community-filters');
+    var searchEl = document.getElementById('community-search');
     if (!filtersEl) return;
 
-    filtersEl.addEventListener('click', function (e) {
-      var btn = e.target.closest('.community-filter');
-      if (!btn) return;
+    function getActiveFilter() {
+      var active = filtersEl.querySelector('.community-filter.active');
+      return active ? active.dataset.filter : 'all';
+    }
 
-      // Update active state
-      filtersEl.querySelectorAll('.community-filter').forEach(function (b) {
-        b.classList.remove('active');
-      });
-      btn.classList.add('active');
-
-      var filter = btn.dataset.filter;
+    function filterCards() {
+      var filter = getActiveFilter();
+      var query = searchEl ? searchEl.value.toLowerCase().trim() : '';
       var cards = document.querySelectorAll('#community-grid .community-card');
 
       cards.forEach(function (card) {
-        if (filter === 'all' || card.dataset.category === filter) {
+        var matchesCategory = (filter === 'all' || card.dataset.category === filter);
+        var matchesSearch = true;
+
+        if (query) {
+          var text = card.textContent.toLowerCase();
+          matchesSearch = text.indexOf(query) !== -1;
+        }
+
+        if (matchesCategory && matchesSearch) {
           card.classList.remove('hidden');
         } else {
           card.classList.add('hidden');
         }
       });
+    }
+
+    filtersEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.community-filter');
+      if (!btn) return;
+
+      filtersEl.querySelectorAll('.community-filter').forEach(function (b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+      filterCards();
     });
+
+    if (searchEl) {
+      searchEl.addEventListener('input', filterCards);
+    }
   }
 
   /* ---------- Daily Verse ---------- */
