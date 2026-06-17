@@ -26,7 +26,7 @@ window.LevyI18n = (function () {
 
       // About
       'about.label': 'About the Poet',
-      'about.name': 'Cadasia Levy',
+      'about.name': "Cadasia Ta'Nae Levy",
       'about.bio': 'Cadasia Levy is a poet, artist, and the voice behind Words That Heal. Her words cut through the noise and speak directly to the soul — exploring the raw edges of love, loss, faith, and self-discovery.',
       'about.bio2': 'Through her poetry and art, Cadasia transforms pain into power and vulnerability into strength. Each piece is a mirror, a prayer, and a promise that you are not alone in what you feel.',
 
@@ -122,7 +122,7 @@ window.LevyI18n = (function () {
       'daily.share': 'Comparte este verso',
 
       'about.label': 'Sobre la Poeta',
-      'about.name': 'Cadasia Levy',
+      'about.name': "Cadasia Ta'Nae Levy",
       'about.bio': 'Cadasia Levy es una poeta, artista, y la voz detrás de Words That Heal. Sus palabras atraviesan el ruido y hablan directamente al alma — explorando los bordes crudos del amor, la pérdida, la fe y el autodescubrimiento.',
       'about.bio2': 'A través de su poesía y arte, Cadasia transforma el dolor en poder y la vulnerabilidad en fortaleza. Cada pieza es un espejo, una oración y una promesa de que no estás solo en lo que sientes.',
 
@@ -206,7 +206,7 @@ window.LevyI18n = (function () {
       'daily.share': '分享这句诗',
 
       'about.label': '关于诗人',
-      'about.name': 'Cadasia Levy',
+      'about.name': "Cadasia Ta'Nae Levy",
       'about.bio': 'Cadasia Levy 是一位诗人、艺术家，也是"治愈之言"品牌的声音。她的文字穿透喧嚣，直达灵魂深处——探索爱、失去、信仰和自我发现的原始边缘。',
       'about.bio2': '通过她的诗歌和艺术，Cadasia 将痛苦转化为力量，将脆弱转化为坚强。每一首诗都是一面镜子、一个祈祷、一个承诺——你所感受到的，你并不孤单。',
 
@@ -290,7 +290,7 @@ window.LevyI18n = (function () {
       'daily.share': 'Shiriki shairi hili',
 
       'about.label': 'Kuhusu Mshairi',
-      'about.name': 'Cadasia Levy',
+      'about.name': "Cadasia Ta'Nae Levy",
       'about.bio': 'Cadasia Levy ni mshairi, msanii, na sauti nyuma ya Words That Heal. Maneno yake yanakata kelele na kuzungumza moja kwa moja na roho — ikichunguza makali ya upendo, kupoteza, imani, na kujigundua.',
       'about.bio2': 'Kupitia ushairi na sanaa yake, Cadasia anabadilisha maumivu kuwa nguvu na udhaifu kuwa ujasiri. Kila kipande ni kioo, dua, na ahadi kwamba huko si peke yako.',
 
