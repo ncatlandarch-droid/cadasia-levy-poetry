@@ -1,5 +1,5 @@
 /* ============================================
-   CADASIA LEVY — MAIN APPLICATION
+   WORDS THAT HEAL — MAIN APPLICATION
    Orchestrates all modules
    ============================================ */
 
@@ -10,6 +10,18 @@
   var Poems = window.LevyPoems;
   var Animations = window.LevyAnimations;
   var Merch = window.LevyMerch;
+  var Gallery = window.LevyGallery;
+  var Audio = window.LevyAudio;
+  var Cursor = window.LevyCursor;
+
+  /* ---------- Page Loader ---------- */
+  function hideLoader() {
+    var loader = document.getElementById('page-loader');
+    if (loader) {
+      loader.classList.add('loaded');
+      setTimeout(function () { loader.style.display = 'none'; }, 800);
+    }
+  }
 
   /* ---------- DOM Ready ---------- */
   document.addEventListener('DOMContentLoaded', function () {
@@ -19,27 +31,64 @@
   function initApp() {
     renderPoemCards();
     Merch.render('merch-grid');
+    Gallery.render('gallery-grid');
+    Gallery.initLightbox();
+    Audio.init();
     I18n.updatePage();
     initLanguageSwitcher();
     initMobileNav();
     initSmoothScroll();
     initPoemModal();
+    initDailyVerse();
+    initNewsletter();
+    initBackToTop();
+    Cursor.init();
 
     Animations.initNavScroll();
     Animations.initParticles(document.getElementById('hero-canvas'));
     Animations.animateHeroEntrance();
 
-    // Start typewriter after a brief delay
+    // Start typewriter
     var quoteEl = document.getElementById('hero-quote');
     if (quoteEl) {
-      var quoteText = I18n.t('hero.quote');
-      Animations.typeWriter(quoteEl, quoteText, 45);
+      Animations.typeWriter(quoteEl, I18n.t('hero.quote'), 45);
     }
 
-    // Delay scroll reveal init slightly so DOM is settled
     setTimeout(function () {
       Animations.initScrollReveal();
     }, 200);
+
+    // Hide loader
+    setTimeout(hideLoader, 600);
+  }
+
+  /* ---------- Daily Verse ---------- */
+  function initDailyVerse() {
+    var verseEl = document.getElementById('daily-verse-text');
+    if (!verseEl) return;
+
+    // Collect all non-empty lines from all poems
+    var allLines = [];
+    var lang = I18n.getLanguage();
+    Poems.forEach(function (poem) {
+      var lines = Poems.getLines(poem, lang);
+      lines.forEach(function (line) {
+        if (line.trim().length > 20) {
+          allLines.push({ text: line, title: Poems.getTitle(poem, lang) });
+        }
+      });
+    });
+
+    // Pick based on day of year
+    var now = new Date();
+    var dayOfYear = Math.floor((now - new Date(now.getFullYear(), 0, 0)) / 86400000);
+    var pick = allLines[dayOfYear % allLines.length];
+
+    if (pick) {
+      verseEl.textContent = '"' + pick.text + '"';
+      var sourceEl = document.getElementById('daily-verse-source');
+      if (sourceEl) sourceEl.textContent = '— ' + pick.title;
+    }
   }
 
   /* ---------- Render Poem Cards ---------- */
@@ -47,21 +96,36 @@
     var grid = document.getElementById('poetry-grid');
     if (!grid) return;
 
+    var lang = I18n.getLanguage();
     var html = '';
     Poems.forEach(function (poem, index) {
       var num = (index + 1).toString().padStart(2, '0');
+      var title = Poems.getTitle(poem, lang);
+      var preview = Poems.getPreview(poem, lang);
+
       html += '<div class="poem-card reveal" data-poem-id="' + poem.id + '" id="poem-card-' + poem.id + '">';
       html += '  <span class="poem-card-number">' + num + '</span>';
-      html += '  <h3 class="poem-card-title">' + poem.title + '</h3>';
-      html += '  <p class="poem-card-preview">' + poem.preview + '</p>';
+      html += '  <h3 class="poem-card-title">' + title + '</h3>';
+      html += '  <p class="poem-card-preview">' + preview + '</p>';
       html += '  <div class="poem-card-footer">';
       html += '    <span class="poem-card-date">' + poem.date + '</span>';
       html += '    <span class="poem-card-read" data-i18n="poetry.readMore">' + I18n.t('poetry.readMore') + '</span>';
       html += '  </div>';
+
+      // Audio player
+      html += '  <div class="poem-card-audio" id="poem-audio-' + poem.id + '"></div>';
       html += '</div>';
     });
 
     grid.innerHTML = html;
+
+    // Create audio players for each poem
+    Poems.forEach(function (poem) {
+      var audioContainer = document.getElementById('poem-audio-' + poem.id);
+      if (audioContainer) {
+        Audio.createPlayer(poem.id, audioContainer);
+      }
+    });
   }
 
   /* ---------- Poem Modal ---------- */
@@ -74,8 +138,10 @@
 
     if (!overlay) return;
 
-    // Open poem on card click
     document.addEventListener('click', function (e) {
+      // Don't open modal if clicking audio player
+      if (e.target.closest('.audio-player') || e.target.closest('.audio-play-btn')) return;
+
       var card = e.target.closest('.poem-card');
       if (!card) return;
 
@@ -86,7 +152,6 @@
       openPoemModal(poem);
     });
 
-    // Close modal
     closeBtn.addEventListener('click', closePoemModal);
     overlay.addEventListener('click', function (e) {
       if (e.target === overlay) closePoemModal();
@@ -96,25 +161,27 @@
     });
 
     function openPoemModal(poem) {
-      modalTitle.textContent = poem.title;
+      var lang = I18n.getLanguage();
+      var title = Poems.getTitle(poem, lang);
+      var lines = Poems.getLines(poem, lang);
+
+      modalTitle.textContent = title;
       modalDate.textContent = poem.date;
 
-      // Build lines
       var linesHtml = '';
-      poem.lines.forEach(function (line) {
+      lines.forEach(function (line, i) {
         if (line === '') {
           linesHtml += '<div class="poem-modal-line empty"></div>';
         } else {
           linesHtml += '<div class="poem-modal-line">' + line + '</div>';
         }
       });
+
       modalBody.innerHTML = linesHtml;
 
-      // Show modal
       overlay.classList.add('open');
       document.body.style.overflow = 'hidden';
 
-      // Animate lines
       setTimeout(function () {
         Animations.revealPoemLines(modalBody, 100);
       }, 300);
@@ -133,34 +200,31 @@
 
     if (!btn || !dropdown) return;
 
-    // Toggle dropdown
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       dropdown.classList.toggle('open');
     });
 
-    // Close on outside click
     document.addEventListener('click', function () {
       dropdown.classList.remove('open');
     });
 
-    // Language option clicks
     dropdown.querySelectorAll('.lang-option').forEach(function (option) {
       option.addEventListener('click', function () {
         var lang = this.dataset.lang;
         I18n.setLanguage(lang);
         dropdown.classList.remove('open');
 
-        // Re-render dynamic content
+        // Re-render everything
         renderPoemCards();
         Merch.render('merch-grid');
+        Gallery.render('gallery-grid');
+        initDailyVerse();
 
-        // Re-init scroll reveal for new elements
         setTimeout(function () {
           Animations.initScrollReveal();
         }, 100);
 
-        // Update typewriter quote
         var quoteEl = document.getElementById('hero-quote');
         if (quoteEl) {
           Animations.typeWriter(quoteEl, I18n.t('hero.quote'), 45);
@@ -181,7 +245,6 @@
       links.classList.toggle('open');
     });
 
-    // Close on link click
     links.querySelectorAll('.nav-link').forEach(function (link) {
       link.addEventListener('click', function () {
         toggle.classList.remove('active');
@@ -200,6 +263,44 @@
           target.scrollIntoView({ behavior: 'smooth' });
         }
       });
+    });
+  }
+
+  /* ---------- Newsletter Signup ---------- */
+  function initNewsletter() {
+    var form = document.getElementById('newsletter-form');
+    if (!form) return;
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var input = form.querySelector('input[type="email"]');
+      var btn = form.querySelector('button');
+
+      if (input && input.value) {
+        btn.textContent = I18n.t('newsletter.thanks');
+        btn.style.background = 'var(--gold)';
+        btn.style.color = 'var(--bg-primary)';
+        input.value = '';
+        setTimeout(function () {
+          btn.textContent = I18n.t('newsletter.cta');
+          btn.style.background = '';
+          btn.style.color = '';
+        }, 3000);
+      }
+    });
+  }
+
+  /* ---------- Back to Top ---------- */
+  function initBackToTop() {
+    var btn = document.getElementById('back-to-top');
+    if (!btn) return;
+
+    window.addEventListener('scroll', function () {
+      btn.classList.toggle('visible', window.scrollY > 600);
+    }, { passive: true });
+
+    btn.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     });
   }
 

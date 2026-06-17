@@ -3,31 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cadasia Levy — Words That Heal. Art That Speaks.</title>
-  <meta name="description" content="Poetry and art by Cadasia Levy. Explore her collection of raw, powerful poems about love, loss, faith, and self-discovery. Shop merch and support her creative journey.">
+  <title>Words That Heal — Poetry & Art by Cadasia Levy</title>
+  <meta name="description" content="Words That Heal — raw, powerful poetry and art by Cadasia Levy from Rocky Mount, NC. Explore the collection, shop merch, and support her creative journey. A portion of every sale supports art programs in Rocky Mount.">
   <meta name="author" content="Cadasia Levy">
+  <meta name="keywords" content="Cadasia Levy, poetry, spoken word, Words That Heal, Rocky Mount NC, art, merch">
 
-  <!-- Open Graph / Social Sharing -->
-  <meta property="og:title" content="Cadasia Levy — Words That Heal. Art That Speaks.">
-  <meta property="og:description" content="Raw, powerful poetry about love, loss, faith, and self-discovery. Explore the collection.">
+  <!-- Open Graph -->
+  <meta property="og:title" content="Words That Heal — Poetry & Art by Cadasia Levy">
+  <meta property="og:description" content="Raw, powerful poetry about love, loss, faith, and self-discovery. From Rocky Mount, NC to the world.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="assets/cadasia.jpg">
+  <meta property="og:image" content="assets/logo.png">
 
   <!-- Stylesheets -->
   <link rel="stylesheet" href="css/style.css">
-
-  <!-- Preconnect to Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
 
   <!-- ============================================
+       PAGE LOADER
+       ============================================ -->
+  <div class="page-loader" id="page-loader">
+    <div class="loader-content">
+      <img src="assets/logo.png" alt="Words That Heal" class="loader-logo">
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- ============================================
        NAVIGATION
        ============================================ -->
   <nav class="nav" id="main-nav">
     <div class="nav-inner">
-      <a href="#hero" class="nav-logo">Cadasia Levy</a>
+      <a href="#hero" class="nav-logo">
+        <img src="assets/logo.png" alt="Words That Heal" class="nav-logo-img">
+      </a>
 
       <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation">
         <span></span><span></span><span></span>
@@ -37,10 +48,10 @@
         <li><a href="#hero" class="nav-link" data-i18n="nav.home">Home</a></li>
         <li><a href="#about" class="nav-link" data-i18n="nav.about">About</a></li>
         <li><a href="#poetry" class="nav-link" data-i18n="nav.poetry">Poetry</a></li>
+        <li><a href="#gallery" class="nav-link" data-i18n="nav.gallery">Gallery</a></li>
         <li><a href="#merch" class="nav-link" data-i18n="nav.merch">Merch</a></li>
         <li><a href="#support" class="nav-link" data-i18n="nav.support">Support</a></li>
         <li>
-          <!-- Language Switcher -->
           <div class="lang-switcher">
             <button class="lang-btn" id="lang-btn">
               <span class="globe-icon">🌍</span>
@@ -48,18 +59,10 @@
               <span>▾</span>
             </button>
             <div class="lang-dropdown" id="lang-dropdown">
-              <button class="lang-option active" data-lang="en">
-                <span class="flag">🇺🇸</span> English
-              </button>
-              <button class="lang-option" data-lang="es">
-                <span class="flag">🇪🇸</span> Español
-              </button>
-              <button class="lang-option" data-lang="zh">
-                <span class="flag">🇨🇳</span> 中文
-              </button>
-              <button class="lang-option" data-lang="sw">
-                <span class="flag">🇰🇪</span> Kiswahili
-              </button>
+              <button class="lang-option active" data-lang="en"><span class="flag">🇺🇸</span> English</button>
+              <button class="lang-option" data-lang="es"><span class="flag">🇪🇸</span> Español</button>
+              <button class="lang-option" data-lang="zh"><span class="flag">🇨🇳</span> 中文</button>
+              <button class="lang-option" data-lang="sw"><span class="flag">🇰🇪</span> Kiswahili</button>
             </div>
           </div>
         </li>
@@ -77,22 +80,33 @@
     <div class="hero-content">
       <div class="hero-photo-wrapper">
         <div class="hero-photo-ring"></div>
-        <img
-          src="assets/cadasia.jpg"
-          alt="Cadasia Levy"
-          class="hero-photo"
-        >
+        <img src="assets/cadasia.jpg" alt="Cadasia Levy" class="hero-photo">
       </div>
 
       <h1 class="hero-name">Cadasia <span>Levy</span></h1>
       <p class="hero-tagline" data-i18n="hero.tagline">Words That Heal. Art That Speaks.</p>
       <p class="hero-quote" id="hero-quote"></p>
       <a href="#poetry" class="hero-cta" data-i18n="hero.cta">Read Her Poetry</a>
+
+      <p class="hero-location">Rocky Mount, North Carolina</p>
     </div>
 
     <div class="hero-scroll">
       <span>Scroll</span>
       <div class="hero-scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       DAILY VERSE
+       ============================================ -->
+  <section class="daily-verse" id="daily-verse">
+    <div class="container">
+      <div class="daily-verse-card glass-card reveal">
+        <span class="daily-verse-label" data-i18n="daily.label">Daily Verse</span>
+        <p class="daily-verse-text" id="daily-verse-text"></p>
+        <span class="daily-verse-source" id="daily-verse-source"></span>
+      </div>
     </div>
   </section>
 
@@ -103,12 +117,7 @@
     <div class="container">
       <div class="about-grid">
         <div class="about-image-wrapper reveal">
-          <img
-            src="assets/cadasia.jpg"
-            alt="Cadasia Levy portrait"
-            class="about-image"
-            loading="lazy"
-          >
+          <img src="assets/cadasia.jpg" alt="Cadasia Levy" class="about-image" loading="lazy">
           <div class="about-image-accent"></div>
         </div>
 
@@ -116,11 +125,21 @@
           <span class="about-label" data-i18n="about.label">About the Poet</span>
           <h2 class="about-name" data-i18n="about.name">Cadasia Levy</h2>
           <p class="about-bio" data-i18n="about.bio">
-            Cadasia Levy is a poet and artist whose words cut through the noise and speak directly to the soul. Her work explores the raw edges of love, loss, faith, and self-discovery — giving voice to the feelings we often carry in silence.
+            Cadasia Levy is a poet, artist, and the voice behind Words That Heal. Her words cut through the noise and speak directly to the soul — exploring the raw edges of love, loss, faith, and self-discovery.
           </p>
           <p class="about-bio" data-i18n="about.bio2">
-            Through her poetry, Cadasia transforms pain into power and vulnerability into strength. Each piece is a mirror, a prayer, and a promise that you are not alone in what you feel.
+            Through her poetry and art, Cadasia transforms pain into power and vulnerability into strength. Each piece is a mirror, a prayer, and a promise that you are not alone in what you feel.
           </p>
+
+          <div class="about-badges">
+            <span class="about-badge">Rocky Mount, NC</span>
+            <span class="about-badge-divider">·</span>
+            <span class="about-badge">Poet</span>
+            <span class="about-badge-divider">·</span>
+            <span class="about-badge">Artist</span>
+            <span class="about-badge-divider">·</span>
+            <span class="about-badge">Healer</span>
+          </div>
 
           <div class="about-social">
             <a href="#" class="social-icon" aria-label="Instagram" title="Instagram">
@@ -139,7 +158,7 @@
   </section>
 
   <!-- ============================================
-       POETRY COLLECTION SECTION
+       POETRY COLLECTION
        ============================================ -->
   <section class="section poetry" id="poetry">
     <div class="container">
@@ -147,15 +166,39 @@
         <h2 class="section-title" data-i18n="poetry.title">Poetry Collection</h2>
         <p class="section-subtitle" data-i18n="poetry.subtitle">Words written from the heart, for the heart</p>
       </div>
+      <div class="poetry-grid" id="poetry-grid"></div>
+    </div>
+  </section>
 
-      <div class="poetry-grid" id="poetry-grid">
-        <!-- Poem cards rendered by JS -->
+  <!-- ============================================
+       ART GALLERY
+       ============================================ -->
+  <section class="section gallery" id="gallery">
+    <div class="container">
+      <div class="section-header reveal">
+        <h2 class="section-title" data-i18n="gallery.title">Art Gallery</h2>
+        <p class="section-subtitle" data-i18n="gallery.subtitle">Visual stories that speak without words</p>
+      </div>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       BOOK ANNOUNCEMENT
+       ============================================ -->
+  <section class="book-announcement" id="book-announcement">
+    <div class="container">
+      <div class="book-card glass-card reveal">
+        <span class="book-badge" data-i18n="book.label">Coming Soon</span>
+        <h2 class="book-title" data-i18n="book.title">The Book Is Coming</h2>
+        <p class="book-desc" data-i18n="book.desc">Cadasia's debut poetry collection — raw, unfiltered, and beautiful. Be the first to know when it drops.</p>
+        <button class="book-cta" data-i18n="book.cta" onclick="document.getElementById('newsletter-email').focus()">Notify Me</button>
       </div>
     </div>
   </section>
 
   <!-- ============================================
-       MERCH & ART SECTION
+       MERCH & ART
        ============================================ -->
   <section class="section merch" id="merch">
     <div class="container">
@@ -164,19 +207,21 @@
         <p class="section-subtitle" data-i18n="merch.subtitle">Carry her words with you</p>
       </div>
 
-      <div class="merch-grid" id="merch-grid">
-        <!-- Merch cards rendered by JS -->
+      <!-- Community Impact Badge -->
+      <div class="impact-badge reveal">
+        <span class="impact-badge-text">A portion of every sale supports art programs in Rocky Mount, NC</span>
       </div>
+
+      <div class="merch-grid" id="merch-grid"></div>
     </div>
   </section>
 
   <!-- ============================================
-       SUPPORT / DONATE SECTION
+       SUPPORT / DONATE
        ============================================ -->
   <section class="section support" id="support">
     <div class="container">
       <div class="support-content reveal">
-        <div class="support-icon">✨</div>
         <h2 class="section-title" data-i18n="support.title">Support the Art</h2>
         <p class="section-subtitle" data-i18n="support.subtitle" style="margin-bottom: 1.5rem;">
           Fuel the fire. Every dollar supports Cadasia's creative journey.
@@ -185,19 +230,46 @@
           Your support helps bring more poetry, more art, and more healing into the world. Every contribution matters — whether it's a dollar or a share.
         </p>
 
-        <a
-          href="https://cash.app/$cadasiata"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="cashapp-btn"
-          id="cashapp-btn"
-        >
-          <svg viewBox="0 0 24 24" fill="currentColor">
-            <path d="M23.59 3.47A5.1 5.1 0 0 0 20.55.42 5.07 5.07 0 0 0 17.08 0H6.92A5.07 5.07 0 0 0 3.45.42 5.1 5.1 0 0 0 .41 3.47 5.06 5.06 0 0 0 0 6.91v10.17a5.06 5.06 0 0 0 .41 3.45 5.1 5.1 0 0 0 3.04 3.04 5.07 5.07 0 0 0 3.47.42h10.16a5.07 5.07 0 0 0 3.47-.42 5.1 5.1 0 0 0 3.04-3.04A5.06 5.06 0 0 0 24 17.08V6.91a5.06 5.06 0 0 0-.41-3.44zm-6.17 4.25l-.93.93a.5.5 0 0 1-.67.01 3.14 3.14 0 0 0-2.15-.79 1.88 1.88 0 0 0-1.63.56c-.23.28-.2.6.09.84a2.08 2.08 0 0 0 .66.36l1.52.5a5.09 5.09 0 0 1 1.56.84 2.63 2.63 0 0 1 .84 2.14 3.57 3.57 0 0 1-1.12 2.62 4.33 4.33 0 0 1-2.21 1.12l.1.77a.52.52 0 0 1-.51.58h-1.32a.52.52 0 0 1-.51-.44l-.11-.83a5.84 5.84 0 0 1-2.83-1.28.5.5 0 0 1-.03-.72l.93-.93a.5.5 0 0 1 .68-.02 3.82 3.82 0 0 0 2.54 1.07 2.05 2.05 0 0 0 1.7-.61c.26-.31.23-.68-.09-.94a2.32 2.32 0 0 0-.73-.4l-1.47-.47a4.74 4.74 0 0 1-1.49-.79 2.55 2.55 0 0 1-.82-2.07 3.36 3.36 0 0 1 1.05-2.49 4.12 4.12 0 0 1 2.1-1.06l-.1-.72a.52.52 0 0 1 .51-.59h1.33a.52.52 0 0 1 .51.44l.1.75a5.37 5.37 0 0 1 2.44 1.02.5.5 0 0 1 .04.72z"/>
-          </svg>
+        <a href="https://cash.app/$cadasiata" target="_blank" rel="noopener noreferrer" class="cashapp-btn" id="cashapp-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.59 3.47A5.1 5.1 0 0 0 20.55.42 5.07 5.07 0 0 0 17.08 0H6.92A5.07 5.07 0 0 0 3.45.42 5.1 5.1 0 0 0 .41 3.47 5.06 5.06 0 0 0 0 6.91v10.17a5.06 5.06 0 0 0 .41 3.45 5.1 5.1 0 0 0 3.04 3.04 5.07 5.07 0 0 0 3.47.42h10.16a5.07 5.07 0 0 0 3.47-.42 5.1 5.1 0 0 0 3.04-3.04A5.06 5.06 0 0 0 24 17.08V6.91a5.06 5.06 0 0 0-.41-3.44zm-6.17 4.25l-.93.93a.5.5 0 0 1-.67.01 3.14 3.14 0 0 0-2.15-.79 1.88 1.88 0 0 0-1.63.56c-.23.28-.2.6.09.84a2.08 2.08 0 0 0 .66.36l1.52.5a5.09 5.09 0 0 1 1.56.84 2.63 2.63 0 0 1 .84 2.14 3.57 3.57 0 0 1-1.12 2.62 4.33 4.33 0 0 1-2.21 1.12l.1.77a.52.52 0 0 1-.51.58h-1.32a.52.52 0 0 1-.51-.44l-.11-.83a5.84 5.84 0 0 1-2.83-1.28.5.5 0 0 1-.03-.72l.93-.93a.5.5 0 0 1 .68-.02 3.82 3.82 0 0 0 2.54 1.07 2.05 2.05 0 0 0 1.7-.61c.26-.31.23-.68-.09-.94a2.32 2.32 0 0 0-.73-.4l-1.47-.47a4.74 4.74 0 0 1-1.49-.79 2.55 2.55 0 0 1-.82-2.07 3.36 3.36 0 0 1 1.05-2.49 4.12 4.12 0 0 1 2.1-1.06l-.1-.72a.52.52 0 0 1 .51-.59h1.33a.52.52 0 0 1 .51.44l.1.75a5.37 5.37 0 0 1 2.44 1.02.5.5 0 0 1 .04.72z"/></svg>
           <span data-i18n="support.cta">Send Love via CashApp</span>
         </a>
         <span class="cashapp-tag" data-i18n="support.tag">$cadasiata</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       NEWSLETTER
+       ============================================ -->
+  <section class="newsletter" id="newsletter">
+    <div class="container">
+      <div class="newsletter-card glass-card reveal">
+        <h2 class="newsletter-title" data-i18n="newsletter.title">Get New Poems First</h2>
+        <p class="newsletter-subtitle" data-i18n="newsletter.subtitle">Join the inner circle. Be the first to read new work, get early merch drops, and exclusive audio.</p>
+        <form class="newsletter-form" id="newsletter-form">
+          <input type="email" id="newsletter-email" class="newsletter-input" data-i18n="newsletter.placeholder" placeholder="Enter your email" required>
+          <button type="submit" class="newsletter-btn" data-i18n="newsletter.cta">Join</button>
+        </form>
+        <p class="newsletter-privacy" data-i18n="newsletter.privacy">No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================
+       COMMUNITY / THINK VENTURES
+       ============================================ -->
+  <section class="community" id="community">
+    <div class="container">
+      <div class="community-inner reveal">
+        <span class="community-label">Part of the</span>
+        <h3 class="community-brand">Think Ventures Network</h3>
+        <p class="community-desc">Words That Heal is proudly part of the Think Ventures creative community — connecting artists, entrepreneurs, and visionaries building something meaningful.</p>
+        <div class="community-badges">
+          <span class="community-badge">Creative Network</span>
+          <span class="community-badge">Rocky Mount, NC</span>
+          <span class="community-badge">Community Driven</span>
+        </div>
       </div>
     </div>
   </section>
@@ -208,7 +280,7 @@
   <footer class="footer" id="footer">
     <div class="container">
       <div class="footer-inner">
-        <span class="footer-logo">Cadasia Levy</span>
+        <img src="assets/logo.png" alt="Words That Heal" class="footer-logo-img">
 
         <div class="footer-social">
           <a href="#" class="social-icon" aria-label="Instagram">
@@ -223,7 +295,7 @@
         </div>
 
         <p class="footer-text">
-          <span data-i18n="footer.copyright">© 2026 Cadasia Levy. All rights reserved.</span>
+          <span data-i18n="footer.copyright">© 2026 Words That Heal by Cadasia Levy. All rights reserved.</span>
           <br>
           <span data-i18n="footer.madeWith">Made with</span>
           <span class="footer-heart">♥</span>
@@ -243,7 +315,6 @@
       <p class="poem-modal-date" id="poem-modal-date"></p>
       <div class="poem-modal-divider"></div>
       <div class="poem-modal-body" id="poem-modal-body"></div>
-
       <div class="poem-modal-actions">
         <button class="poem-action-btn" id="poem-share-btn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
@@ -253,13 +324,21 @@
     </div>
   </div>
 
+  <!-- Back to Top -->
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="18 15 12 9 6 15"/></svg>
+  </button>
+
   <!-- ============================================
-       SCRIPTS (order matters)
+       SCRIPTS
        ============================================ -->
   <script src="js/poems.js"></script>
   <script src="js/i18n.js"></script>
   <script src="js/animations.js"></script>
   <script src="js/merch.js"></script>
+  <script src="js/gallery.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/cursor.js"></script>
   <script src="js/app.js"></script>
 
 </body>
