@@ -1,228 +1,230 @@
 /* ============================================
-   WORDS THAT HEAL — DYNAMIC CURSOR
-   Gold particle trail + magnetic effects
+   WORDS THAT HEAL — CUSTOM CURSOR + PAINT TRAIL
+   Adapted from Sean Parrish Design cursor
+   Gold dot + ring + paint drop trail
    ============================================ */
 
 window.LevyCursor = (function () {
   'use strict';
 
-  // Skip on touch devices
-  if ('ontouchstart' in window || navigator.maxTouchPoints > 0) {
-    return { init: function () {} };
+  /* ---------- Helpers ---------- */
+  function lerp(start, end, factor) {
+    return start + (end - start) * factor;
   }
 
-  var cursor = null;
-  var cursorDot = null;
-  var particles = [];
-  var mouseX = -100, mouseY = -100;
-  var cursorX = -100, cursorY = -100;
-  var dotX = -100, dotY = -100;
-  var isHovering = false;
-  var hoverTarget = null;
-  var rafId = null;
+  var hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+  var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var MAX_PARTICLES = 35;
-  var PARTICLE_RATE = 3; // frames between spawns
-  var frameCount = 0;
+  /* ---------- Config ---------- */
+  var MAX_DROPS     = 30;
+  var DROP_INTERVAL = 80;   // ms between paint drops
+  var DROP_LIFETIME = 1000; // ms before a drop fades
 
-  /* ---------- Particle Class ---------- */
-  function Particle(x, y) {
-    this.x = x;
-    this.y = y;
-    this.size = Math.random() * 4 + 2;
-    this.speedX = (Math.random() - 0.5) * 1.5;
-    this.speedY = (Math.random() - 0.5) * 1.5 - 0.5;
-    this.opacity = 1;
-    this.decay = Math.random() * 0.02 + 0.015;
-    this.el = document.createElement('div');
-    this.el.className = 'cursor-particle';
-    this.el.style.cssText = 'position:fixed;pointer-events:none;z-index:9998;border-radius:50%;background:radial-gradient(circle,rgba(212,175,55,0.8),rgba(212,175,55,0));';
-    document.body.appendChild(this.el);
-  }
+  var dot  = null;
+  var ring = null;
+  var mouseX = 0, mouseY = 0;
+  var ringX  = 0, ringY  = 0;
+  var isHovering   = false;
+  var isVisible    = false;
+  var lastDropTime = 0;
+  var isMouseMoving = false;
+  var moveTimer = null;
 
-  Particle.prototype.update = function () {
-    this.x += this.speedX;
-    this.y += this.speedY;
-    this.opacity -= this.decay;
-    this.size *= 0.98;
+  // Paint drop pool
+  var pool = [];
+  var activeDrops = [];
 
-    this.el.style.left = this.x + 'px';
-    this.el.style.top = this.y + 'px';
-    this.el.style.width = this.size + 'px';
-    this.el.style.height = this.size + 'px';
-    this.el.style.opacity = this.opacity;
+  /* ---------- Init ---------- */
+  function init() {
+    // Skip on touch or reduced motion
+    if (!hasFinePointer || prefersReducedMotion) return;
 
-    return this.opacity > 0.01;
-  };
+    // Create cursor dot
+    dot = document.createElement('div');
+    dot.className = 'cursor-dot';
+    dot.setAttribute('aria-hidden', 'true');
 
-  Particle.prototype.destroy = function () {
-    if (this.el.parentNode) {
-      this.el.parentNode.removeChild(this.el);
+    // Create cursor ring
+    ring = document.createElement('div');
+    ring.className = 'cursor-ring';
+    ring.setAttribute('aria-hidden', 'true');
+
+    document.body.appendChild(dot);
+    document.body.appendChild(ring);
+
+    // Add CSS — hide default cursor, style custom elements
+    var style = document.createElement('style');
+    style.textContent =
+      '*, *::before, *::after { cursor: none !important; }' +
+      '.cursor-dot {' +
+      '  position: fixed; top: 0; left: 0; width: 8px; height: 8px;' +
+      '  background: #D4AF37; border-radius: 50%;' +
+      '  pointer-events: none; z-index: 100000;' +
+      '  transform: translate(-50%, -50%);' +
+      '  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1), opacity 0.3s;' +
+      '  opacity: 0; mix-blend-mode: difference;' +
+      '}' +
+      '.cursor-ring {' +
+      '  position: fixed; top: 0; left: 0; width: 40px; height: 40px;' +
+      '  border: 1.5px solid rgba(212, 175, 55, 0.6); border-radius: 50%;' +
+      '  pointer-events: none; z-index: 99999;' +
+      '  transform: translate(-50%, -50%);' +
+      '  transition: transform 0.2s cubic-bezier(0.22,1,0.36,1),' +
+      '              border-color 0.3s, opacity 0.3s;' +
+      '  opacity: 0;' +
+      '}' +
+      '.cursor-dot.visible, .cursor-ring.visible { opacity: 1; }' +
+      '.cursor-dot.hover {' +
+      '  transform: translate(-50%, -50%) scale(2.5);' +
+      '  background: #E8D48B;' +
+      '}' +
+      '.cursor-ring.hover {' +
+      '  transform: translate(-50%, -50%) scale(1.6);' +
+      '  border-color: #E8D48B;' +
+      '}' +
+      '.paint-drop {' +
+      '  position: fixed; pointer-events: none; z-index: 99998;' +
+      '  border-radius: 50%;' +
+      '  background: #D4AF37;' +
+      '  opacity: 0.5; mix-blend-mode: difference;' +
+      '  transform: translate(-50%, -50%) scale(1);' +
+      '  transition: none; will-change: opacity, transform;' +
+      '}';
+    document.head.appendChild(style);
+
+    // Pre-fill paint drop pool
+    for (var i = 0; i < MAX_DROPS; i++) {
+      var drop = document.createElement('div');
+      drop.className = 'paint-drop';
+      drop.style.display = 'none';
+      drop.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(drop);
+      pool.push(drop);
     }
-  };
 
-  /* ---------- Click Ripple ---------- */
-  function createRipple(x, y) {
-    var ripple = document.createElement('div');
-    ripple.className = 'cursor-ripple';
-    ripple.style.cssText = 'position:fixed;pointer-events:none;z-index:9997;border-radius:50%;border:2px solid rgba(212,175,55,0.6);left:' + x + 'px;top:' + y + 'px;width:0;height:0;transform:translate(-50%,-50%);transition:all 0.6s cubic-bezier(0.16,1,0.3,1);';
-    document.body.appendChild(ripple);
+    // Event listeners
+    document.addEventListener('mousemove', onMouseMove, { passive: true });
+    document.addEventListener('mouseenter', function () { show(); }, { passive: true });
+    document.addEventListener('mouseleave', function () { hide(); }, { passive: true });
 
-    requestAnimationFrame(function () {
-      ripple.style.width = '60px';
-      ripple.style.height = '60px';
-      ripple.style.opacity = '0';
-      ripple.style.borderColor = 'rgba(212,175,55,0)';
-    });
+    // Hover detection for interactive elements
+    document.addEventListener('mouseover', function (e) {
+      if (e.target.closest('a, button, .poem-card, .merch-card, .gallery-item, [role="button"], input, select, textarea, label')) {
+        isHovering = true;
+        dot.classList.add('hover');
+        ring.classList.add('hover');
+      }
+    }, { passive: true });
 
-    setTimeout(function () {
-      if (ripple.parentNode) ripple.parentNode.removeChild(ripple);
-    }, 700);
+    document.addEventListener('mouseout', function (e) {
+      if (e.target.closest('a, button, .poem-card, .merch-card, .gallery-item, [role="button"], input, select, textarea, label')) {
+        isHovering = false;
+        dot.classList.remove('hover');
+        ring.classList.remove('hover');
+      }
+    }, { passive: true });
+
+    // Start animation loop
+    animate();
   }
 
-  /* ---------- Magnetic Effect ---------- */
-  function getMagneticOffset(el) {
-    if (!el) return { x: 0, y: 0 };
-    var rect = el.getBoundingClientRect();
-    var centerX = rect.left + rect.width / 2;
-    var centerY = rect.top + rect.height / 2;
-    var distX = mouseX - centerX;
-    var distY = mouseY - centerY;
-    var dist = Math.sqrt(distX * distX + distY * distY);
-    var maxDist = 100;
+  /* ---------- Show / Hide ---------- */
+  function show() {
+    if (!dot) return;
+    isVisible = true;
+    dot.classList.add('visible');
+    ring.classList.add('visible');
+  }
 
-    if (dist < maxDist) {
-      var strength = (1 - dist / maxDist) * 0.3;
-      return {
-        x: distX * strength,
-        y: distY * strength
-      };
-    }
-    return { x: 0, y: 0 };
+  function hide() {
+    if (!dot) return;
+    isVisible = false;
+    dot.classList.remove('visible');
+    ring.classList.remove('visible');
+  }
+
+  /* ---------- Mouse Move ---------- */
+  function onMouseMove(e) {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    if (!isVisible) show();
+
+    isMouseMoving = true;
+    clearTimeout(moveTimer);
+    moveTimer = setTimeout(function () { isMouseMoving = false; }, 150);
   }
 
   /* ---------- Animation Loop ---------- */
   function animate() {
-    frameCount++;
+    if (!dot) return;
 
-    // Smooth cursor follow
-    var ease = isHovering ? 0.15 : 0.12;
-    cursorX += (mouseX - cursorX) * ease;
-    cursorY += (mouseY - cursorY) * ease;
+    // Dot follows exactly
+    dot.style.left = mouseX + 'px';
+    dot.style.top  = mouseY + 'px';
 
-    // Dot follows faster
-    dotX += (mouseX - dotX) * 0.25;
-    dotY += (mouseY - dotY) * 0.25;
+    // Ring follows with lerp (smooth trailing)
+    ringX = lerp(ringX, mouseX, 0.15);
+    ringY = lerp(ringY, mouseY, 0.15);
+    ring.style.left = ringX + 'px';
+    ring.style.top  = ringY + 'px';
 
-    // Apply magnetic offset to outer ring
-    var magOffset = getMagneticOffset(hoverTarget);
-
-    // Update cursor ring
-    if (cursor) {
-      var scale = isHovering ? 2.2 : 1;
-      var opacity = isHovering ? 0.5 : 0.7;
-      cursor.style.transform = 'translate(' + (cursorX + magOffset.x) + 'px, ' + (cursorY + magOffset.y) + 'px) translate(-50%, -50%) scale(' + scale + ')';
-      cursor.style.opacity = opacity;
+    // Paint trail — spawn drops while moving
+    var now = Date.now();
+    if (isMouseMoving && isVisible && now - lastDropTime > DROP_INTERVAL) {
+      spawnDrop(mouseX, mouseY);
+      lastDropTime = now;
     }
 
-    // Update cursor dot
-    if (cursorDot) {
-      cursorDot.style.transform = 'translate(' + dotX + 'px, ' + dotY + 'px) translate(-50%, -50%)';
-    }
+    // Update active drops (fade + shrink)
+    updateDrops(now);
 
-    // Spawn particles on movement
-    var dx = mouseX - (particles.length ? particles[particles.length - 1].x : mouseX);
-    var dy = mouseY - (particles.length ? particles[particles.length - 1].y : mouseY);
-    var moved = Math.sqrt(dx * dx + dy * dy);
-
-    if (moved > 3 && frameCount % PARTICLE_RATE === 0 && particles.length < MAX_PARTICLES) {
-      particles.push(new Particle(mouseX, mouseY));
-    }
-
-    // Update particles
-    particles = particles.filter(function (p) {
-      var alive = p.update();
-      if (!alive) p.destroy();
-      return alive;
-    });
-
-    rafId = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
   }
 
-  /* ---------- Init ---------- */
-  function init() {
-    // Keep default cursor visible — custom elements are enhancements only
-    var style = document.createElement('style');
-    style.textContent = '*, *::before, *::after { cursor: auto; }';
-    document.head.appendChild(style);
+  /* ---------- Paint Drops ---------- */
+  function spawnDrop(x, y) {
+    var drop;
+    if (pool.length > 0) {
+      drop = pool.pop();
+    } else if (activeDrops.length > 0) {
+      // Recycle oldest
+      drop = activeDrops.shift();
+    } else {
+      return;
+    }
 
-    // Create cursor ring
-    cursor = document.createElement('div');
-    cursor.className = 'custom-cursor-ring';
-    cursor.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:36px;height:36px;border:1.5px solid rgba(212,175,55,0.6);border-radius:50%;transition:opacity 0.3s ease;will-change:transform;';
-    document.body.appendChild(cursor);
+    var size = 4 + Math.random() * 6; // 4–10px
+    drop.style.width  = size + 'px';
+    drop.style.height = size + 'px';
+    drop.style.left   = x + 'px';
+    drop.style.top    = y + 'px';
+    drop.style.opacity = (0.35 + Math.random() * 0.2).toFixed(3);
+    drop.style.transform = 'translate(-50%, -50%) scale(1)';
+    drop.style.display = 'block';
+    drop._spawnTime = Date.now();
+    drop._initialOpacity = parseFloat(drop.style.opacity);
 
-    // Create cursor dot
-    cursorDot = document.createElement('div');
-    cursorDot.className = 'custom-cursor-dot';
-    cursorDot.style.cssText = 'position:fixed;pointer-events:none;z-index:9999;width:6px;height:6px;background:rgba(212,175,55,0.9);border-radius:50%;will-change:transform;box-shadow:0 0 8px rgba(212,175,55,0.4);';
-    document.body.appendChild(cursorDot);
+    activeDrops.push(drop);
+  }
 
-    // Mouse move
-    document.addEventListener('mousemove', function (e) {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    });
+  function updateDrops(now) {
+    for (var i = activeDrops.length - 1; i >= 0; i--) {
+      var drop = activeDrops[i];
+      var age = now - drop._spawnTime;
+      var progress = Math.min(age / DROP_LIFETIME, 1);
 
-    // Click ripple
-    document.addEventListener('click', function (e) {
-      createRipple(e.clientX, e.clientY);
-    });
-
-    // Hover detection for magnetic effect
-    var interactives = 'a, button, .poem-card, .merch-card, .merch-card-btn, .cashapp-btn, .social-icon, .nav-link, .hero-cta, .lang-btn, .lang-option, .gallery-item';
-
-    document.addEventListener('mouseover', function (e) {
-      var target = e.target.closest(interactives);
-      if (target) {
-        isHovering = true;
-        hoverTarget = target;
+      if (progress >= 1) {
+        drop.style.display = 'none';
+        activeDrops.splice(i, 1);
+        pool.push(drop);
+        continue;
       }
-    });
 
-    document.addEventListener('mouseout', function (e) {
-      var target = e.target.closest(interactives);
-      if (target) {
-        isHovering = false;
-        hoverTarget = null;
-      }
-    });
-
-    // Poem line glow effect
-    document.addEventListener('mouseover', function (e) {
-      if (e.target.classList && e.target.classList.contains('poem-modal-line')) {
-        e.target.style.color = '#D4AF37';
-        e.target.style.transition = 'color 0.3s ease';
-      }
-    });
-    document.addEventListener('mouseout', function (e) {
-      if (e.target.classList && e.target.classList.contains('poem-modal-line')) {
-        e.target.style.color = '';
-      }
-    });
-
-    // Hide cursor when leaving window
-    document.addEventListener('mouseleave', function () {
-      if (cursor) cursor.style.opacity = '0';
-      if (cursorDot) cursorDot.style.opacity = '0';
-    });
-    document.addEventListener('mouseenter', function () {
-      if (cursor) cursor.style.opacity = '0.7';
-      if (cursorDot) cursorDot.style.opacity = '1';
-    });
-
-    // Start animation loop
-    animate();
+      // Ease-out fade and shrink
+      var easedProgress = 1 - Math.pow(1 - progress, 3);
+      drop.style.opacity = (drop._initialOpacity * (1 - easedProgress)).toFixed(3);
+      drop.style.transform = 'translate(-50%, -50%) scale(' + (1 - easedProgress * 0.6).toFixed(3) + ')';
+    }
   }
 
   return { init: init };
