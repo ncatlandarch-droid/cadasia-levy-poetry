@@ -9,6 +9,7 @@ window.LevyPoems = [
     title: { en: 'Breathe', es: 'Respira', zh: '呼吸', sw: 'Pumzika' },
     date: 'June 2, 2026',
     featured: true,
+    free: true,
     lines: {
       en: [
         'Just breathe love, why are you worried?',
@@ -88,6 +89,7 @@ window.LevyPoems = [
     title: { en: 'Can I escape?', es: '¿Puedo escapar?', zh: '我能逃脱吗？', sw: 'Je, naweza kutoroka?' },
     date: 'January 18, 2026',
     featured: false,
+    free: false,
     lines: {
       en: [
         'Can I escape from the pain that keeps me from seeing,',
@@ -175,6 +177,7 @@ window.LevyPoems = [
     title: { en: 'How could you?', es: '¿Cómo pudiste?', zh: '你怎么能？', sw: 'Ungewezaje?' },
     date: 'January 15, 2026',
     featured: false,
+    free: false,
     lines: {
       en: [
         'How could you leave me in the cold',
@@ -278,6 +281,7 @@ window.LevyPoems = [
     title: { en: 'Am I the reason?', es: '¿Soy yo la razón?', zh: '是我的原因吗？', sw: 'Je, mimi ndio sababu?' },
     date: 'November 19, 2025',
     featured: false,
+    free: true,
     lines: {
       en: [
         'Am I the reason it\'s so hard to love me?',
@@ -393,6 +397,7 @@ window.LevyPoems = [
     title: { en: 'The idea of me', es: 'La idea de mí', zh: '我的假象', sw: 'Wazo la mimi' },
     date: 'June 2, 2026',
     featured: false,
+    free: false,
     lines: {
       en: [
         'You like me? You love me?',

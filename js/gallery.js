@@ -59,6 +59,7 @@ window.LevyGallery = (function () {
       html += '      <span class="gallery-item-poem">' + art.poem + '</span>';
       html += '      <span class="gallery-item-view">' + t('gallery.view') + '</span>';
       html += '    </div>';
+      html += '    <span class="gallery-item-buy">Buy Print</span>';
       html += '  </div>';
       html += '</div>';
     });
@@ -72,7 +73,10 @@ window.LevyGallery = (function () {
     lightbox.className = 'gallery-lightbox';
     lightbox.innerHTML = '<button class="gallery-lightbox-close" aria-label="Close">✕</button>' +
       '<img class="gallery-lightbox-img" src="" alt="">' +
-      '<p class="gallery-lightbox-caption"></p>';
+      '<p class="gallery-lightbox-caption"></p>' +
+      '<div class="gallery-lightbox-actions">' +
+      '<a href="https://cash.app/$cadasiata" target="_blank" rel="noopener" class="gallery-buy-btn">Buy Print — $29.99</a>' +
+      '</div>';
     document.body.appendChild(lightbox);
 
     lightboxImg = lightbox.querySelector('.gallery-lightbox-img');
@@ -101,6 +105,13 @@ window.LevyGallery = (function () {
       lightboxImg.src = art.image;
       lightboxImg.alt = art.poem;
       lightboxCaption.textContent = '"' + art.poem + '"';
+
+      // Update buy button
+      var buyBtn = lightbox.querySelector('.gallery-buy-btn');
+      if (buyBtn) {
+        buyBtn.textContent = 'Buy "' + art.poem + '" Print — $29.99';
+      }
+
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
     });

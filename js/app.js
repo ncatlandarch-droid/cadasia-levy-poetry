@@ -102,25 +102,36 @@
       var num = (index + 1).toString().padStart(2, '0');
       var title = Poems.getTitle(poem, lang);
       var preview = Poems.getPreview(poem, lang);
+      var isFree = poem.free === true;
 
-      html += '<div class="poem-card reveal" data-poem-id="' + poem.id + '" id="poem-card-' + poem.id + '">';
+      html += '<div class="poem-card reveal' + (isFree ? '' : ' poem-card--locked') + '" data-poem-id="' + poem.id + '" id="poem-card-' + poem.id + '">';
+      if (!isFree) {
+        html += '  <span class="poem-card-lock">🔒</span>';
+      }
       html += '  <span class="poem-card-number">' + num + '</span>';
       html += '  <h3 class="poem-card-title">' + title + '</h3>';
       html += '  <p class="poem-card-preview">' + preview + '</p>';
       html += '  <div class="poem-card-footer">';
       html += '    <span class="poem-card-date">' + poem.date + '</span>';
-      html += '    <span class="poem-card-read" data-i18n="poetry.readMore">' + I18n.t('poetry.readMore') + '</span>';
+      if (isFree) {
+        html += '    <span class="poem-card-read" data-i18n="poetry.readMore">' + I18n.t('poetry.readMore') + '</span>';
+      } else {
+        html += '    <span class="poem-card-read poem-card-read--locked">Preview · Get the Book</span>';
+      }
       html += '  </div>';
 
-      // Audio player
-      html += '  <div class="poem-card-audio" id="poem-audio-' + poem.id + '"></div>';
+      // Audio player only for free poems
+      if (isFree) {
+        html += '  <div class="poem-card-audio" id="poem-audio-' + poem.id + '"></div>';
+      }
       html += '</div>';
     });
 
     grid.innerHTML = html;
 
-    // Create audio players for each poem
+    // Create audio players for free poems only
     Poems.forEach(function (poem) {
+      if (poem.free !== true) return;
       var audioContainer = document.getElementById('poem-audio-' + poem.id);
       if (audioContainer) {
         Audio.createPlayer(poem.id, audioContainer);
@@ -164,18 +175,54 @@
       var lang = I18n.getLanguage();
       var title = Poems.getTitle(poem, lang);
       var lines = Poems.getLines(poem, lang);
+      var isFree = poem.free === true;
+      var teaserCount = poem.teaserLines || 4;
 
       modalTitle.textContent = title;
       modalDate.textContent = poem.date;
 
       var linesHtml = '';
-      lines.forEach(function (line, i) {
-        if (line === '') {
-          linesHtml += '<div class="poem-modal-line empty"></div>';
-        } else {
-          linesHtml += '<div class="poem-modal-line">' + line + '</div>';
+
+      if (isFree) {
+        // FREE poem — show full text
+        lines.forEach(function (line) {
+          if (line === '') {
+            linesHtml += '<div class="poem-modal-line empty"></div>';
+          } else {
+            linesHtml += '<div class="poem-modal-line">' + line + '</div>';
+          }
+        });
+      } else {
+        // LOCKED poem — show teaser lines + blur + CTA
+        lines.forEach(function (line, i) {
+          if (i < teaserCount) {
+            if (line === '') {
+              linesHtml += '<div class="poem-modal-line empty"></div>';
+            } else {
+              linesHtml += '<div class="poem-modal-line">' + line + '</div>';
+            }
+          }
+        });
+
+        // Blurred preview of next few lines
+        linesHtml += '<div class="poem-locked-fade">';
+        for (var j = teaserCount; j < Math.min(teaserCount + 4, lines.length); j++) {
+          if (lines[j] && lines[j] !== '') {
+            linesHtml += '<div class="poem-modal-line">' + lines[j] + '</div>';
+          }
         }
-      });
+        linesHtml += '</div>';
+
+        // CTA
+        linesHtml += '<div class="poem-locked-cta">';
+        linesHtml += '  <div class="poem-locked-icon">🔒</div>';
+        linesHtml += '  <p class="poem-locked-message">This poem continues in the full collection.</p>';
+        linesHtml += '  <a href="https://cash.app/$cadasiata" target="_blank" rel="noopener" class="poem-locked-btn">';
+        linesHtml += '    Support Cadasia · Get the Book';
+        linesHtml += '  </a>';
+        linesHtml += '  <p class="poem-locked-sub">Includes all 5 poems + exclusive audio + art prints</p>';
+        linesHtml += '</div>';
+      }
 
       modalBody.innerHTML = linesHtml;
 
