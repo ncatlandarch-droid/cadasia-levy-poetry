@@ -1985,7 +1985,6 @@ button {
   max-width: 75vw;
   margin-bottom: var(--space-md);
   filter: drop-shadow(0 0 30px var(--gold-glow));
-  animation: pulse 3s ease-in-out infinite;
 }
 
 .hero-subtitle {

@@ -151,9 +151,9 @@ window.LevyCursor = (function () {
 
   /* ---------- Init ---------- */
   function init() {
-    // Hide default cursor
+    // Keep default cursor visible — custom elements are enhancements only
     var style = document.createElement('style');
-    style.textContent = '*, *::before, *::after { cursor: none !important; } .poem-modal-overlay:not(.open) ~ * { cursor: none !important; }';
+    style.textContent = '*, *::before, *::after { cursor: auto; }';
     document.head.appendChild(style);
 
     // Create cursor ring
