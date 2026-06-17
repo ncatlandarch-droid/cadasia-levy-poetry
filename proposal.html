@@ -7,21 +7,24 @@
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      --gold: #D4AF37;
-      --gold-dark: #A8892C;
-      --gold-light: #E8D48B;
-      --bg-deep: #0A0A0F;
-      --bg-section: #111118;
-      --text-primary: #F0ECE3;
-      --text-secondary: #A09B8C;
-      --glass-border: rgba(212, 175, 55, 0.08);
+      --gold: #A8892C;
+      --gold-dark: #8B6F1E;
+      --gold-light: #D4AF37;
+      --bg-page: #FFFFFF;
+      --bg-section: #FAFAF8;
+      --bg-cover: #F5F3EF;
+      --text-primary: #1A1A1A;
+      --text-secondary: #555555;
+      --text-muted: #888888;
+      --border: #E8E4DD;
+      --border-accent: rgba(168, 137, 44, 0.2);
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--bg-deep);
+      background: #EEEAE4;
       color: var(--text-primary);
       line-height: 1.7;
       font-size: 14px;
@@ -34,9 +37,9 @@
       left: 0;
       right: 0;
       z-index: 100;
-      background: rgba(10, 10, 15, 0.95);
+      background: rgba(255, 255, 255, 0.95);
       backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--border);
       padding: 12px 24px;
       display: flex;
       justify-content: center;
@@ -46,8 +49,8 @@
 
     .download-bar button {
       padding: 10px 28px;
-      background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-      color: var(--bg-deep);
+      background: linear-gradient(135deg, var(--gold-dark), var(--gold-light));
+      color: #FFFFFF;
       border: none;
       border-radius: 50px;
       font-family: 'Inter', sans-serif;
@@ -61,7 +64,7 @@
 
     .download-bar button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(212, 175, 55, 0.35);
+      box-shadow: 0 8px 30px rgba(168, 137, 44, 0.3);
     }
 
     .download-bar span {
@@ -73,10 +76,11 @@
     .document {
       max-width: 850px;
       margin: 80px auto 40px;
-      background: var(--bg-section);
-      border: 1px solid var(--glass-border);
-      border-radius: 12px;
+      background: var(--bg-page);
+      border: 1px solid var(--border);
+      border-radius: 4px;
       overflow: hidden;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.08);
     }
 
     /* Cover Page */
@@ -84,8 +88,8 @@
       position: relative;
       padding: 80px 60px;
       text-align: center;
-      background: linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-section) 100%);
-      border-bottom: 1px solid var(--glass-border);
+      background: var(--bg-cover);
+      border-bottom: 1px solid var(--border);
       min-height: 700px;
       display: flex;
       flex-direction: column;
@@ -93,15 +97,8 @@
       align-items: center;
     }
 
-    .cover::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: radial-gradient(ellipse at center, rgba(212, 175, 55, 0.05) 0%, transparent 70%);
-    }
-
     .cover-logo {
-      width: 200px;
+      width: 220px;
       height: auto;
       margin-bottom: 40px;
       position: relative;
@@ -113,8 +110,6 @@
       height: 1px;
       background: linear-gradient(90deg, transparent, var(--gold), transparent);
       margin: 24px auto;
-      position: relative;
-      z-index: 1;
     }
 
     .cover-type {
@@ -125,8 +120,6 @@
       text-transform: uppercase;
       color: var(--gold);
       margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
     }
 
     .cover-title {
@@ -136,8 +129,6 @@
       color: var(--text-primary);
       line-height: 1.2;
       margin-bottom: 8px;
-      position: relative;
-      z-index: 1;
     }
 
     .cover-subtitle {
@@ -147,15 +138,11 @@
       font-style: italic;
       color: var(--text-secondary);
       margin-bottom: 40px;
-      position: relative;
-      z-index: 1;
     }
 
     .cover-meta {
       font-size: 0.8rem;
       color: var(--text-secondary);
-      position: relative;
-      z-index: 1;
     }
 
     .cover-meta strong {
@@ -169,7 +156,7 @@
     /* Pages */
     .page {
       padding: 60px;
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--border);
       page-break-inside: avoid;
     }
 
@@ -179,7 +166,7 @@
 
     .page-number {
       font-size: 0.7rem;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       letter-spacing: 0.15em;
       text-transform: uppercase;
       margin-bottom: 40px;
@@ -224,42 +211,20 @@
       font-weight: 400;
     }
 
-    .callout {
-      background: rgba(212, 175, 55, 0.05);
-      border: 1px solid rgba(212, 175, 55, 0.12);
-      border-radius: 8px;
-      padding: 20px 24px;
-      margin: 24px 0;
-      text-align: center;
-    }
-
-    .callout-big {
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: var(--gold);
-    }
-
-    .callout-sub {
-      font-size: 0.8rem;
-      color: var(--text-secondary);
-      margin-top: 4px;
-    }
-
     .callout-zero {
-      background: linear-gradient(135deg, rgba(212, 175, 55, 0.08), rgba(212, 175, 55, 0.02));
-      border: 1px solid rgba(212, 175, 55, 0.2);
+      background: var(--bg-section);
+      border: 2px solid var(--border-accent);
       border-radius: 8px;
-      padding: 24px;
+      padding: 28px;
       margin: 24px 0;
       text-align: center;
     }
 
     .callout-zero .big {
       font-family: 'Cormorant Garamond', serif;
-      font-size: 2.4rem;
+      font-size: 2.2rem;
       font-weight: 600;
-      color: var(--gold);
+      color: var(--gold-dark);
     }
 
     .callout-zero .sub {
@@ -280,17 +245,18 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--gold-dark);
       text-align: left;
       padding: 10px 12px;
-      border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+      border-bottom: 2px solid var(--border-accent);
+      background: var(--bg-section);
     }
 
     tbody td {
       padding: 10px 12px;
       font-size: 0.85rem;
       color: var(--text-secondary);
-      border-bottom: 1px solid var(--glass-border);
+      border-bottom: 1px solid var(--border);
     }
 
     tbody tr:last-child td {
@@ -298,24 +264,27 @@
     }
 
     td.status-done {
-      color: #4ade80;
+      color: #16a34a;
+      font-weight: 500;
     }
 
     td.status-next {
-      color: var(--gold);
+      color: var(--gold-dark);
+      font-weight: 500;
     }
 
     td.value {
       text-align: right;
-      font-weight: 500;
+      font-weight: 600;
       color: var(--text-primary);
     }
 
     .total-row td {
-      border-top: 1px solid rgba(212, 175, 55, 0.2);
+      border-top: 2px solid var(--border-accent);
       font-weight: 600;
       color: var(--text-primary);
       padding-top: 14px;
+      background: var(--bg-section);
     }
 
     /* Revenue Split Boxes */
@@ -327,8 +296,8 @@
     }
 
     .split-box {
-      background: rgba(212, 175, 55, 0.04);
-      border: 1px solid var(--glass-border);
+      background: var(--bg-section);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 20px;
       text-align: center;
@@ -347,12 +316,12 @@
       font-family: 'Cormorant Garamond', serif;
       font-size: 2rem;
       font-weight: 600;
-      color: var(--gold);
+      color: var(--gold-dark);
     }
 
     .split-box-desc {
       font-size: 0.75rem;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       margin-top: 4px;
     }
 
@@ -365,8 +334,8 @@
     }
 
     .own-box {
-      background: rgba(212, 175, 55, 0.03);
-      border: 1px solid var(--glass-border);
+      background: var(--bg-section);
+      border: 1px solid var(--border);
       border-radius: 8px;
       padding: 24px;
     }
@@ -392,7 +361,19 @@
 
     .own-box li::before {
       content: '✓  ';
-      color: var(--gold);
+      color: var(--gold-dark);
+      font-weight: 700;
+    }
+
+    /* Quote block */
+    blockquote {
+      border-left: 3px solid var(--gold);
+      padding-left: 20px;
+      margin: 24px 0;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 1.15rem;
+      font-style: italic;
+      color: var(--text-primary);
     }
 
     /* Signature Section */
@@ -404,7 +385,7 @@
     }
 
     .sig-block {
-      border-top: 1px solid var(--glass-border);
+      border-top: 2px solid var(--border-accent);
       padding-top: 24px;
     }
 
@@ -413,7 +394,7 @@
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: var(--gold-dark);
       margin-bottom: 4px;
     }
 
@@ -432,14 +413,14 @@
     }
 
     .sig-line {
-      border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+      border-bottom: 1px solid var(--border);
       padding-bottom: 4px;
       margin-bottom: 16px;
     }
 
     .sig-label {
       font-size: 0.7rem;
-      color: var(--text-secondary);
+      color: var(--text-muted);
       letter-spacing: 0.08em;
       text-transform: uppercase;
       margin-bottom: 24px;
@@ -449,8 +430,8 @@
     .doc-footer {
       text-align: center;
       padding: 40px 60px;
-      background: var(--bg-deep);
-      border-top: 1px solid var(--glass-border);
+      background: var(--bg-section);
+      border-top: 1px solid var(--border);
     }
 
     .doc-footer p {
@@ -462,27 +443,16 @@
     .doc-footer .motto {
       font-family: 'Cormorant Garamond', serif;
       font-style: italic;
-      color: var(--gold);
+      color: var(--gold-dark);
       font-size: 0.9rem;
       margin-top: 12px;
-    }
-
-    /* Quote block */
-    blockquote {
-      border-left: 2px solid var(--gold);
-      padding-left: 20px;
-      margin: 24px 0;
-      font-family: 'Cormorant Garamond', serif;
-      font-size: 1.15rem;
-      font-style: italic;
-      color: var(--text-primary);
     }
 
     /* Print styles */
     @media print {
       .download-bar { display: none !important; }
-      body { background: #0A0A0F; }
-      .document { margin: 0; border: none; border-radius: 0; }
+      body { background: #FFFFFF; }
+      .document { margin: 0; border: none; border-radius: 0; box-shadow: none; }
       .page { page-break-inside: avoid; }
       .cover { page-break-after: always; }
     }
@@ -500,7 +470,7 @@
 
     <!-- ===== COVER PAGE ===== -->
     <div class="cover">
-      <img src="logo/cadasia-logo.png" alt="Words That Heal" class="cover-logo">
+      <img src="Logos/Words that Heal Brown Logo.png" alt="Words That Heal" class="cover-logo">
       <div class="cover-divider"></div>
       <div class="cover-type">Creative Services Proposal & Agreement</div>
       <h1 class="cover-title">Words That Heal</h1>
@@ -508,7 +478,7 @@
       <div class="cover-divider"></div>
       <div class="cover-meta">
         <p><strong>Prepared for:</strong> Cadasia Ta'Nae Levy</p>
-        <p><strong>Prepared by:</strong> Charlie Hopper · Think! Design & Planning, LLC</p>
+        <p><strong>Prepared by:</strong> William "Chris" Harrison · Think! Design & Planning, LLC</p>
         <p><strong>Date:</strong> June 17, 2026</p>
         <p><strong>Proposal:</strong> TVF-2026-CLV-001</p>
       </div>
@@ -523,7 +493,7 @@
 
       <p class="highlight">Thank you for trusting Think! Ventures Foundation with your creative vision. Your poetry speaks truth, and your art carries weight. It deserves a platform that matches.</p>
 
-      <p>This proposal outlines the full scope of services we are providing to launch and grow <strong style="color:var(--gold)">Words That Heal</strong> — your poetry, art, and merchandise brand — at zero cost to you.</p>
+      <p>This proposal outlines the full scope of services we are providing to launch and grow <strong style="color:var(--gold-dark)">Words That Heal</strong> — your poetry, art, and merchandise brand — at zero cost to you.</p>
 
       <p>Think! Ventures Foundation is a 501(c)(3) nonprofit that builds complete businesses for underserved entrepreneurs in 2–5 days. Everything described below is provided free of charge as part of our mission.</p>
 
@@ -633,13 +603,13 @@
       <p><strong style="color:var(--text-primary)">Example Earnings:</strong></p>
       <table>
         <thead>
-          <tr><th>Product</th><th>Retail Price</th><th>Production</th><th>Net Profit</th><th style="text-align:right">You Earn (70%)</th></tr>
+          <tr><th>Product</th><th>Retail</th><th>Cost</th><th>Net Profit</th><th style="text-align:right">You Earn (70%)</th></tr>
         </thead>
         <tbody>
-          <tr><td>"Breathe" T-Shirt</td><td>$34.99</td><td>$10.00</td><td>$25.00</td><td class="value" style="color:var(--gold)">$17.50</td></tr>
-          <tr><td>"Am I the Reason" Mug</td><td>$18.99</td><td>$6.00</td><td>$13.00</td><td class="value" style="color:var(--gold)">$9.10</td></tr>
-          <tr><td>Art Print (Gallery)</td><td>$29.99</td><td>$5.00</td><td>$25.00</td><td class="value" style="color:var(--gold)">$17.50</td></tr>
-          <tr><td>Volume 1 Audio (Digital)</td><td>$9.99</td><td>$1.00</td><td>$9.00</td><td class="value" style="color:var(--gold)">$6.30</td></tr>
+          <tr><td>"Breathe" T-Shirt</td><td>$34.99</td><td>$10.00</td><td>$25.00</td><td class="value" style="color:var(--gold-dark)">$17.50</td></tr>
+          <tr><td>"Am I the Reason" Mug</td><td>$18.99</td><td>$6.00</td><td>$13.00</td><td class="value" style="color:var(--gold-dark)">$9.10</td></tr>
+          <tr><td>Art Print (Gallery)</td><td>$29.99</td><td>$5.00</td><td>$25.00</td><td class="value" style="color:var(--gold-dark)">$17.50</td></tr>
+          <tr><td>Volume 1 Audio (Digital)</td><td>$9.99</td><td>$1.00</td><td>$9.00</td><td class="value" style="color:var(--gold-dark)">$6.30</td></tr>
         </tbody>
       </table>
 
@@ -689,7 +659,7 @@
       • Respond to communications within 48 hours</p>
 
       <p><strong style="color:var(--text-primary)">What You Don't Have To Do:</strong></p>
-      <p>• No managing the website • No handling customer orders • No processing payments • No dealing with technology • No paying any fees</p>
+      <p>• No managing the website &nbsp;• No handling customer orders &nbsp;• No processing payments &nbsp;• No dealing with technology &nbsp;• No paying any fees</p>
     </div>
 
     <!-- ===== PAGE 6: TERMS ===== -->
@@ -747,7 +717,7 @@
 
         <div class="sig-block">
           <div class="sig-role">Service Provider</div>
-          <div class="sig-name">Charlie Hopper</div>
+          <div class="sig-name">William "Chris" Harrison</div>
           <div class="sig-company">Think! Design & Planning, LLC<br>on behalf of Think! Ventures Foundation</div>
 
           <div class="sig-line">&nbsp;</div>

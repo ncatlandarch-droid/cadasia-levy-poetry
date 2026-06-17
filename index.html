@@ -85,12 +85,11 @@
       <p class="hero-quote" id="hero-quote"></p>
       <a href="#poetry" class="hero-cta" data-i18n="hero.cta">Read Her Poetry</a>
 
-      <p class="hero-location">Rocky Mount, North Carolina</p>
-    </div>
+      <div class="hero-scroll">
+        <div class="hero-scroll-line"></div>
+      </div>
 
-    <div class="hero-scroll">
-      <span>Scroll</span>
-      <div class="hero-scroll-line"></div>
+      <p class="hero-location">Rocky Mount, North Carolina</p>
     </div>
   </section>
 
@@ -246,85 +245,93 @@
         <p class="section-subtitle">Part of a network of Black-owned businesses, farms, and creators building together.</p>
       </div>
 
+      <div class="community-filters reveal" id="community-filters">
+        <button class="community-filter active" data-filter="all">All</button>
+        <button class="community-filter" data-filter="nonprofit">Nonprofit</button>
+        <button class="community-filter" data-filter="publishing">Publishing</button>
+        <button class="community-filter" data-filter="farm">Farms</button>
+        <button class="community-filter" data-filter="collective">Collective</button>
+      </div>
+
       <div class="community-grid" id="community-grid">
 
-        <!-- Think! Ventures Foundation -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="nonprofit">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap"><img src="assets/logos/think-ventures.png" alt="Think! Ventures" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">501(c)(3) Nonprofit</span>
           <h3 class="community-card-name">Think! Ventures Foundation</h3>
           <p class="community-card-tagline">"From Dream to Launch in Days"</p>
-          <p class="community-card-desc">Builds complete businesses for underserved entrepreneurs in 2–5 days. Website, brand, e-commerce, business plan — plus 12 months of coaching. All at zero cost. Over $114K+ in value delivered.</p>
+          <p class="community-card-desc">Builds complete businesses for underserved entrepreneurs in 2–5 days. Website, brand, e-commerce, business plan — plus 12 months of coaching.</p>
           <a href="https://thinkventures.org" target="_blank" rel="noopener" class="community-card-link">thinkventures.org →</a>
         </div>
 
-        <!-- Think! Design & Planning -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="nonprofit">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap community-card-logo-wrap--dark"><img src="assets/logos/think-design.png" alt="Think! Design" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">USDA Technical Service Provider</span>
           <h3 class="community-card-name">Think! Design & Planning</h3>
           <p class="community-card-tagline">"Conservation • Culture • Memorial"</p>
-          <p class="community-card-desc">A design studio at the intersection of conservation science, cultural landscapes, and memorial architecture. NRCS Certified TSP helping landowners move from vision to implementation.</p>
+          <p class="community-card-desc">Design studio at the intersection of conservation science, cultural landscapes, and memorial architecture. NRCS Certified TSP.</p>
           <a href="https://thinkdesignandplanning.com" target="_blank" rel="noopener" class="community-card-link">thinkdesignandplanning.com →</a>
         </div>
 
-        <!-- Brothers Function Group -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="collective">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap community-card-logo-wrap--dark"><img src="assets/logos/bfg.png" alt="Brothers Function Group" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Social Collective</span>
           <h3 class="community-card-name">Brothers Function Group</h3>
           <p class="community-card-tagline">"A Premium Social Collective Founded on Brotherhood"</p>
-          <p class="community-card-desc">Curates premium themed environments where connection stirs the soul. "The Hub" — a digital directory supporting minority-owned businesses. Experience the product, support the people.</p>
+          <p class="community-card-desc">Curates premium themed environments where connection stirs the soul. "The Hub" — supporting minority-owned businesses.</p>
           <a href="https://thefunctiongroup.netlify.app" target="_blank" rel="noopener" class="community-card-link">thefunctiongroup.netlify.app →</a>
         </div>
 
-        <!-- Re-Thinking The Leaf -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="farm">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap"><img src="assets/logos/rttl.png" alt="Re-Thinking The Leaf" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Agrotherapy Estate</span>
           <h3 class="community-card-name">Re-Thinking The Leaf</h3>
           <p class="community-card-tagline">"Return to the Land"</p>
-          <p class="community-card-desc">A 66-acre agrotherapy estate in Brunswick County, Virginia. Lavender fields, equine therapy, and community wellness — inviting communities of color back to the farm.</p>
+          <p class="community-card-desc">A 66-acre agrotherapy estate in Brunswick County, Virginia. Lavender fields, equine therapy, and community wellness.</p>
           <a href="https://rethinkingtheleaf.netlify.app" target="_blank" rel="noopener" class="community-card-link">rethinkingtheleaf.netlify.app →</a>
         </div>
 
-        <!-- DJ VanHook's Masterpiece Studio -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="publishing">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap community-card-logo-wrap--dark"><img src="assets/logos/dj-masterpiece.png" alt="DJ Masterpiece Studio" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Literary Publishing</span>
           <h3 class="community-card-name">DJ VanHook's Masterpiece Studio</h3>
           <p class="community-card-tagline">"Stories That Hit Different"</p>
-          <p class="community-card-desc">Burlington, NC-based author behind the Black Men No More Excuses series. Trilingual publishing platform with AI-narrated audiobooks and cinematic book trailers.</p>
+          <p class="community-card-desc">Burlington, NC-based author behind the Black Men No More Excuses series. Trilingual publishing with AI-narrated audiobooks.</p>
           <a href="https://djs-masterpiece-website.netlify.app" target="_blank" rel="noopener" class="community-card-link">DJ's Masterpiece Studio →</a>
         </div>
 
-        <!-- Hood Hymns Publishing -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="publishing">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap community-card-logo-wrap--dark"><img src="assets/logos/hood-hymns.png" alt="Hood Hymns Publishing" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Literary Publishing</span>
           <h3 class="community-card-name">Hood Hymns Publishing</h3>
           <p class="community-card-tagline">"Positive Stories Rooted in the Streets"</p>
-          <p class="community-card-desc">Founded by C.D. Howell — Detroit native and NC resident. Urban literary fiction featuring The Harmonies of Hope. Ebook, signed hardcovers, and full AI-narrated audiobook.</p>
+          <p class="community-card-desc">Founded by C.D. Howell — Detroit native and NC resident. Urban literary fiction featuring The Harmonies of Hope.</p>
           <a href="https://hood-hymns-publishing.netlify.app" target="_blank" rel="noopener" class="community-card-link">Hood Hymns Publishing →</a>
         </div>
 
-        <!-- Anointed Acres -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="farm">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap"><img src="assets/logos/anointed-acres.png" alt="Anointed Acres" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Partner Farm</span>
           <h3 class="community-card-name">Anointed Acres Stables</h3>
           <p class="community-card-tagline">"Empowering Families Through Equine Connection"</p>
-          <p class="community-card-desc">A sanctuary where purpose and passion converge — fostering character, discipline, and resilience through equine therapy and therapeutic farmwork in Lawrenceville, VA.</p>
+          <p class="community-card-desc">Fostering character, discipline, and resilience through equine therapy and therapeutic farmwork in Lawrenceville, VA.</p>
           <a href="https://anointedacres.org" target="_blank" rel="noopener" class="community-card-link">anointedacres.org →</a>
         </div>
 
-        <!-- Browntown Farms -->
-        <div class="community-card reveal">
+        <div class="community-card reveal" data-category="farm">
           <div class="community-card-accent"></div>
+          <div class="community-card-logo-wrap"><img src="assets/logos/browntown-farms.webp" alt="Browntown Farms" class="community-card-logo" loading="lazy"></div>
           <span class="community-badge">Century Farm · Est. 1908</span>
           <h3 class="community-card-name">Browntown Farms</h3>
           <p class="community-card-tagline">"Rooted in Heritage, Growing for Community"</p>
-          <p class="community-card-desc">A century farm in Warfield, Virginia — operating since 1908. Fresh produce, artisan jams, seasonal gift baskets, and generational land stewardship at its finest.</p>
+          <p class="community-card-desc">A century farm in Warfield, Virginia — operating since 1908. Fresh produce, artisan jams, seasonal gift baskets.</p>
           <a href="https://browntownfarms.com" target="_blank" rel="noopener" class="community-card-link">browntownfarms.com →</a>
         </div>
 

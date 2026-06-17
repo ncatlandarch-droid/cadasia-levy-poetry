@@ -58,8 +58,38 @@
       Animations.initScrollReveal();
     }, 200);
 
+    initCommunityFilters();
+
     // Hide loader
     setTimeout(hideLoader, 600);
+  }
+
+  /* ---------- Community Filters ---------- */
+  function initCommunityFilters() {
+    var filtersEl = document.getElementById('community-filters');
+    if (!filtersEl) return;
+
+    filtersEl.addEventListener('click', function (e) {
+      var btn = e.target.closest('.community-filter');
+      if (!btn) return;
+
+      // Update active state
+      filtersEl.querySelectorAll('.community-filter').forEach(function (b) {
+        b.classList.remove('active');
+      });
+      btn.classList.add('active');
+
+      var filter = btn.dataset.filter;
+      var cards = document.querySelectorAll('#community-grid .community-card');
+
+      cards.forEach(function (card) {
+        if (filter === 'all' || card.dataset.category === filter) {
+          card.classList.remove('hidden');
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    });
   }
 
   /* ---------- Daily Verse ---------- */
