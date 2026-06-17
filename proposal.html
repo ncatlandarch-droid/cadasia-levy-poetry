@@ -448,13 +448,49 @@
       margin-top: 12px;
     }
 
-    /* Print styles */
+    /* Print / PDF Export styles */
     @media print {
       .download-bar { display: none !important; }
-      body { background: #FFFFFF; }
-      .document { margin: 0; border: none; border-radius: 0; box-shadow: none; }
-      .page { page-break-inside: avoid; }
-      .cover { page-break-after: always; }
+
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+
+      body {
+        background: #FFFFFF;
+        margin: 0;
+        padding: 0;
+      }
+
+      .document {
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        max-width: 100%;
+      }
+
+      /* Each page section starts on a new printed page */
+      .cover {
+        page-break-after: always;
+        min-height: 100vh;
+      }
+
+      .page {
+        page-break-before: always;
+        page-break-inside: avoid;
+        padding: 40px 50px;
+      }
+
+      /* Keep tables, grids, and signature blocks together */
+      table { page-break-inside: avoid; }
+      .split-grid { page-break-inside: avoid; }
+      .own-grid { page-break-inside: avoid; }
+      .sig-grid { page-break-inside: avoid; }
+      .callout-zero { page-break-inside: avoid; }
+
+      /* Footer on last page */
+      .doc-footer {
+        page-break-before: avoid;
+      }
     }
   </style>
 </head>
