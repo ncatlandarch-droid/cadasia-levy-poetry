@@ -2433,6 +2433,31 @@ button {
   padding: var(--space-lg);
   text-align: center;
   transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.community-card-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-dark));
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.community-card:hover .community-card-accent {
+  opacity: 1;
+}
+
+.community-card-tagline {
+  font-family: var(--font-poem);
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: var(--space-sm);
 }
 
 .community-card:hover {
