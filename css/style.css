@@ -2020,7 +2020,7 @@ button {
 
 /* Footer Logo Image */
 .footer-logo-img {
-  height: 52px;
+  height: 140px;
   width: auto;
   filter: drop-shadow(0 0 10px var(--gold-glow));
 }
