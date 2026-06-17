@@ -1928,9 +1928,9 @@ button {
 }
 
 .loader-logo {
-  width: 200px;
-  max-width: 60vw;
-  filter: drop-shadow(0 0 20px var(--gold-glow));
+  width: 240px;
+  max-width: 65vw;
+  filter: drop-shadow(0 0 24px var(--gold-glow));
   animation: pulse 2.5s ease-in-out infinite;
 }
 
@@ -1981,9 +1981,9 @@ button {
 
 /* Hero Brand Logo */
 .hero-brand-logo {
-  width: 280px;
-  max-width: 70vw;
-  margin-bottom: var(--space-lg);
+  width: 340px;
+  max-width: 75vw;
+  margin-bottom: var(--space-md);
   filter: drop-shadow(0 0 30px var(--gold-glow));
   animation: pulse 3s ease-in-out infinite;
 }
@@ -1999,16 +1999,21 @@ button {
 
 /* Nav Logo Image */
 .nav-logo-img {
-  height: 32px;
+  height: 44px;
   width: auto;
-  filter: drop-shadow(0 0 6px var(--gold-glow));
+  filter: drop-shadow(0 0 8px var(--gold-glow));
+  transition: transform 0.3s ease;
+}
+
+.nav-logo-img:hover {
+  transform: scale(1.05);
 }
 
 /* Footer Logo Image */
 .footer-logo-img {
-  height: 36px;
+  height: 52px;
   width: auto;
-  filter: drop-shadow(0 0 8px var(--gold-glow));
+  filter: drop-shadow(0 0 10px var(--gold-glow));
 }
 
 /* About Badge Divider */
