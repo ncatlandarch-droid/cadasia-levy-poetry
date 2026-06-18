@@ -36,6 +36,42 @@ window.LevyGallery = (function () {
       image: 'assets/art-ideaofme.png',
       titleKey: 'gallery.ideaofme',
       poem: 'The idea of me'
+    },
+    {
+      id: 'dragon-fire',
+      image: 'assets/art-dragon-fire.png',
+      titleKey: 'gallery.dragonfire',
+      poem: 'Dragon & Flame'
+    },
+    {
+      id: 'dragon-bloom',
+      image: 'assets/art-dragon-bloom.png',
+      titleKey: 'gallery.dragonbloom',
+      poem: 'Dragon & Bloom'
+    },
+    {
+      id: 'affirmation-queen',
+      image: 'assets/art-affirmation-queen.png',
+      titleKey: 'gallery.affirmationqueen',
+      poem: 'Affirmation Queen'
+    },
+    {
+      id: 'rainbow-bloom',
+      image: 'assets/art-rainbow-bloom.png',
+      titleKey: 'gallery.rainbowbloom',
+      poem: 'Rainbow Bloom'
+    },
+    {
+      id: 'mudra-hand',
+      image: 'assets/art-mudra-hand.png',
+      titleKey: 'gallery.mudrahand',
+      poem: 'Mudra'
+    },
+    {
+      id: 'heartbeat-breathe',
+      image: 'assets/art-heartbeat-breathe.png',
+      titleKey: 'gallery.heartbeatbreathe',
+      poem: 'Heartbeat'
     }
   ];
 
