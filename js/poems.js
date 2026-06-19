@@ -86,7 +86,7 @@ window.LevyPoems = [
   },
   {
     id: 'can-i-escape',
-    title: { en: 'Can I escape?', es: '¿Puedo escapar?', zh: '我能逃脱吗？', sw: 'Je, naweza kutoroka?' },
+    title: { en: 'Can I Escape?', es: '¿Puedo Escapar?', zh: '我能逃脱吗？', sw: 'Je, Naweza Kutoroka?' },
     date: 'January 18, 2026',
     featured: false,
     free: false,
@@ -174,7 +174,7 @@ window.LevyPoems = [
   },
   {
     id: 'how-could-you',
-    title: { en: 'How could you?', es: '¿Cómo pudiste?', zh: '你怎么能？', sw: 'Ungewezaje?' },
+    title: { en: 'How Could You?', es: '¿Cómo Pudiste?', zh: '你怎么能？', sw: 'Ungewezaje?' },
     date: 'January 15, 2026',
     featured: false,
     free: false,
@@ -278,7 +278,7 @@ window.LevyPoems = [
   },
   {
     id: 'am-i-the-reason',
-    title: { en: 'Am I the reason?', es: '¿Soy yo la razón?', zh: '是我的原因吗？', sw: 'Je, mimi ndio sababu?' },
+    title: { en: 'Am I The Reason?', es: '¿Soy Yo La Razón?', zh: '是我的原因吗？', sw: 'Je, Mimi Ndio Sababu?' },
     date: 'November 19, 2025',
     featured: false,
     free: true,
@@ -394,7 +394,7 @@ window.LevyPoems = [
   },
   {
     id: 'the-idea-of-me',
-    title: { en: 'The idea of me', es: 'La idea de mí', zh: '我的假象', sw: 'Wazo la mimi' },
+    title: { en: 'The Idea Of Me', es: 'La Idea De Mí', zh: '我的假象', sw: 'Wazo La Mimi' },
     date: 'June 2, 2026',
     featured: false,
     free: false,

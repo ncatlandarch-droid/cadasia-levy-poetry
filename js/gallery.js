@@ -17,25 +17,25 @@ window.LevyGallery = (function () {
       id: 'escape',
       image: 'assets/art-escape.png',
       titleKey: 'gallery.escape',
-      poem: 'Can I escape?'
+      poem: 'Can I Escape?'
     },
     {
       id: 'howcouldyou',
       image: 'assets/art-howcouldyou.png',
       titleKey: 'gallery.howcouldyou',
-      poem: 'How could you?'
+      poem: 'How Could You?'
     },
     {
       id: 'amithereason',
       image: 'assets/art-amithereason.png',
       titleKey: 'gallery.amithereason',
-      poem: 'Am I the reason?'
+      poem: 'Am I The Reason?'
     },
     {
       id: 'ideaofme',
       image: 'assets/art-ideaofme.png',
       titleKey: 'gallery.ideaofme',
-      poem: 'The idea of me'
+      poem: 'The Idea Of Me'
     },
     {
       id: 'dragon-fire',
