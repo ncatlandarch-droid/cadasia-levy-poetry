@@ -72,6 +72,12 @@ window.LevyGallery = (function () {
       image: 'assets/art-heartbeat-breathe.png',
       titleKey: 'gallery.heartbeatbreathe',
       poem: 'Heartbeat'
+    },
+    {
+      id: 'nubian-dragon',
+      image: 'assets/merch-nubian-dragon.png',
+      titleKey: 'gallery.nubiandragon',
+      poem: 'Nubian Dragon Queen'
     }
   ];
 

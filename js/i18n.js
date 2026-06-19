@@ -70,6 +70,8 @@ window.LevyI18n = (function () {
       'merch.mug.desc': 'The question that haunts. Black ceramic, gold script. Morning reflections.',
       'merch.artprint.title': '"Can I Escape?" Art Print',
       'merch.artprint.desc': 'Gallery-quality print with gold calligraphy over abstract watercolor.',
+      'merch.nubiandragon.title': 'Nubian Dragon Queen Print',
+      'merch.nubiandragon.desc': 'Dragon & flower tattoo art wrapped around a Nubian queen. Premium gallery print.',
       'merch.comingSoon': 'Coming Soon',
 
       // Support
@@ -162,6 +164,8 @@ window.LevyI18n = (function () {
       'merch.mug.desc': 'La pregunta que persigue. Cerámica negra, letras doradas.',
       'merch.artprint.title': 'Impresión "¿Puedo escapar?"',
       'merch.artprint.desc': 'Impresión de galería con caligrafía dorada sobre acuarela abstracta.',
+      'merch.nubiandragon.title': 'Impresión Reina Dragón Nubia',
+      'merch.nubiandragon.desc': 'Arte de tatuaje de dragón y flores envuelto alrededor de una reina nubia. Impresión premium.',
       'merch.comingSoon': 'Próximamente',
 
       'support.title': 'Apoya el Arte',
@@ -246,6 +250,8 @@ window.LevyI18n = (function () {
       'merch.mug.desc': '那个萦绕心头的问题。黑色陶瓷，金色字体。',
       'merch.artprint.title': '"我能逃脱吗？" 艺术印刷品',
       'merch.artprint.desc': '画廊级印刷品，金色书法叠加抽象水彩。',
+      'merch.nubiandragon.title': '努比亚龙后印刷品',
+      'merch.nubiandragon.desc': '龙与花纹身艺术环绕努比亚女王。画廊级印刷品。',
       'merch.comingSoon': '即将推出',
 
       'support.title': '支持艺术',
@@ -330,6 +336,8 @@ window.LevyI18n = (function () {
       'merch.mug.desc': 'Swali linalosumbua. Kauri nyeusi, maandishi ya dhahabu.',
       'merch.artprint.title': 'Uchapishaji "Je, naweza kutoroka?"',
       'merch.artprint.desc': 'Uchapishaji wa galeria na maandishi ya dhahabu.',
+      'merch.nubiandragon.title': 'Uchapishaji wa Malkia Joka Nubia',
+      'merch.nubiandragon.desc': 'Sanaa ya joka na maua imezunguka malkia wa Nubia. Uchapishaji wa galeria.',
       'merch.comingSoon': 'Inakuja Hivi Karibuni',
 
       'support.title': 'Saidia Sanaa',

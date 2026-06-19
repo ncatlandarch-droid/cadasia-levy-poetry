@@ -41,6 +41,15 @@ window.LevyMerch = (function () {
       price: '$29.99',
       link: '#',
       comingSoon: true
+    },
+    {
+      id: 'nubian-dragon',
+      image: 'assets/merch-nubian-dragon.png',
+      titleKey: 'merch.nubiandragon.title',
+      descKey: 'merch.nubiandragon.desc',
+      price: '$34.99',
+      link: '#',
+      comingSoon: true
     }
   ];
 
