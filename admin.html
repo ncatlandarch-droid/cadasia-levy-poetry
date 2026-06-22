@@ -1943,15 +1943,48 @@ select.form-control { cursor: pointer; }
   // ============================================
   // GALLERY CRUD
   // ============================================
+  var DEFAULT_GALLERY = [
+    { id: 'breathe', image: 'assets/art-breathe.png', title: 'Breathe', poem: 'Breathe', description: 'Finding peace in the storm', order: 1 },
+    { id: 'escape', image: 'assets/art-escape.png', title: 'Can I Escape?', poem: 'Can I Escape?', description: 'Breaking free', order: 2 },
+    { id: 'howcouldyou', image: 'assets/art-howcouldyou.png', title: 'How Could You?', poem: 'How Could You?', description: 'Broken bonds', order: 3 },
+    { id: 'amithereason', image: 'assets/art-amithereason.png', title: 'Am I The Reason?', poem: 'Am I The Reason?', description: 'Self-reflection', order: 4 },
+    { id: 'ideaofme', image: 'assets/art-ideaofme.png', title: 'The Idea Of Me', poem: 'The Idea Of Me', description: 'Beyond the surface', order: 5 },
+    { id: 'dragon-fire', image: 'assets/art-dragon-fire.png', title: 'Dragon & Flame', poem: 'Dragon & Flame', description: 'Inner fire', order: 6 },
+    { id: 'dragon-bloom', image: 'assets/art-dragon-bloom.png', title: 'Dragon & Bloom', poem: 'Dragon & Bloom', description: 'Strength in beauty', order: 7 },
+    { id: 'affirmation-queen', image: 'assets/art-affirmation-queen.png', title: 'Affirmation Queen', poem: 'Affirmation Queen', description: 'Crown of words', order: 8 },
+    { id: 'rainbow-bloom', image: 'assets/art-rainbow-bloom.png', title: 'Rainbow Bloom', poem: 'Rainbow Bloom', description: 'Color from within', order: 9 },
+    { id: 'mudra-hand', image: 'assets/art-mudra-hand.png', title: 'Mudra', poem: 'Mudra', description: 'Sacred gesture', order: 10 },
+    { id: 'heartbeat-breathe', image: 'assets/art-heartbeat-breathe.png', title: 'Heartbeat', poem: 'Heartbeat', description: 'The rhythm of life', order: 11 },
+    { id: 'nubian-dragon', image: 'assets/merch-nubian-dragon.png', title: 'Nubian Dragon Queen', poem: 'Nubian Dragon Queen', description: 'Royal power', order: 12 }
+  ];
+
   function loadGallery() {
-    // Real-time listener already handles this in initFirestoreListeners.
-    // This is a manual fallback if listener hasn't fired yet.
     if (fsGallery.length === 0) {
       db.collection('businesses/words-that-heal/gallery').orderBy('order', 'asc').get()
         .then(function(snap) {
-          fsGallery = [];
-          snap.forEach(function(doc) { fsGallery.push(Object.assign({ id: doc.id }, doc.data())); });
-          renderGallery();
+          if (snap.empty) {
+            // Auto-seed with existing artworks
+            toast('Seeding gallery with existing artworks...', 'info');
+            var batch = db.batch();
+            DEFAULT_GALLERY.forEach(function(art) {
+              var ref = db.collection('businesses/words-that-heal/gallery').doc(art.id);
+              batch.set(ref, {
+                title: art.title,
+                image: art.image,
+                poem: art.poem,
+                description: art.description,
+                order: art.order,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            });
+            batch.commit()
+              .then(function() { toast('12 artworks imported!', 'success'); })
+              .catch(function(err) { toast('Seed error: ' + err.message, 'error'); });
+          } else {
+            fsGallery = [];
+            snap.forEach(function(doc) { fsGallery.push(Object.assign({ id: doc.id }, doc.data())); });
+            renderGallery();
+          }
         })
         .catch(function(err) { console.error('Gallery load error:', err); });
     }
