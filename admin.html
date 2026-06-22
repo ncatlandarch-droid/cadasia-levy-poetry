@@ -1010,6 +1010,14 @@ select.form-control { cursor: pointer; }
         <div class="chart-wrapper">
           <canvas id="pulse-chart"></canvas>
         </div>
+        <div class="card" id="recent-activity">
+          <div class="card-header"><h3>Recent Visitors</h3></div>
+          <div class="empty-state">
+            <div class="icon">👁️</div>
+            <h3>Tracking Active</h3>
+            <p>Visitor data will appear as people visit your site.</p>
+          </div>
+        </div>
         <div class="card">
           <div class="card-header"><h3>🔗 Quick Links</h3></div>
           <div class="quick-links">
@@ -1603,39 +1611,107 @@ select.form-control { cursor: pointer; }
   // PULSE DATA
   // ============================================
   function loadPulseData() {
-    // Baseline analytics (will be enhanced with live tracking later)
-    document.getElementById('kpi-pageviews').textContent = '—';
-    document.getElementById('kpi-visitors').textContent = '—';
-    document.getElementById('kpi-avgday').textContent = '—';
+    // Read live analytics from Firestore
+    var now = new Date();
+    var labels = [];
+    var pvData = [];
+    var uvData = [];
+    var totalPV = 0;
+    var totalUV = 0;
+    var promises = [];
 
-    // Render simple chart placeholder
-    var ctx = document.getElementById('pulse-chart');
-    if (ctx && !ctx._chartInitialized) {
-      new Chart(ctx, {
-        type: 'line',
-        data: {
-          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
-          datasets: [{
-            label: 'Pageviews',
-            data: [0, 0, 0, 0],
-            borderColor: '#D4AF37',
-            backgroundColor: 'rgba(212,175,55,0.1)',
-            fill: true,
-            tension: 0.4
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { labels: { color: '#8b95b0' } } },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' } },
-            y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' }, beginAtZero: true }
+    // Get last 7 days
+    for (var i = 6; i >= 0; i--) {
+      var d = new Date(now);
+      d.setDate(d.getDate() - i);
+      var dateKey = d.toISOString().split('T')[0];
+      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+      
+      (function(dk, idx) {
+        var p = db.doc('analytics/daily/' + dk + '/summary').get().then(function(doc) {
+          if (doc.exists) {
+            var data = doc.data();
+            pvData[idx] = data.pageviews || 0;
+            uvData[idx] = data.uniqueVisitors || 0;
+            totalPV += pvData[idx];
+            totalUV += uvData[idx];
+          } else {
+            pvData[idx] = 0;
+            uvData[idx] = 0;
           }
-        }
-      });
-      ctx._chartInitialized = true;
+        }).catch(function() {
+          pvData[idx] = 0;
+          uvData[idx] = 0;
+        });
+        promises.push(p);
+      })(dateKey, 6 - i);
     }
+
+    Promise.all(promises).then(function() {
+      document.getElementById('kpi-pageviews').textContent = totalPV.toLocaleString();
+      document.getElementById('kpi-visitors').textContent = totalUV.toLocaleString();
+      document.getElementById('kpi-avgday').textContent = Math.round(totalPV / 7).toLocaleString();
+
+      // Recent events for the activity list
+      db.collection('analytics/pageviews/events')
+        .orderBy('timestamp', 'desc')
+        .limit(10)
+        .get()
+        .then(function(snap) {
+          var eventsEl = document.getElementById('recent-activity');
+          if (eventsEl && snap.size > 0) {
+            var html = '<div class="card-header"><h3>Recent Visitors</h3></div>';
+            html += '<div style="max-height:300px;overflow-y:auto;">';
+            snap.forEach(function(doc) {
+              var ev = doc.data();
+              var time = ev.timestamp ? ev.timestamp.toDate().toLocaleString() : 'just now';
+              html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
+                '<span style="color:#c5cfe0;">📄 ' + (ev.page || 'Home') + '</span>' +
+                '<span style="color:#5a6380;">' + (ev.source || 'direct') + '</span>' +
+                '<span style="color:#5a6380;">' + time + '</span>' +
+                '</div>';
+            });
+            html += '</div>';
+            eventsEl.innerHTML = html;
+          }
+        }).catch(function() {});
+
+      // Render chart
+      var ctx = document.getElementById('pulse-chart');
+      if (ctx && !ctx._chartInitialized) {
+        new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Pageviews',
+              data: pvData,
+              borderColor: '#D4AF37',
+              backgroundColor: 'rgba(212,175,55,0.1)',
+              fill: true,
+              tension: 0.4
+            }, {
+              label: 'Unique Visitors',
+              data: uvData,
+              borderColor: '#7c6cff',
+              backgroundColor: 'rgba(124,108,255,0.08)',
+              fill: true,
+              tension: 0.4
+            }]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { labels: { color: '#8b95b0' } } },
+            scales: {
+              x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' } },
+              y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' }, beginAtZero: true }
+            }
+          }
+        });
+        ctx._chartInitialized = true;
+      }
+    });
   }
 
   // ============================================
