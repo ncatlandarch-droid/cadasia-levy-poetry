@@ -890,6 +890,123 @@ select.form-control { cursor: pointer; }
 }
 
 .quick-link .ql-icon { font-size: 18px; }
+
+/* ============================================
+   RTTL ANALYTICS PATTERN
+   ============================================ */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+  margin-bottom: 24px;
+}
+
+.summary-card__label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.summary-card__value {
+  font-size: 28px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.analytics-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+
+@media (max-width: 768px) {
+  .analytics-2col { grid-template-columns: 1fr; }
+}
+
+.analytics-2col .data-table { font-size: 12px; }
+.analytics-2col .data-table td,
+.analytics-2col .data-table th { padding: 8px 12px; }
+
+.country-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0;
+}
+
+.country-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: border-color 0.15s;
+}
+
+.country-pill:hover { border-color: rgba(212,175,55,0.3); }
+
+.country-pill .pill-count {
+  font-weight: 700;
+  color: #47d185;
+}
+
+/* ============================================
+   GALLERY ADMIN
+   ============================================ */
+.gallery-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.gallery-admin-card {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.gallery-admin-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,0.2);
+}
+
+.gallery-admin-card img {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  background: var(--bg-primary);
+}
+
+.gallery-admin-card .gallery-card-body {
+  padding: 12px 14px;
+}
+
+.gallery-admin-card .gallery-card-body h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.gallery-admin-card .gallery-card-body .meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+}
+
+.gallery-admin-card .gallery-card-actions {
+  display: flex;
+  gap: 6px;
+  padding: 0 14px 12px;
+}
 </style>
 </head>
 <body>
@@ -1001,22 +1118,15 @@ select.form-control { cursor: pointer; }
           <h1>📊 Site Pulse</h1>
           <p>Website analytics and performance overview</p>
         </div>
-        <div class="summary-row" id="pulse-kpis">
-          <div class="summary-card"><div class="label">Pageviews</div><div class="value" id="kpi-pageviews">—</div><span class="icon-big">👁️</span></div>
-          <div class="summary-card"><div class="label">Unique Visitors</div><div class="value" id="kpi-visitors">—</div><span class="icon-big">👤</span></div>
-          <div class="summary-card"><div class="label">Avg Views/Day</div><div class="value" id="kpi-avgday">—</div><span class="icon-big">📈</span></div>
-          <div class="summary-card"><div class="label">Languages Active</div><div class="value">4</div><span class="icon-big">🌍</span></div>
+        <div id="analytics-container">
+          <div class="empty-state">
+            <div class="icon">📊</div>
+            <h3>Loading Analytics...</h3>
+            <p>Fetching visitor data from Firestore and Netlify baseline.</p>
+          </div>
         </div>
         <div class="chart-wrapper">
           <canvas id="pulse-chart"></canvas>
-        </div>
-        <div class="card" id="recent-activity">
-          <div class="card-header"><h3>Recent Visitors</h3></div>
-          <div class="empty-state">
-            <div class="icon">👁️</div>
-            <h3>Tracking Active</h3>
-            <p>Visitor data will appear as people visit your site.</p>
-          </div>
         </div>
         <div class="card">
           <div class="card-header"><h3>🔗 Quick Links</h3></div>
@@ -1181,24 +1291,13 @@ select.form-control { cursor: pointer; }
         <div class="card">
           <div class="card-header">
             <h3>🖼️ Art Gallery</h3>
-            <span style="font-size:12px;color:var(--text-muted);">12 pieces</span>
+            <button class="btn btn-sm btn-primary admin-only" onclick="showModal('add-gallery')">+ Add Artwork</button>
           </div>
-          <div class="card-grid" id="gallery-manage">
-            <div class="product-card">
-              <img src="assets/art-breathe.png" alt="Breathe">
-              <div class="product-card-body"><h4>Breathe</h4><div class="meta">Original • Live</div></div>
-            </div>
-            <div class="product-card">
-              <img src="assets/art-escape.png" alt="Can I Escape?">
-              <div class="product-card-body"><h4>Can I Escape?</h4><div class="meta">Original • Live</div></div>
-            </div>
-            <div class="product-card">
-              <img src="assets/art-dragon-fire.png" alt="Dragon & Flame">
-              <div class="product-card-body"><h4>Dragon & Flame</h4><div class="meta">Inspired • Live</div></div>
-            </div>
-            <div class="product-card">
-              <img src="assets/merch-nubian-dragon.png" alt="Nubian Dragon Queen">
-              <div class="product-card-body"><h4>Nubian Dragon Queen</h4><div class="meta">Merch Art • Live</div></div>
+          <div class="gallery-admin-grid" id="gallery-admin-grid">
+            <div class="empty-state">
+              <div class="icon">🖼️</div>
+              <h3>Loading Gallery...</h3>
+              <p>Gallery items will load from Firestore.</p>
             </div>
           </div>
         </div>
@@ -1340,6 +1439,7 @@ select.form-control { cursor: pointer; }
   var fsExpenses = [];
   var fsTasks = [];
   var fsTeam = [];
+  var fsGallery = [];
 
   // ============================================
   // AUTH FUNCTIONS
@@ -1475,6 +1575,9 @@ select.form-control { cursor: pointer; }
     var sidebar = document.querySelector('[data-panel="' + panelName + '"]');
     if (panel) panel.classList.add('active');
     if (sidebar) sidebar.classList.add('active');
+
+    // Load gallery when Content tab is shown
+    if (panelName === 'content') loadGallery();
   }
 
   // ============================================
@@ -1516,6 +1619,14 @@ select.form-control { cursor: pointer; }
       renderTeam();
     });
     firestoreUnsubs.push(unsubTeam);
+
+    // Gallery
+    var unsubGallery = db.collection(bizPath + '/gallery').orderBy('order', 'asc').onSnapshot(function(snap) {
+      fsGallery = [];
+      snap.forEach(function(doc) { fsGallery.push(Object.assign({ id: doc.id }, doc.data())); });
+      renderGallery();
+    });
+    firestoreUnsubs.push(unsubGallery);
   }
 
   // ============================================
@@ -1686,48 +1797,17 @@ select.form-control { cursor: pointer; }
           mergedSources[s] = (mergedSources[s] || 0) + sourceMap[s];
         });
 
-        // Update KPIs
-        document.getElementById('kpi-pageviews').textContent = totalPV.toLocaleString();
-        document.getElementById('kpi-visitors').textContent = totalUV.toLocaleString();
-        document.getElementById('kpi-avgday').textContent = Math.round(totalPV / 30).toLocaleString();
-
-        // Build recent activity — Top Pages + Sources
-        var activityEl = document.getElementById('recent-activity');
-        if (activityEl) {
-          var html = '<div class="card-header"><h3>📊 Top Pages</h3></div>';
-          html += '<div style="max-height:200px;overflow-y:auto;">';
-          var sortedPages = Object.entries(mergedPages).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
-          sortedPages.forEach(function(entry) {
-            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
-              '<span style="color:#c5cfe0;">📄 ' + entry[0] + '</span>' +
-              '<span style="color:#D4AF37;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
-          });
-          html += '</div>';
-
-          // Traffic sources
-          html += '<div class="card-header" style="margin-top:1rem;"><h3>🔗 Traffic Sources</h3></div>';
-          html += '<div style="max-height:200px;overflow-y:auto;">';
-          var sortedSources = Object.entries(mergedSources).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
-          sortedSources.forEach(function(entry) {
-            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
-              '<span style="color:#c5cfe0;">🌐 ' + entry[0] + '</span>' +
-              '<span style="color:#7c6cff;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
-          });
-          html += '</div>';
-
-          // Top countries
-          html += '<div class="card-header" style="margin-top:1rem;"><h3>🌍 Top Countries</h3></div>';
-          html += '<div style="max-height:200px;overflow-y:auto;">';
-          var sortedCountries = Object.entries(ANALYTICS_BASELINE.topCountries).sort(function(a, b) { return b[1] - a[1]; });
-          sortedCountries.forEach(function(entry) {
-            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
-              '<span style="color:#c5cfe0;">🏳️ ' + entry[0] + '</span>' +
-              '<span style="color:#47d185;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
-          });
-          html += '</div>';
-
-          activityEl.innerHTML = html;
-        }
+        // Render analytics via RTTL pattern
+        renderAnalytics({
+          totalPV: totalPV,
+          totalUV: totalUV,
+          avgDay: Math.round(totalPV / 30),
+          bandwidth: ANALYTICS_BASELINE.bandwidth,
+          mergedPages: mergedPages,
+          mergedSources: mergedSources,
+          countries: ANALYTICS_BASELINE.topCountries,
+          dailyMap: dailyMap
+        });
 
         // Chart — last 7 days of LIVE data
         var labels = [];
@@ -1756,14 +1836,14 @@ select.form-control { cursor: pointer; }
               datasets: [{
                 label: 'Pageviews',
                 data: pvChart,
-                borderColor: '#D4AF37',
-                backgroundColor: 'rgba(212,175,55,0.1)',
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139,92,246,0.1)',
                 fill: true, tension: 0.4
               }, {
                 label: 'Unique Visitors',
                 data: uvChart,
-                borderColor: '#7c6cff',
-                backgroundColor: 'rgba(124,108,255,0.08)',
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59,130,246,0.08)',
                 fill: true, tension: 0.4
               }]
             },
@@ -1782,10 +1862,154 @@ select.form-control { cursor: pointer; }
       .catch(function(err) {
         console.error('Analytics load error:', err);
         // Show baseline data even if Firestore query fails
-        document.getElementById('kpi-pageviews').textContent = ANALYTICS_BASELINE.totalPageviews.toLocaleString();
-        document.getElementById('kpi-visitors').textContent = ANALYTICS_BASELINE.totalVisitors.toLocaleString();
-        document.getElementById('kpi-avgday').textContent = Math.round(ANALYTICS_BASELINE.totalPageviews / 30).toLocaleString();
+        renderAnalytics({
+          totalPV: ANALYTICS_BASELINE.totalPageviews,
+          totalUV: ANALYTICS_BASELINE.totalVisitors,
+          avgDay: Math.round(ANALYTICS_BASELINE.totalPageviews / 30),
+          bandwidth: ANALYTICS_BASELINE.bandwidth,
+          mergedPages: ANALYTICS_BASELINE.topPages,
+          mergedSources: ANALYTICS_BASELINE.topSources,
+          countries: ANALYTICS_BASELINE.topCountries,
+          dailyMap: {}
+        });
       });
+  }
+
+  // ============================================
+  // RENDER ANALYTICS (RTTL Pattern)
+  // ============================================
+  function renderAnalytics(data) {
+    var container = document.getElementById('analytics-container');
+    if (!container) return;
+
+    var html = '';
+
+    // — KPI Summary Grid —
+    html += '<div class="summary-grid">';
+    html += '<div class="summary-card">' +
+      '<div class="summary-card__label">Pageviews</div>' +
+      '<div class="summary-card__value" style="color:#8b5cf6;">' + data.totalPV.toLocaleString() + '</div>' +
+      '</div>';
+    html += '<div class="summary-card">' +
+      '<div class="summary-card__label">Unique Visitors</div>' +
+      '<div class="summary-card__value" style="color:#3b82f6;">' + data.totalUV.toLocaleString() + '</div>' +
+      '</div>';
+    html += '<div class="summary-card">' +
+      '<div class="summary-card__label">Avg Views / Day</div>' +
+      '<div class="summary-card__value" style="color:#47d185;">' + data.avgDay.toLocaleString() + '</div>' +
+      '</div>';
+    html += '<div class="summary-card">' +
+      '<div class="summary-card__label">Bandwidth</div>' +
+      '<div class="summary-card__value" style="color:#D4AF37;">' + esc(data.bandwidth) + '</div>' +
+      '</div>';
+    html += '</div>';
+
+    // — Top Pages + Traffic Sources (2-col grid) —
+    var sortedPages = Object.entries(data.mergedPages).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+    var sortedSources = Object.entries(data.mergedSources).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+
+    html += '<div class="analytics-2col">';
+
+    // Top Pages table
+    html += '<div class="card"><div class="card-header"><h3>📄 Top Pages</h3></div>';
+    html += '<table class="data-table"><thead><tr><th>Page</th><th style="text-align:right;">Views</th></tr></thead><tbody>';
+    sortedPages.forEach(function(entry) {
+      html += '<tr><td>' + esc(entry[0]) + '</td><td style="text-align:right;color:#8b5cf6;font-weight:600;">' + entry[1].toLocaleString() + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    // Traffic Sources table
+    html += '<div class="card"><div class="card-header"><h3>🔗 Traffic Sources</h3></div>';
+    html += '<table class="data-table"><thead><tr><th>Source</th><th style="text-align:right;">Visits</th></tr></thead><tbody>';
+    sortedSources.forEach(function(entry) {
+      html += '<tr><td>' + esc(entry[0]) + '</td><td style="text-align:right;color:#3b82f6;font-weight:600;">' + entry[1].toLocaleString() + '</td></tr>';
+    });
+    html += '</tbody></table></div>';
+
+    html += '</div>'; // end analytics-2col
+
+    // — Countries (flex pills) —
+    var sortedCountries = Object.entries(data.countries).sort(function(a, b) { return b[1] - a[1]; });
+    html += '<div class="card"><div class="card-header"><h3>🌍 Top Countries</h3></div>';
+    html += '<div class="country-pills">';
+    sortedCountries.forEach(function(entry) {
+      html += '<span class="country-pill">' + esc(entry[0]) + ' <span class="pill-count">' + entry[1].toLocaleString() + '</span></span>';
+    });
+    html += '</div></div>';
+
+    container.innerHTML = html;
+  }
+
+  // ============================================
+  // GALLERY CRUD
+  // ============================================
+  function loadGallery() {
+    // Real-time listener already handles this in initFirestoreListeners.
+    // This is a manual fallback if listener hasn't fired yet.
+    if (fsGallery.length === 0) {
+      db.collection('businesses/words-that-heal/gallery').orderBy('order', 'asc').get()
+        .then(function(snap) {
+          fsGallery = [];
+          snap.forEach(function(doc) { fsGallery.push(Object.assign({ id: doc.id }, doc.data())); });
+          renderGallery();
+        })
+        .catch(function(err) { console.error('Gallery load error:', err); });
+    }
+  }
+
+  function renderGallery() {
+    var container = document.getElementById('gallery-admin-grid');
+    if (!container) return;
+
+    if (fsGallery.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">🖼️</div><h3>No Gallery Items</h3><p>Add artwork to your gallery using the button above.</p></div>';
+      return;
+    }
+
+    container.innerHTML = fsGallery.map(function(item) {
+      return '<div class="gallery-admin-card">' +
+        '<img src="' + esc(item.image) + '" alt="' + esc(item.title) + '" onerror="this.src=\'data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22200%22 height=%22160%22><rect fill=%22%23141928%22 width=%22200%22 height=%22160%22/><text x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%235a6380%22 font-size=%2214%22>No Image</text></svg>\'">' +
+        '<div class="gallery-card-body">' +
+        '<h4>' + esc(item.title) + '</h4>' +
+        '<div class="meta">Poem: ' + esc(item.poem || '—') + '</div>' +
+        '</div>' +
+        '<div class="gallery-card-actions">' +
+        '<button class="btn btn-sm btn-danger admin-only" onclick="deleteGalleryItem(\'' + item.id + '\',\'' + esc(item.title).replace(/'/g, "\\'") + '\')" title="Delete">🗑 Delete</button>' +
+        '</div>' +
+        '</div>';
+    }).join('');
+
+    applyRoleVisibility();
+  }
+
+  function saveGalleryItem() {
+    var title = document.getElementById('m-gallery-title').value.trim();
+    var image = document.getElementById('m-gallery-image').value.trim();
+    var poem = document.getElementById('m-gallery-poem').value.trim();
+    var desc = document.getElementById('m-gallery-desc').value.trim();
+
+    if (!title) return toast('Please enter a title', 'error');
+    if (!image) return toast('Please enter an image URL', 'error');
+
+    var data = {
+      title: title,
+      image: image,
+      poem: poem,
+      description: desc,
+      order: fsGallery.length + 1,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    db.collection('businesses/words-that-heal/gallery').add(data)
+      .then(function() { closeModal(); toast('Artwork added to gallery!', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  function deleteGalleryItem(id, title) {
+    if (!confirm('Delete "' + title + '" from the gallery?')) return;
+    db.collection('businesses/words-that-heal/gallery').doc(id).delete()
+      .then(function() { toast('Artwork deleted', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
   }
 
   // ============================================
@@ -1830,6 +2054,15 @@ select.form-control { cursor: pointer; }
         '<div class="form-group"><label>Priority</label><select class="form-control" id="m-task-priority"><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div>' +
         '<div class="form-group"><label>Due Date</label><input class="form-control" id="m-task-due" type="date"></div>' +
         '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveTask()">Save</button></div></div>';
+    }
+
+    if (type === 'add-gallery') {
+      html = '<div class="modal"><h2>🖼️ Add Artwork</h2>' +
+        '<div class="form-group"><label>Title</label><input class="form-control" id="m-gallery-title" placeholder="e.g., Breathe"></div>' +
+        '<div class="form-group"><label>Image URL</label><input class="form-control" id="m-gallery-image" placeholder="assets/art-breathe.png"></div>' +
+        '<div class="form-group"><label>Poem Name</label><input class="form-control" id="m-gallery-poem" placeholder="e.g., Breathe"></div>' +
+        '<div class="form-group"><label>Description</label><textarea class="form-control" id="m-gallery-desc" placeholder="Brief description of the artwork"></textarea></div>' +
+        '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveGalleryItem()">Save</button></div></div>';
     }
 
     root.innerHTML = html;
@@ -2008,6 +2241,9 @@ select.form-control { cursor: pointer; }
   window.connectBank = connectBank;
   window.loadOrders = loadOrders;
   window.cycleTaskStatus = cycleTaskStatus;
+  window.saveGalleryItem = saveGalleryItem;
+  window.deleteGalleryItem = deleteGalleryItem;
+  window.loadGallery = loadGallery;
 
 })();
 </script>
