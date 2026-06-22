@@ -1,0 +1,122 @@
+{
+  "finances": {
+    "revenue": [
+      {
+        "id": "rev-merch",
+        "source": "Printify Merch",
+        "category": "merchandise",
+        "amount": 0,
+        "date": "2026-06-22",
+        "notes": "Store launching — no sales yet",
+        "recurring": false
+      },
+      {
+        "id": "rev-digital",
+        "source": "Gumroad Digital Products",
+        "category": "digital",
+        "amount": 0,
+        "date": "2026-06-22",
+        "notes": "Store launching — no sales yet",
+        "recurring": false
+      },
+      {
+        "id": "rev-tips",
+        "source": "CashApp Tips",
+        "category": "donations",
+        "amount": 0,
+        "date": "2026-06-22",
+        "notes": "$cadasiata",
+        "recurring": false
+      }
+    ],
+    "expenses": [
+      {
+        "id": "exp-llc",
+        "description": "NC LLC Filing — Words That Heal LLC",
+        "category": "legal",
+        "amount": 125,
+        "date": "2026-06-19",
+        "notes": "One-time filing fee"
+      }
+    ],
+    "capitalProjects": []
+  },
+  "tasks": [
+    {
+      "id": "task-001",
+      "title": "Upload merch designs to Printify",
+      "status": "not-started",
+      "priority": "high",
+      "assignee": "Chris",
+      "dueDate": "2026-07-01"
+    },
+    {
+      "id": "task-002",
+      "title": "Set up Gumroad digital products",
+      "status": "not-started",
+      "priority": "high",
+      "assignee": "Cadasia",
+      "dueDate": "2026-07-01"
+    },
+    {
+      "id": "task-003",
+      "title": "Connect Novo bank account (pending approval)",
+      "status": "in-progress",
+      "priority": "high",
+      "assignee": "Cadasia",
+      "dueDate": "2026-07-05"
+    },
+    {
+      "id": "task-004",
+      "title": "Launch Instagram @wordsthatheal",
+      "status": "not-started",
+      "priority": "medium",
+      "assignee": "Cadasia",
+      "dueDate": "2026-07-15"
+    },
+    {
+      "id": "task-005",
+      "title": "Launch TikTok with spoken word clips",
+      "status": "not-started",
+      "priority": "medium",
+      "assignee": "Cadasia",
+      "dueDate": "2026-07-15"
+    },
+    {
+      "id": "task-006",
+      "title": "Sign PSA agreement",
+      "status": "not-started",
+      "priority": "high",
+      "assignee": "Both",
+      "dueDate": "2026-07-01"
+    },
+    {
+      "id": "task-007",
+      "title": "Submit quarterly report (Q3 2026)",
+      "status": "not-started",
+      "priority": "low",
+      "assignee": "Cadasia",
+      "dueDate": "2026-09-30"
+    }
+  ],
+  "team": [
+    {
+      "id": "team-001",
+      "name": "Cadasia Ta'Nae Levy",
+      "role": "Founder & Creative Director",
+      "email": "wordsthatheal619@gmail.com",
+      "phone": "",
+      "avatar": "🎨",
+      "status": "active"
+    },
+    {
+      "id": "team-002",
+      "name": "Chris Harrison",
+      "role": "Think! Ventures — Platform Architect",
+      "email": "chris@thinkdesignplanning.com",
+      "phone": "",
+      "avatar": "🔧",
+      "status": "active"
+    }
+  ]
+}

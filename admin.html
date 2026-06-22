@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<meta http-equiv="Cache-Control" content="no-store">
+<title>Words That Heal — Admin Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<style>
+/* ============================================
+   DESIGN TOKENS — WORDS THAT HEAL GOLD THEME
+   ============================================ */
+:root {
+  --bg-primary: #0b0f1a;
+  --bg-secondary: #101525;
+  --bg-card: #141928;
+  --bg-card-alt: #1a2035;
+  --bg-hover: #1e2745;
+  --bg-input: #1a2035;
+  --border: rgba(255,255,255,0.06);
+  --border-focus: rgba(212,175,55,0.4);
+  --text-primary: #e8eaf0;
+  --text-secondary: #8b95b0;
+  --text-muted: #5a6380;
+  --accent: #D4AF37;
+  --accent-deep: #8B6F1E;
+  --accent-light: #F5E6A3;
+  --accent-green: #10b981;
+  --accent-gold: #f59e0b;
+  --accent-red: #ef4444;
+  --accent-blue: #3b82f6;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.3);
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+* { margin:0; padding:0; box-sizing:border-box; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   LOGIN GATE
+   ============================================ */
+#login-gate {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 30% 50%, rgba(212,175,55,0.08), transparent 60%),
+              radial-gradient(ellipse at 70% 30%, rgba(139,111,30,0.06), transparent 60%),
+              var(--bg-primary);
+}
+
+.login-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 40px;
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.login-logo { font-size: 48px; margin-bottom: 8px; }
+
+.login-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 4px;
+}
+
+.login-subtitle {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+}
+
+.login-input {
+  width: 100%;
+  padding: 12px 16px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font);
+  margin-bottom: 12px;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.login-input:focus { border-color: var(--accent); }
+
+.login-btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  margin-bottom: 12px;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.login-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(212,175,55,0.3);
+}
+
+.login-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.login-divider::before, .login-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.google-btn {
+  width: 100%;
+  padding: 12px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.google-btn:hover { background: var(--bg-hover); }
+
+.login-error {
+  color: var(--accent-red);
+  font-size: 12px;
+  margin-top: 12px;
+  display: none;
+}
+
+.login-toggle {
+  color: var(--accent);
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 16px;
+  display: inline-block;
+}
+
+.login-toggle:hover { text-decoration: underline; }
+
+/* ============================================
+   ACCESS DENIED
+   ============================================ */
+#access-denied {
+  display: none;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  text-align: center;
+}
+
+#access-denied .lock-icon { font-size: 64px; margin-bottom: 16px; }
+#access-denied h2 { color: var(--accent-red); margin-bottom: 8px; }
+#access-denied p { color: var(--text-secondary); margin-bottom: 24px; }
+
+/* ============================================
+   DASHBOARD LAYOUT
+   ============================================ */
+#dashboard {
+  display: none;
+  min-height: 100vh;
+}
+
+/* Topbar */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: 56px;
+  background: rgba(11,15,26,0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+}
+
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--accent);
+}
+
+.topbar-brand img { height: 28px; border-radius: 6px; }
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-user {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.topbar-user strong { color: var(--text-primary); }
+
+.btn-signout {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-signout:hover {
+  background: var(--accent-red);
+  color: #fff;
+  border-color: var(--accent-red);
+}
+
+/* Sidebar + Content */
+.dashboard-body {
+  display: flex;
+  min-height: calc(100vh - 56px);
+}
+
+.sidebar {
+  width: 220px;
+  background: var(--bg-secondary);
+  border-right: 1px solid var(--border);
+  padding: 16px 0;
+  flex-shrink: 0;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-left: 3px solid transparent;
+}
+
+.sidebar-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.sidebar-item.active {
+  background: rgba(212,175,55,0.08);
+  color: var(--accent);
+  border-left-color: var(--accent);
+}
+
+.sidebar-item .icon { font-size: 16px; width: 20px; text-align: center; }
+.sidebar-divider { height: 1px; background: var(--border); margin: 12px 16px; }
+
+.admin-only { display: none; }
+.admin-only.visible { display: flex; }
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+}
+
+.panel { display: none; }
+.panel.active { display: block; }
+
+.panel-header {
+  margin-bottom: 20px;
+}
+
+.panel-header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.panel-header p {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+/* ============================================
+   SUMMARY CARDS (KPI Row)
+   ============================================ */
+.summary-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.summary-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,0.2);
+}
+
+.summary-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-deep), var(--accent));
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.summary-card:hover::before { opacity: 1; }
+
+.summary-card .label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.summary-card .value {
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.summary-card .trend {
+  font-size: 11px;
+  margin-top: 6px;
+  font-weight: 600;
+}
+
+.trend-up { color: var(--accent-green); }
+.trend-down { color: var(--accent-red); }
+.trend-neutral { color: var(--text-muted); }
+.summary-card .icon-big { font-size: 20px; position: absolute; top: 16px; right: 16px; opacity: 0.5; }
+
+/* ============================================
+   DATA TABLES
+   ============================================ */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 10px 14px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+.data-table tr:hover td { background: var(--bg-hover); }
+
+/* Status Badges */
+.badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.badge-success { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+.badge-warning { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
+.badge-error { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+.badge-info { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+.badge-neutral { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+
+/* ============================================
+   CARDS & SECTIONS
+   ============================================ */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.card-header h3 {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+/* ============================================
+   BUTTONS
+   ============================================ */
+.btn {
+  padding: 8px 18px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font);
+  cursor: pointer;
+  border: none;
+  transition: all 0.15s;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--accent-deep), var(--accent));
+  color: #fff;
+}
+
+.btn-primary:hover {
+  box-shadow: 0 4px 16px rgba(212,175,55,0.3);
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+
+.btn-secondary:hover { background: var(--bg-hover); color: var(--text-primary); }
+
+.btn-danger {
+  background: rgba(239,68,68,0.15);
+  color: var(--accent-red);
+}
+
+.btn-danger:hover { background: rgba(239,68,68,0.25); }
+
+.btn-sm { padding: 5px 12px; font-size: 12px; }
+
+/* ============================================
+   FORMS
+   ============================================ */
+.form-group {
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.form-control {
+  width: 100%;
+  padding: 10px 14px;
+  background: var(--bg-input);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: var(--font);
+  outline: none;
+  transition: border 0.2s;
+}
+
+.form-control:focus { border-color: var(--accent); }
+
+textarea.form-control { resize: vertical; min-height: 80px; }
+
+select.form-control { cursor: pointer; }
+
+/* ============================================
+   MODAL SYSTEM
+   ============================================ */
+#modal-root {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(8px);
+  align-items: center;
+  justify-content: center;
+}
+
+#modal-root.open { display: flex; }
+
+.modal {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 32px;
+  width: 100%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.5);
+  animation: modalIn 0.2s ease;
+}
+
+@keyframes modalIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal h2 {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--accent);
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 24px;
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+#toast-container {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.toast {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 12px 18px;
+  font-size: 13px;
+  color: var(--text-primary);
+  box-shadow: var(--shadow);
+  animation: slideIn 0.3s ease;
+  max-width: 360px;
+}
+
+.toast-success { border-left: 3px solid var(--accent-green); }
+.toast-error { border-left: 3px solid var(--accent-red); }
+.toast-info { border-left: 3px solid var(--accent); }
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+/* ============================================
+   PRODUCTS GRID (Merch)
+   ============================================ */
+.product-card {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  transition: transform 0.15s, border-color 0.15s;
+}
+
+.product-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(212,175,55,0.2);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  background: var(--bg-primary);
+}
+
+.product-card-body {
+  padding: 14px;
+}
+
+.product-card-body h4 {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.product-card-body .price {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 15px;
+}
+
+.product-card-body .meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   TASK ITEMS
+   ============================================ */
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+  transition: background 0.1s;
+}
+
+.task-item:hover { background: var(--bg-hover); }
+.task-item:last-child { border-bottom: none; }
+
+.task-status {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: all 0.15s;
+}
+
+.task-status.not-started { background: rgba(255,255,255,0.06); color: var(--text-muted); }
+.task-status.in-progress { background: rgba(212,175,55,0.15); color: var(--accent); }
+.task-status.done { background: rgba(16,185,129,0.15); color: var(--accent-green); }
+
+.task-body { flex: 1; }
+.task-body .task-title { font-size: 14px; font-weight: 500; }
+.task-body .task-title.completed { text-decoration: line-through; color: var(--text-muted); }
+.task-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+.task-priority {
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.priority-high { background: rgba(239,68,68,0.15); color: var(--accent-red); }
+.priority-medium { background: rgba(245,158,11,0.15); color: var(--accent-gold); }
+.priority-low { background: rgba(59,130,246,0.15); color: var(--accent-blue); }
+
+/* ============================================
+   TEAM CARDS
+   ============================================ */
+.team-card {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.15s;
+}
+
+.team-card:hover { transform: translateY(-2px); }
+
+.team-avatar {
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+
+.team-card h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.team-card .role {
+  font-size: 12px;
+  color: var(--accent);
+  margin-bottom: 8px;
+}
+
+.team-card .email {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* ============================================
+   BANK SECTION
+   ============================================ */
+.bank-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.bank-status .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+}
+
+.bank-status .dot.connected { background: var(--accent-green); }
+.bank-status .dot.pending { background: var(--accent-gold); }
+.bank-status .dot.disconnected { background: var(--text-muted); }
+
+.bank-balance-card {
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  text-align: center;
+}
+
+.bank-balance-card .account-name {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.bank-balance-card .balance {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--accent-green);
+}
+
+.bank-balance-card .account-type {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* ============================================
+   CHART CONTAINER
+   ============================================ */
+.chart-wrapper {
+  position: relative;
+  height: 260px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+/* ============================================
+   SKELETON LOADING
+   ============================================ */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-card-alt) 25%, var(--bg-hover) 50%, var(--bg-card-alt) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media (max-width: 768px) {
+  .sidebar { display: none; }
+  .main-content { padding: 16px; }
+  .summary-row { grid-template-columns: 1fr 1fr; }
+  .topbar { padding: 0 12px; }
+  .card-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .summary-row { grid-template-columns: 1fr; }
+}
+
+/* ============================================
+   EMPTY STATE
+   ============================================ */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  color: var(--text-muted);
+}
+
+.empty-state .icon { font-size: 48px; margin-bottom: 12px; opacity: 0.5; }
+.empty-state h3 { color: var(--text-secondary); margin-bottom: 8px; }
+.empty-state p { font-size: 13px; max-width: 360px; margin: 0 auto 16px; }
+
+/* Inline edit flash */
+@keyframes saveFlash {
+  0% { background: rgba(16,185,129,0.3); }
+  100% { background: transparent; }
+}
+.saved { animation: saveFlash 0.6s ease; }
+
+/* Quick links */
+.quick-links {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.quick-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.15s;
+}
+
+.quick-link:hover {
+  background: var(--bg-hover);
+  color: var(--accent);
+  border-color: rgba(212,175,55,0.2);
+}
+
+.quick-link .ql-icon { font-size: 18px; }
+</style>
+</head>
+<body>
+
+<!-- ============================================
+     LOGIN GATE
+     ============================================ -->
+<div id="login-gate">
+  <div class="login-card">
+    <div class="login-logo">✍️</div>
+    <div class="login-title">Words That Heal</div>
+    <div class="login-subtitle">Admin Dashboard</div>
+
+    <div id="login-form">
+      <input type="email" class="login-input" id="login-email" placeholder="Email address">
+      <input type="password" class="login-input" id="login-password" placeholder="Password">
+      <button class="login-btn" onclick="emailSignIn()">Sign In</button>
+
+      <div class="login-divider">or</div>
+      <button class="google-btn" onclick="googleSignIn()">🔵 Continue with Google</button>
+
+      <div class="login-error" id="login-error"></div>
+      <div class="login-toggle" id="toggle-create" onclick="toggleCreateAccount()">
+        First time? Create admin account
+      </div>
+    </div>
+
+    <div id="create-form" style="display:none;">
+      <input type="text" class="login-input" id="create-name" placeholder="Full name">
+      <input type="email" class="login-input" id="create-email" placeholder="Email address">
+      <input type="password" class="login-input" id="create-password" placeholder="Password (min 6 characters)">
+      <button class="login-btn" onclick="createAccount()">Create Account</button>
+      <div class="login-error" id="create-error"></div>
+      <div class="login-toggle" onclick="toggleCreateAccount()">← Back to sign in</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     ACCESS DENIED
+     ============================================ -->
+<div id="access-denied">
+  <div>
+    <div class="lock-icon">🔒</div>
+    <h2>Access Denied</h2>
+    <p>Your account is not authorized to access this dashboard.</p>
+    <button class="btn btn-secondary" onclick="signOut()">Sign Out</button>
+  </div>
+</div>
+
+<!-- ============================================
+     MAIN DASHBOARD
+     ============================================ -->
+<div id="dashboard">
+
+  <!-- Topbar -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <img src="assets/logo.png" alt="Logo" onerror="this.style.display='none'">
+      Words That Heal
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <span id="user-name"></span><br>
+        <span id="user-role" style="font-size:10px; color:var(--accent);"></span>
+      </div>
+      <button class="btn-signout" onclick="signOut()">Sign Out</button>
+    </div>
+  </div>
+
+  <div class="dashboard-body">
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+      <div class="sidebar-item active" data-panel="pulse" onclick="switchPanel('pulse')">
+        <span class="icon">📊</span> Site Pulse
+      </div>
+      <div class="sidebar-item" data-panel="orders" onclick="switchPanel('orders')">
+        <span class="icon">📦</span> Merch Orders
+      </div>
+      <div class="sidebar-item" data-panel="digital" onclick="switchPanel('digital')">
+        <span class="icon">🛒</span> Digital Sales
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item" data-panel="finances" onclick="switchPanel('finances')">
+        <span class="icon">💰</span> Finances
+      </div>
+      <div class="sidebar-item" data-panel="content" onclick="switchPanel('content')">
+        <span class="icon">✏️</span> Content
+      </div>
+      <div class="sidebar-item" data-panel="tasks" onclick="switchPanel('tasks')">
+        <span class="icon">✅</span> Tasks
+      </div>
+      <div class="sidebar-divider"></div>
+      <div class="sidebar-item" data-panel="team" onclick="switchPanel('team')">
+        <span class="icon">👥</span> Team
+      </div>
+      <div class="sidebar-item" data-panel="tools" onclick="switchPanel('tools')">
+        <span class="icon">🔧</span> Tools
+      </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+
+      <!-- ====== SITE PULSE ====== -->
+      <div class="panel active" id="panel-pulse">
+        <div class="panel-header">
+          <h1>📊 Site Pulse</h1>
+          <p>Website analytics and performance overview</p>
+        </div>
+        <div class="summary-row" id="pulse-kpis">
+          <div class="summary-card"><div class="label">Pageviews</div><div class="value" id="kpi-pageviews">—</div><span class="icon-big">👁️</span></div>
+          <div class="summary-card"><div class="label">Unique Visitors</div><div class="value" id="kpi-visitors">—</div><span class="icon-big">👤</span></div>
+          <div class="summary-card"><div class="label">Avg Views/Day</div><div class="value" id="kpi-avgday">—</div><span class="icon-big">📈</span></div>
+          <div class="summary-card"><div class="label">Languages Active</div><div class="value">4</div><span class="icon-big">🌍</span></div>
+        </div>
+        <div class="chart-wrapper">
+          <canvas id="pulse-chart"></canvas>
+        </div>
+        <div class="card">
+          <div class="card-header"><h3>🔗 Quick Links</h3></div>
+          <div class="quick-links">
+            <a class="quick-link" href="/" target="_blank"><span class="ql-icon">🌐</span> View Live Site</a>
+            <a class="quick-link" href="/business-plan.html" target="_blank"><span class="ql-icon">📋</span> Business Plan</a>
+            <a class="quick-link" href="/psa-cadasia-levy.html" target="_blank"><span class="ql-icon">📝</span> PSA Contract</a>
+            <a class="quick-link" href="https://app.netlify.com/projects/cadasia-levy-poetry" target="_blank"><span class="ql-icon">🚀</span> Netlify Dashboard</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== MERCH ORDERS ====== -->
+      <div class="panel" id="panel-orders">
+        <div class="panel-header">
+          <h1>📦 Merch Orders</h1>
+          <p>Printify merchandise — orders, products, and revenue</p>
+        </div>
+        <div class="summary-row" id="orders-kpis">
+          <div class="summary-card"><div class="label">Total Orders</div><div class="value" id="kpi-orders">0</div><span class="icon-big">📦</span></div>
+          <div class="summary-card"><div class="label">Revenue</div><div class="value" id="kpi-revenue">$0</div><span class="icon-big">💰</span></div>
+          <div class="summary-card"><div class="label">Fulfilled</div><div class="value" id="kpi-fulfilled">0</div><span class="icon-big">✅</span></div>
+          <div class="summary-card"><div class="label">Pending</div><div class="value" id="kpi-pending">0</div><span class="icon-big">⏳</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Recent Orders</h3>
+            <button class="btn btn-sm btn-secondary" onclick="loadOrders()">↻ Refresh</button>
+          </div>
+          <div id="orders-table">
+            <div class="empty-state">
+              <div class="icon">📦</div>
+              <h3>No Orders Yet</h3>
+              <p>Orders will appear here once your Printify store is connected and customers start purchasing.</p>
+              <a href="https://printify.com/app/dashboard" target="_blank" class="btn btn-primary btn-sm">Open Printify →</a>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Products</h3>
+          </div>
+          <div class="card-grid" id="products-grid">
+            <div class="empty-state">
+              <div class="icon">🎨</div>
+              <h3>Products Loading...</h3>
+              <p>Connect your Printify API key in Tools to see products.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== DIGITAL SALES ====== -->
+      <div class="panel" id="panel-digital">
+        <div class="panel-header">
+          <h1>🛒 Digital Sales</h1>
+          <p>Gumroad digital products — ebooks, audio, art downloads</p>
+        </div>
+        <div class="summary-row">
+          <div class="summary-card"><div class="label">Total Sales</div><div class="value" id="kpi-digital-sales">0</div><span class="icon-big">🛒</span></div>
+          <div class="summary-card"><div class="label">Revenue</div><div class="value" id="kpi-digital-revenue">$0</div><span class="icon-big">💵</span></div>
+          <div class="summary-card"><div class="label">Products Listed</div><div class="value" id="kpi-digital-products">0</div><span class="icon-big">📚</span></div>
+          <div class="summary-card"><div class="label">Avg Order</div><div class="value" id="kpi-digital-avg">$0</div><span class="icon-big">📊</span></div>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Digital Products</h3>
+            <a href="https://gumroad.com/dashboard" target="_blank" class="btn btn-sm btn-primary">Open Gumroad →</a>
+          </div>
+          <div id="digital-products">
+            <div class="empty-state">
+              <div class="icon">📚</div>
+              <h3>Ready to Add Products</h3>
+              <p>Your Gumroad account is set up. Add your first digital product — poetry eBook, audio collection, or digital art downloads.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ====== FINANCES ====== -->
+      <div class="panel" id="panel-finances">
+        <div class="panel-header">
+          <h1>💰 Finances</h1>
+          <p>Revenue, expenses, and bank account overview</p>
+        </div>
+        <div class="summary-row" id="finance-kpis">
+          <div class="summary-card"><div class="label">Total Revenue</div><div class="value" id="kpi-total-revenue">$0</div><span class="icon-big">💰</span></div>
+          <div class="summary-card"><div class="label">Total Expenses</div><div class="value" id="kpi-total-expenses">$125</div><span class="icon-big">📤</span></div>
+          <div class="summary-card"><div class="label">Net Profit</div><div class="value" id="kpi-net-profit">-$125</div><span class="icon-big">📊</span></div>
+          <div class="summary-card"><div class="label">Profit Margin</div><div class="value" id="kpi-margin">—</div><span class="icon-big">📈</span></div>
+        </div>
+
+        <!-- Revenue Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3>💵 Revenue Streams</h3>
+            <button class="btn btn-sm btn-primary admin-only" onclick="showModal('add-revenue')">+ Add Revenue</button>
+          </div>
+          <table class="data-table" id="revenue-table">
+            <thead><tr><th>Source</th><th>Category</th><th>Amount</th><th>Date</th><th>Notes</th></tr></thead>
+            <tbody id="revenue-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Expenses Table -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📤 Expenses</h3>
+            <button class="btn btn-sm btn-primary admin-only" onclick="showModal('add-expense')">+ Add Expense</button>
+          </div>
+          <table class="data-table" id="expenses-table">
+            <thead><tr><th>Description</th><th>Category</th><th>Amount</th><th>Date</th><th>Notes</th></tr></thead>
+            <tbody id="expenses-body"></tbody>
+          </table>
+        </div>
+
+        <!-- Bank Account -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🏦 Bank Account</h3>
+            <button class="btn btn-sm btn-secondary" id="bank-connect-btn" onclick="connectBank()">Connect Bank</button>
+          </div>
+          <div class="bank-status" id="bank-status">
+            <span class="dot pending"></span>
+            <span>Novo — Pending Approval</span>
+          </div>
+          <div id="bank-balances">
+            <div class="empty-state" style="padding:24px;">
+              <p>Bank connection available once Novo account is approved. Use Plaid to securely link your account.</p>
+            </div>
+          </div>
+          <div id="bank-transactions"></div>
+        </div>
+      </div>
+
+      <!-- ====== CONTENT MANAGER ====== -->
+      <div class="panel" id="panel-content">
+        <div class="panel-header">
+          <h1>✏️ Content Manager</h1>
+          <p>Edit poems, gallery, bio, and merch listings on your website</p>
+        </div>
+
+        <!-- Poems -->
+        <div class="card">
+          <div class="card-header">
+            <h3>📖 Poems</h3>
+            <button class="btn btn-sm btn-primary admin-only" onclick="showModal('add-poem')">+ Add Poem</button>
+          </div>
+          <table class="data-table">
+            <thead><tr><th>Title</th><th>Status</th><th>Free?</th><th>Date Added</th><th class="admin-only">Actions</th></tr></thead>
+            <tbody id="poems-body">
+              <tr><td>Breathe</td><td><span class="badge badge-success">Live</span></td><td><span class="badge badge-info">Free</span></td><td>Jan 2026</td><td class="admin-only"><button class="btn btn-sm btn-secondary">Edit</button></td></tr>
+              <tr><td>Can I Escape?</td><td><span class="badge badge-success">Live</span></td><td><span class="badge badge-neutral">Paid</span></td><td>Jan 2026</td><td class="admin-only"><button class="btn btn-sm btn-secondary">Edit</button></td></tr>
+              <tr><td>How Could You?</td><td><span class="badge badge-success">Live</span></td><td><span class="badge badge-neutral">Paid</span></td><td>Jan 2026</td><td class="admin-only"><button class="btn btn-sm btn-secondary">Edit</button></td></tr>
+              <tr><td>Am I The Reason?</td><td><span class="badge badge-success">Live</span></td><td><span class="badge badge-info">Free</span></td><td>Nov 2025</td><td class="admin-only"><button class="btn btn-sm btn-secondary">Edit</button></td></tr>
+              <tr><td>The Idea Of Me</td><td><span class="badge badge-success">Live</span></td><td><span class="badge badge-neutral">Paid</span></td><td>Jun 2026</td><td class="admin-only"><button class="btn btn-sm btn-secondary">Edit</button></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Gallery -->
+        <div class="card">
+          <div class="card-header">
+            <h3>🖼️ Art Gallery</h3>
+            <span style="font-size:12px;color:var(--text-muted);">12 pieces</span>
+          </div>
+          <div class="card-grid" id="gallery-manage">
+            <div class="product-card">
+              <img src="assets/art-breathe.png" alt="Breathe">
+              <div class="product-card-body"><h4>Breathe</h4><div class="meta">Original • Live</div></div>
+            </div>
+            <div class="product-card">
+              <img src="assets/art-escape.png" alt="Can I Escape?">
+              <div class="product-card-body"><h4>Can I Escape?</h4><div class="meta">Original • Live</div></div>
+            </div>
+            <div class="product-card">
+              <img src="assets/art-dragon-fire.png" alt="Dragon & Flame">
+              <div class="product-card-body"><h4>Dragon & Flame</h4><div class="meta">Inspired • Live</div></div>
+            </div>
+            <div class="product-card">
+              <img src="assets/merch-nubian-dragon.png" alt="Nubian Dragon Queen">
+              <div class="product-card-body"><h4>Nubian Dragon Queen</h4><div class="meta">Merch Art • Live</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bio -->
+        <div class="card">
+          <div class="card-header">
+            <h3>👤 Bio / About</h3>
+            <button class="btn btn-sm btn-secondary admin-only" onclick="showModal('edit-bio')">Edit Bio</button>
+          </div>
+          <p style="color:var(--text-secondary);font-size:13px;">Cadasia Ta'Nae Levy is a poet, visual artist, and creative entrepreneur from Rocky Mount, North Carolina. Her work explores themes of love, loss, identity, faith, and self-discovery.</p>
+        </div>
+      </div>
+
+      <!-- ====== TASKS ====== -->
+      <div class="panel" id="panel-tasks">
+        <div class="panel-header">
+          <h1>✅ Tasks</h1>
+          <p>Track action items and to-dos</p>
+        </div>
+        <div class="card">
+          <div class="card-header">
+            <h3>Action Items</h3>
+            <button class="btn btn-sm btn-primary admin-only" onclick="showModal('add-task')">+ Add Task</button>
+          </div>
+          <div id="tasks-list"></div>
+        </div>
+      </div>
+
+      <!-- ====== TEAM ====== -->
+      <div class="panel" id="panel-team">
+        <div class="panel-header">
+          <h1>👥 Team</h1>
+          <p>Team directory</p>
+        </div>
+        <div class="card-grid" id="team-grid"></div>
+      </div>
+
+      <!-- ====== TOOLS ====== -->
+      <div class="panel" id="panel-tools">
+        <div class="panel-header">
+          <h1>🔧 Tools</h1>
+          <p>Platform management and data tools</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>📋 Platform Info</h3></div>
+          <table class="data-table">
+            <tbody>
+              <tr><td><strong>Business</strong></td><td>Words That Heal LLC</td></tr>
+              <tr><td><strong>Founded</strong></td><td>June 19, 2026</td></tr>
+              <tr><td><strong>EIN</strong></td><td>On file</td></tr>
+              <tr><td><strong>Website</strong></td><td><a href="https://wordsthatheal-llc.com" target="_blank" style="color:var(--accent);">wordsthatheal-llc.com</a></td></tr>
+              <tr><td><strong>Banking</strong></td><td>Novo (Pending Approval)</td></tr>
+              <tr><td><strong>Merch</strong></td><td>Printify (Connected)</td></tr>
+              <tr><td><strong>Digital Products</strong></td><td>Gumroad (Connected)</td></tr>
+              <tr><td><strong>Tips</strong></td><td>CashApp — $cadasiata</td></tr>
+              <tr><td><strong>Support</strong></td><td>Think! Ventures Foundation</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>🔗 Quick Actions</h3></div>
+          <div class="quick-links">
+            <a class="quick-link" href="https://printify.com/app/dashboard" target="_blank"><span class="ql-icon">🖨️</span> Printify Dashboard</a>
+            <a class="quick-link" href="https://gumroad.com/dashboard" target="_blank"><span class="ql-icon">🛒</span> Gumroad Dashboard</a>
+            <a class="quick-link" href="https://app.novo.co" target="_blank"><span class="ql-icon">🏦</span> Novo Banking</a>
+            <a class="quick-link" href="/psa-cadasia-levy.html" target="_blank"><span class="ql-icon">📝</span> View PSA Contract</a>
+            <a class="quick-link" href="/business-plan.html" target="_blank"><span class="ql-icon">📋</span> Business Plan</a>
+            <a class="quick-link" href="https://github.com/ncatlandarch-droid/cadasia-levy-poetry" target="_blank"><span class="ql-icon">💻</span> GitHub Repo</a>
+          </div>
+        </div>
+
+        <div class="card admin-only">
+          <div class="card-header"><h3>⚙️ Data Management</h3></div>
+          <div style="display:flex;gap:12px;flex-wrap:wrap;">
+            <button class="btn btn-secondary" onclick="seedData()">📥 Import Seed Data</button>
+            <button class="btn btn-danger" onclick="clearAndReseed()">🗑️ Clear & Re-import All Data</button>
+          </div>
+          <p style="font-size:11px;color:var(--text-muted);margin-top:8px;">Import initial data from admin/data.json. Warning: Clear & Re-import will delete all existing Firestore data.</p>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- Modal Root -->
+<div id="modal-root"></div>
+
+<!-- Toast Container -->
+<div id="toast-container"></div>
+
+<!-- ============================================
+     JAVASCRIPT
+     ============================================ -->
+<script>
+(function() {
+  'use strict';
+
+  // ============================================
+  // FIREBASE CONFIG
+  // ============================================
+  var firebaseConfig = {
+    apiKey: "AIzaSyDplaceholder",
+    authDomain: "words-that-heal.firebaseapp.com",
+    projectId: "words-that-heal",
+    storageBucket: "words-that-heal.appspot.com",
+    messagingSenderId: "000000000000",
+    appId: "1:000000000000:web:placeholder"
+  };
+
+  // Initialize Firebase
+  if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+  }
+
+  var auth = firebase.auth();
+  var db = firebase.firestore();
+
+  // ============================================
+  // ADMIN EMAILS (auto-promoted to admin role)
+  // ============================================
+  var ADMIN_EMAILS = [
+    'chris@thinkdesignplanning.com',
+    'wordsthatheal619@gmail.com',
+    'ncatlandarch@gmail.com'
+  ];
+
+  // ============================================
+  // STATE
+  // ============================================
+  var currentUser = null;
+  var userRole = null;
+  var firestoreUnsubs = [];
+  var fsRevenue = [];
+  var fsExpenses = [];
+  var fsTasks = [];
+  var fsTeam = [];
+
+  // ============================================
+  // AUTH FUNCTIONS
+  // ============================================
+  function emailSignIn() {
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+    if (!email || !password) return showLoginError('Please enter email and password');
+
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(function(err) { showLoginError(err.message); });
+  }
+
+  function googleSignIn() {
+    var provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .catch(function(err) { showLoginError(err.message); });
+  }
+
+  function createAccount() {
+    var name = document.getElementById('create-name').value.trim();
+    var email = document.getElementById('create-email').value.trim();
+    var password = document.getElementById('create-password').value;
+    if (!name || !email || !password) return showCreateError('Please fill all fields');
+    if (password.length < 6) return showCreateError('Password must be at least 6 characters');
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(function(cred) {
+        return cred.user.updateProfile({ displayName: name });
+      })
+      .catch(function(err) { showCreateError(err.message); });
+  }
+
+  function signOut() {
+    firestoreUnsubs.forEach(function(unsub) { unsub(); });
+    firestoreUnsubs = [];
+    sessionStorage.clear();
+    auth.signOut();
+  }
+
+  function toggleCreateAccount() {
+    var lf = document.getElementById('login-form');
+    var cf = document.getElementById('create-form');
+    lf.style.display = lf.style.display === 'none' ? '' : 'none';
+    cf.style.display = cf.style.display === 'none' ? '' : 'none';
+  }
+
+  function showLoginError(msg) {
+    var el = document.getElementById('login-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  function showCreateError(msg) {
+    var el = document.getElementById('create-error');
+    el.textContent = msg;
+    el.style.display = 'block';
+  }
+
+  // ============================================
+  // AUTH STATE LISTENER
+  // ============================================
+  auth.onAuthStateChanged(function(user) {
+    if (user) {
+      currentUser = user;
+      checkUserRole(user);
+    } else {
+      currentUser = null;
+      userRole = null;
+      document.getElementById('login-gate').style.display = 'flex';
+      document.getElementById('dashboard').style.display = 'none';
+      document.getElementById('access-denied').style.display = 'none';
+    }
+  });
+
+  function checkUserRole(user) {
+    var userRef = db.collection('users').doc(user.uid);
+    userRef.get().then(function(doc) {
+      if (doc.exists) {
+        userRole = doc.data().role;
+        showDashboard();
+      } else if (ADMIN_EMAILS.includes(user.email.toLowerCase())) {
+        // Auto-create admin doc
+        return userRef.set({
+          email: user.email,
+          name: user.displayName || user.email,
+          role: 'admin',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(function() {
+          userRole = 'admin';
+          showDashboard();
+        });
+      } else {
+        // Unknown user — access denied
+        document.getElementById('login-gate').style.display = 'none';
+        document.getElementById('access-denied').style.display = 'flex';
+      }
+    });
+  }
+
+  function showDashboard() {
+    document.getElementById('login-gate').style.display = 'none';
+    document.getElementById('access-denied').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+
+    document.getElementById('user-name').textContent = currentUser.displayName || currentUser.email;
+    document.getElementById('user-role').textContent = userRole === 'admin' ? 'Admin' : 'Viewer';
+
+    applyRoleVisibility();
+    initFirestoreListeners();
+    loadPulseData();
+  }
+
+  function applyRoleVisibility() {
+    var adminEls = document.querySelectorAll('.admin-only');
+    adminEls.forEach(function(el) {
+      if (userRole === 'admin') {
+        el.classList.add('visible');
+      } else {
+        el.classList.remove('visible');
+      }
+    });
+  }
+
+  // ============================================
+  // PANEL NAVIGATION
+  // ============================================
+  function switchPanel(panelName) {
+    document.querySelectorAll('.panel').forEach(function(p) { p.classList.remove('active'); });
+    document.querySelectorAll('.sidebar-item').forEach(function(s) { s.classList.remove('active'); });
+
+    var panel = document.getElementById('panel-' + panelName);
+    var sidebar = document.querySelector('[data-panel="' + panelName + '"]');
+    if (panel) panel.classList.add('active');
+    if (sidebar) sidebar.classList.add('active');
+  }
+
+  // ============================================
+  // FIRESTORE REAL-TIME LISTENERS
+  // ============================================
+  function initFirestoreListeners() {
+    var bizPath = 'businesses/words-that-heal';
+
+    // Revenue
+    var unsubRev = db.collection(bizPath + '/revenue').onSnapshot(function(snap) {
+      fsRevenue = [];
+      snap.forEach(function(doc) { fsRevenue.push(Object.assign({ id: doc.id }, doc.data())); });
+      renderRevenue();
+      renderFinanceKPIs();
+    });
+    firestoreUnsubs.push(unsubRev);
+
+    // Expenses
+    var unsubExp = db.collection(bizPath + '/expenses').onSnapshot(function(snap) {
+      fsExpenses = [];
+      snap.forEach(function(doc) { fsExpenses.push(Object.assign({ id: doc.id }, doc.data())); });
+      renderExpenses();
+      renderFinanceKPIs();
+    });
+    firestoreUnsubs.push(unsubExp);
+
+    // Tasks
+    var unsubTasks = db.collection(bizPath + '/tasks').onSnapshot(function(snap) {
+      fsTasks = [];
+      snap.forEach(function(doc) { fsTasks.push(Object.assign({ id: doc.id }, doc.data())); });
+      renderTasks();
+    });
+    firestoreUnsubs.push(unsubTasks);
+
+    // Team
+    var unsubTeam = db.collection(bizPath + '/team').onSnapshot(function(snap) {
+      fsTeam = [];
+      snap.forEach(function(doc) { fsTeam.push(Object.assign({ id: doc.id }, doc.data())); });
+      renderTeam();
+    });
+    firestoreUnsubs.push(unsubTeam);
+  }
+
+  // ============================================
+  // RENDER FUNCTIONS
+  // ============================================
+  function renderRevenue() {
+    var tbody = document.getElementById('revenue-body');
+    if (!tbody) return;
+    if (fsRevenue.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No revenue recorded yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = fsRevenue.map(function(r) {
+      return '<tr><td>' + esc(r.source) + '</td><td><span class="badge badge-info">' + esc(r.category) + '</span></td><td style="color:var(--accent-green);font-weight:600;">$' + (r.amount || 0).toFixed(2) + '</td><td>' + esc(r.date) + '</td><td>' + esc(r.notes || '') + '</td></tr>';
+    }).join('');
+  }
+
+  function renderExpenses() {
+    var tbody = document.getElementById('expenses-body');
+    if (!tbody) return;
+    if (fsExpenses.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--text-muted);padding:24px;">No expenses recorded yet</td></tr>';
+      return;
+    }
+    tbody.innerHTML = fsExpenses.map(function(e) {
+      return '<tr><td>' + esc(e.description) + '</td><td><span class="badge badge-warning">' + esc(e.category) + '</span></td><td style="color:var(--accent-red);font-weight:600;">$' + (e.amount || 0).toFixed(2) + '</td><td>' + esc(e.date) + '</td><td>' + esc(e.notes || '') + '</td></tr>';
+    }).join('');
+  }
+
+  function renderFinanceKPIs() {
+    var totalRev = fsRevenue.reduce(function(sum, r) { return sum + (r.amount || 0); }, 0);
+    var totalExp = fsExpenses.reduce(function(sum, e) { return sum + (e.amount || 0); }, 0);
+    var net = totalRev - totalExp;
+
+    document.getElementById('kpi-total-revenue').textContent = '$' + totalRev.toFixed(0);
+    document.getElementById('kpi-total-expenses').textContent = '$' + totalExp.toFixed(0);
+    document.getElementById('kpi-net-profit').textContent = (net >= 0 ? '$' : '-$') + Math.abs(net).toFixed(0);
+    document.getElementById('kpi-net-profit').style.color = net >= 0 ? 'var(--accent-green)' : 'var(--accent-red)';
+    document.getElementById('kpi-margin').textContent = totalRev > 0 ? ((net / totalRev) * 100).toFixed(0) + '%' : '—';
+  }
+
+  function renderTasks() {
+    var container = document.getElementById('tasks-list');
+    if (!container) return;
+    if (fsTasks.length === 0) {
+      container.innerHTML = '<div class="empty-state"><div class="icon">✅</div><h3>No Tasks</h3><p>Add tasks to track your progress.</p></div>';
+      return;
+    }
+
+    // Sort: not-started & in-progress first, then done
+    var sorted = fsTasks.slice().sort(function(a, b) {
+      var order = { 'in-progress': 0, 'not-started': 1, 'done': 2 };
+      return (order[a.status] || 1) - (order[b.status] || 1);
+    });
+
+    container.innerHTML = sorted.map(function(t) {
+      var statusIcon = t.status === 'done' ? '✓' : t.status === 'in-progress' ? '◐' : '○';
+      var titleClass = t.status === 'done' ? 'task-title completed' : 'task-title';
+      var prioClass = 'priority-' + (t.priority || 'medium');
+      return '<div class="task-item">' +
+        '<div class="task-status ' + t.status + '" onclick="cycleTaskStatus(\'' + t.id + '\',\'' + t.status + '\')" title="Click to change status">' + statusIcon + '</div>' +
+        '<div class="task-body"><div class="' + titleClass + '">' + esc(t.title) + '</div>' +
+        '<div class="task-meta">' + esc(t.assignee || '') + (t.dueDate ? ' · Due ' + t.dueDate : '') + '</div></div>' +
+        '<span class="task-priority ' + prioClass + '">' + (t.priority || 'medium') + '</span>' +
+        '</div>';
+    }).join('');
+  }
+
+  function renderTeam() {
+    var container = document.getElementById('team-grid');
+    if (!container) return;
+    container.innerHTML = fsTeam.map(function(m) {
+      return '<div class="team-card">' +
+        '<div class="team-avatar">' + (m.avatar || '👤') + '</div>' +
+        '<h4>' + esc(m.name) + '</h4>' +
+        '<div class="role">' + esc(m.role) + '</div>' +
+        '<div class="email">' + esc(m.email) + '</div>' +
+        '</div>';
+    }).join('');
+  }
+
+  // ============================================
+  // TASK STATUS CYCLING
+  // ============================================
+  function cycleTaskStatus(taskId, current) {
+    var next = current === 'not-started' ? 'in-progress' : current === 'in-progress' ? 'done' : 'not-started';
+    db.collection('businesses/words-that-heal/tasks').doc(taskId).update({ status: next })
+      .then(function() { toast('Task updated', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  // ============================================
+  // PULSE DATA
+  // ============================================
+  function loadPulseData() {
+    // Baseline analytics (will be enhanced with live tracking later)
+    document.getElementById('kpi-pageviews').textContent = '—';
+    document.getElementById('kpi-visitors').textContent = '—';
+    document.getElementById('kpi-avgday').textContent = '—';
+
+    // Render simple chart placeholder
+    var ctx = document.getElementById('pulse-chart');
+    if (ctx && !ctx._chartInitialized) {
+      new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+          datasets: [{
+            label: 'Pageviews',
+            data: [0, 0, 0, 0],
+            borderColor: '#D4AF37',
+            backgroundColor: 'rgba(212,175,55,0.1)',
+            fill: true,
+            tension: 0.4
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#8b95b0' } } },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' } },
+            y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' }, beginAtZero: true }
+          }
+        }
+      });
+      ctx._chartInitialized = true;
+    }
+  }
+
+  // ============================================
+  // MERCH ORDERS (Printify)
+  // ============================================
+  function loadOrders() {
+    toast('Refreshing orders...', 'info');
+    // Will connect to Netlify function once Printify API key is set
+  }
+
+  // ============================================
+  // MODAL SYSTEM
+  // ============================================
+  function showModal(type) {
+    var root = document.getElementById('modal-root');
+    var html = '';
+
+    if (type === 'add-revenue') {
+      html = '<div class="modal"><h2>💵 Add Revenue</h2>' +
+        '<div class="form-group"><label>Source</label><input class="form-control" id="m-rev-source" placeholder="e.g., Printify Merch"></div>' +
+        '<div class="form-group"><label>Category</label><select class="form-control" id="m-rev-category"><option value="merchandise">Merchandise</option><option value="digital">Digital Products</option><option value="donations">Donations/Tips</option><option value="other">Other</option></select></div>' +
+        '<div class="form-group"><label>Amount ($)</label><input class="form-control" id="m-rev-amount" type="number" step="0.01" placeholder="0.00"></div>' +
+        '<div class="form-group"><label>Date</label><input class="form-control" id="m-rev-date" type="date"></div>' +
+        '<div class="form-group"><label>Notes</label><input class="form-control" id="m-rev-notes" placeholder="Optional notes"></div>' +
+        '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveRevenue()">Save</button></div></div>';
+    }
+
+    if (type === 'add-expense') {
+      html = '<div class="modal"><h2>📤 Add Expense</h2>' +
+        '<div class="form-group"><label>Description</label><input class="form-control" id="m-exp-desc" placeholder="e.g., Domain registration"></div>' +
+        '<div class="form-group"><label>Category</label><select class="form-control" id="m-exp-category"><option value="legal">Legal</option><option value="marketing">Marketing</option><option value="supplies">Supplies</option><option value="subscription">Subscription</option><option value="other">Other</option></select></div>' +
+        '<div class="form-group"><label>Amount ($)</label><input class="form-control" id="m-exp-amount" type="number" step="0.01" placeholder="0.00"></div>' +
+        '<div class="form-group"><label>Date</label><input class="form-control" id="m-exp-date" type="date"></div>' +
+        '<div class="form-group"><label>Notes</label><input class="form-control" id="m-exp-notes" placeholder="Optional notes"></div>' +
+        '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveExpense()">Save</button></div></div>';
+    }
+
+    if (type === 'add-task') {
+      html = '<div class="modal"><h2>✅ Add Task</h2>' +
+        '<div class="form-group"><label>Task Title</label><input class="form-control" id="m-task-title" placeholder="What needs to be done?"></div>' +
+        '<div class="form-group"><label>Assignee</label><select class="form-control" id="m-task-assignee"><option value="Cadasia">Cadasia</option><option value="Chris">Chris</option><option value="Both">Both</option></select></div>' +
+        '<div class="form-group"><label>Priority</label><select class="form-control" id="m-task-priority"><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div>' +
+        '<div class="form-group"><label>Due Date</label><input class="form-control" id="m-task-due" type="date"></div>' +
+        '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveTask()">Save</button></div></div>';
+    }
+
+    root.innerHTML = html;
+    root.classList.add('open');
+  }
+
+  function closeModal() {
+    var root = document.getElementById('modal-root');
+    root.classList.remove('open');
+    root.innerHTML = '';
+  }
+
+  // Close modal on Escape
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // ============================================
+  // SAVE FUNCTIONS (Firestore)
+  // ============================================
+  function saveRevenue() {
+    var data = {
+      source: document.getElementById('m-rev-source').value.trim(),
+      category: document.getElementById('m-rev-category').value,
+      amount: parseFloat(document.getElementById('m-rev-amount').value) || 0,
+      date: document.getElementById('m-rev-date').value || new Date().toISOString().split('T')[0],
+      notes: document.getElementById('m-rev-notes').value.trim(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (!data.source) return toast('Please enter a source', 'error');
+
+    db.collection('businesses/words-that-heal/revenue').add(data)
+      .then(function() { closeModal(); toast('Revenue added!', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  function saveExpense() {
+    var data = {
+      description: document.getElementById('m-exp-desc').value.trim(),
+      category: document.getElementById('m-exp-category').value,
+      amount: parseFloat(document.getElementById('m-exp-amount').value) || 0,
+      date: document.getElementById('m-exp-date').value || new Date().toISOString().split('T')[0],
+      notes: document.getElementById('m-exp-notes').value.trim(),
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (!data.description) return toast('Please enter a description', 'error');
+
+    db.collection('businesses/words-that-heal/expenses').add(data)
+      .then(function() { closeModal(); toast('Expense added!', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  function saveTask() {
+    var data = {
+      title: document.getElementById('m-task-title').value.trim(),
+      assignee: document.getElementById('m-task-assignee').value,
+      priority: document.getElementById('m-task-priority').value,
+      dueDate: document.getElementById('m-task-due').value || '',
+      status: 'not-started',
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    };
+    if (!data.title) return toast('Please enter a task title', 'error');
+
+    db.collection('businesses/words-that-heal/tasks').add(data)
+      .then(function() { closeModal(); toast('Task added!', 'success'); })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  // ============================================
+  // SEED DATA (from data.json)
+  // ============================================
+  function seedData() {
+    toast('Importing seed data...', 'info');
+    fetch('admin/data.json')
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var batch = db.batch();
+        var bizPath = 'businesses/words-that-heal';
+
+        if (data.finances && data.finances.revenue) {
+          data.finances.revenue.forEach(function(r) {
+            var ref = db.collection(bizPath + '/revenue').doc(r.id);
+            batch.set(ref, r);
+          });
+        }
+
+        if (data.finances && data.finances.expenses) {
+          data.finances.expenses.forEach(function(e) {
+            var ref = db.collection(bizPath + '/expenses').doc(e.id);
+            batch.set(ref, e);
+          });
+        }
+
+        if (data.tasks) {
+          data.tasks.forEach(function(t) {
+            var ref = db.collection(bizPath + '/tasks').doc(t.id);
+            batch.set(ref, t);
+          });
+        }
+
+        if (data.team) {
+          data.team.forEach(function(m) {
+            var ref = db.collection(bizPath + '/team').doc(m.id);
+            batch.set(ref, m);
+          });
+        }
+
+        return batch.commit();
+      })
+      .then(function() { toast('Seed data imported successfully!', 'success'); })
+      .catch(function(err) { toast('Error importing: ' + err.message, 'error'); });
+  }
+
+  function clearAndReseed() {
+    if (!confirm('This will delete ALL data and re-import from seed. Are you sure?')) return;
+
+    var bizPath = 'businesses/words-that-heal';
+    var collections = ['/revenue', '/expenses', '/tasks', '/team'];
+    var deletePromises = collections.map(function(col) {
+      return db.collection(bizPath + col).get().then(function(snap) {
+        var batch = db.batch();
+        snap.forEach(function(doc) { batch.delete(doc.ref); });
+        return batch.commit();
+      });
+    });
+
+    Promise.all(deletePromises)
+      .then(function() { seedData(); })
+      .catch(function(err) { toast('Error clearing data: ' + err.message, 'error'); });
+  }
+
+  // ============================================
+  // BANK CONNECTION (Plaid)
+  // ============================================
+  function connectBank() {
+    toast('Bank connection will be available once Novo account is approved and Plaid is configured.', 'info');
+  }
+
+  // ============================================
+  // TOAST SYSTEM
+  // ============================================
+  function toast(msg, type) {
+    var container = document.getElementById('toast-container');
+    var el = document.createElement('div');
+    el.className = 'toast toast-' + (type || 'info');
+    el.textContent = msg;
+    container.appendChild(el);
+    setTimeout(function() { el.remove(); }, 3500);
+  }
+
+  // ============================================
+  // UTILITY
+  // ============================================
+  function esc(str) {
+    var div = document.createElement('div');
+    div.textContent = str || '';
+    return div.innerHTML;
+  }
+
+  // ============================================
+  // EXPOSE GLOBALS
+  // ============================================
+  window.emailSignIn = emailSignIn;
+  window.googleSignIn = googleSignIn;
+  window.createAccount = createAccount;
+  window.signOut = signOut;
+  window.toggleCreateAccount = toggleCreateAccount;
+  window.switchPanel = switchPanel;
+  window.showModal = showModal;
+  window.closeModal = closeModal;
+  window.saveRevenue = saveRevenue;
+  window.saveExpense = saveExpense;
+  window.saveTask = saveTask;
+  window.seedData = seedData;
+  window.clearAndReseed = clearAndReseed;
+  window.connectBank = connectBank;
+  window.loadOrders = loadOrders;
+  window.cycleTaskStatus = cycleTaskStatus;
+
+})();
+</script>
+
+</body>
+</html>
