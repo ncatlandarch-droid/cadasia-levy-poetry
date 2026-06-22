@@ -1610,108 +1610,182 @@ select.form-control { cursor: pointer; }
   // ============================================
   // PULSE DATA
   // ============================================
-  function loadPulseData() {
-    // Read live analytics from Firestore
-    var now = new Date();
-    var labels = [];
-    var pvData = [];
-    var uvData = [];
-    var totalPV = 0;
-    var totalUV = 0;
-    var promises = [];
-
-    // Get last 7 days
-    for (var i = 6; i >= 0; i--) {
-      var d = new Date(now);
-      d.setDate(d.getDate() - i);
-      var dateKey = d.toISOString().split('T')[0];
-      labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
-      
-      (function(dk, idx) {
-        var p = db.doc('analytics/daily/' + dk + '/summary').get().then(function(doc) {
-          if (doc.exists) {
-            var data = doc.data();
-            pvData[idx] = data.pageviews || 0;
-            uvData[idx] = data.uniqueVisitors || 0;
-            totalPV += pvData[idx];
-            totalUV += uvData[idx];
-          } else {
-            pvData[idx] = 0;
-            uvData[idx] = 0;
-          }
-        }).catch(function() {
-          pvData[idx] = 0;
-          uvData[idx] = 0;
-        });
-        promises.push(p);
-      })(dateKey, 6 - i);
+  // Netlify Analytics baseline (May 23 – Jun 22, 2026)
+  var ANALYTICS_BASELINE = {
+    totalPageviews: 506,
+    totalVisitors: 321,
+    bandwidth: '1 GB',
+    topPages: {
+      '/': 479, '/proposal.html': 9, '/admin.html': 7,
+      '/psa-cadasia-levy.html': 6, '/business-plan.html': 3
+    },
+    topSources: {
+      'Direct': 397, 'google.com': 3, 'aisearchindex.space': 3, 'bing.com': 1
+    },
+    topCountries: {
+      'United States': 278, 'Singapore': 35, 'Germany': 32,
+      'China': 17, 'United Kingdom': 14, 'Canada': 14, 'Japan': 11
     }
+  };
 
-    Promise.all(promises).then(function() {
-      document.getElementById('kpi-pageviews').textContent = totalPV.toLocaleString();
-      document.getElementById('kpi-visitors').textContent = totalUV.toLocaleString();
-      document.getElementById('kpi-avgday').textContent = Math.round(totalPV / 7).toLocaleString();
+  function loadPulseData() {
+    // Query live Firestore events (last 30 days) + merge with baseline
+    var thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    var cutoffDate = thirtyDaysAgo.toISOString().split('T')[0];
 
-      // Recent events for the activity list
-      db.collection('analytics/pageviews/events')
-        .orderBy('timestamp', 'desc')
-        .limit(10)
-        .get()
-        .then(function(snap) {
-          var eventsEl = document.getElementById('recent-activity');
-          if (eventsEl && snap.size > 0) {
-            var html = '<div class="card-header"><h3>Recent Visitors</h3></div>';
-            html += '<div style="max-height:300px;overflow-y:auto;">';
-            snap.forEach(function(doc) {
-              var ev = doc.data();
-              var time = ev.timestamp ? ev.timestamp.toDate().toLocaleString() : 'just now';
-              html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
-                '<span style="color:#c5cfe0;">📄 ' + (ev.page || 'Home') + '</span>' +
-                '<span style="color:#5a6380;">' + (ev.source || 'direct') + '</span>' +
-                '<span style="color:#5a6380;">' + time + '</span>' +
-                '</div>';
-            });
-            html += '</div>';
-            eventsEl.innerHTML = html;
-          }
-        }).catch(function() {});
+    db.collection('analytics/pageviews/events')
+      .where('date', '>=', cutoffDate)
+      .orderBy('date', 'desc')
+      .limit(5000)
+      .get()
+      .then(function(snap) {
+        var dailyMap = {};
+        var pageMap = {};
+        var sourceMap = {};
+        var visitorSet = {};
+        var livePageviews = 0;
 
-      // Render chart
-      var ctx = document.getElementById('pulse-chart');
-      if (ctx && !ctx._chartInitialized) {
-        new Chart(ctx, {
-          type: 'line',
-          data: {
-            labels: labels,
-            datasets: [{
-              label: 'Pageviews',
-              data: pvData,
-              borderColor: '#D4AF37',
-              backgroundColor: 'rgba(212,175,55,0.1)',
-              fill: true,
-              tension: 0.4
-            }, {
-              label: 'Unique Visitors',
-              data: uvData,
-              borderColor: '#7c6cff',
-              backgroundColor: 'rgba(124,108,255,0.08)',
-              fill: true,
-              tension: 0.4
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { labels: { color: '#8b95b0' } } },
-            scales: {
-              x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' } },
-              y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' }, beginAtZero: true }
-            }
-          }
+        snap.forEach(function(doc) {
+          var ev = doc.data();
+          var date = ev.date || 'unknown';
+          var page = ev.page || '/';
+          var source = ev.source || 'Direct';
+          var vid = ev.visitorId || 'anon';
+
+          livePageviews++;
+          visitorSet[vid] = true;
+
+          // Daily aggregation for chart
+          if (!dailyMap[date]) dailyMap[date] = { pv: 0, visitors: {} };
+          dailyMap[date].pv++;
+          dailyMap[date].visitors[vid] = true;
+
+          // Page counts
+          pageMap[page] = (pageMap[page] || 0) + 1;
+
+          // Source counts
+          sourceMap[source] = (sourceMap[source] || 0) + 1;
         });
-        ctx._chartInitialized = true;
-      }
-    });
+
+        var liveVisitors = Object.keys(visitorSet).length;
+
+        // Merge with baseline
+        var totalPV = ANALYTICS_BASELINE.totalPageviews + livePageviews;
+        var totalUV = ANALYTICS_BASELINE.totalVisitors + liveVisitors;
+
+        // Merge page counts
+        var mergedPages = Object.assign({}, ANALYTICS_BASELINE.topPages);
+        Object.keys(pageMap).forEach(function(p) {
+          mergedPages[p] = (mergedPages[p] || 0) + pageMap[p];
+        });
+
+        // Merge source counts
+        var mergedSources = Object.assign({}, ANALYTICS_BASELINE.topSources);
+        Object.keys(sourceMap).forEach(function(s) {
+          mergedSources[s] = (mergedSources[s] || 0) + sourceMap[s];
+        });
+
+        // Update KPIs
+        document.getElementById('kpi-pageviews').textContent = totalPV.toLocaleString();
+        document.getElementById('kpi-visitors').textContent = totalUV.toLocaleString();
+        document.getElementById('kpi-avgday').textContent = Math.round(totalPV / 30).toLocaleString();
+
+        // Build recent activity — Top Pages + Sources
+        var activityEl = document.getElementById('recent-activity');
+        if (activityEl) {
+          var html = '<div class="card-header"><h3>📊 Top Pages</h3></div>';
+          html += '<div style="max-height:200px;overflow-y:auto;">';
+          var sortedPages = Object.entries(mergedPages).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+          sortedPages.forEach(function(entry) {
+            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
+              '<span style="color:#c5cfe0;">📄 ' + entry[0] + '</span>' +
+              '<span style="color:#D4AF37;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
+          });
+          html += '</div>';
+
+          // Traffic sources
+          html += '<div class="card-header" style="margin-top:1rem;"><h3>🔗 Traffic Sources</h3></div>';
+          html += '<div style="max-height:200px;overflow-y:auto;">';
+          var sortedSources = Object.entries(mergedSources).sort(function(a, b) { return b[1] - a[1]; }).slice(0, 10);
+          sortedSources.forEach(function(entry) {
+            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
+              '<span style="color:#c5cfe0;">🌐 ' + entry[0] + '</span>' +
+              '<span style="color:#7c6cff;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
+          });
+          html += '</div>';
+
+          // Top countries
+          html += '<div class="card-header" style="margin-top:1rem;"><h3>🌍 Top Countries</h3></div>';
+          html += '<div style="max-height:200px;overflow-y:auto;">';
+          var sortedCountries = Object.entries(ANALYTICS_BASELINE.topCountries).sort(function(a, b) { return b[1] - a[1]; });
+          sortedCountries.forEach(function(entry) {
+            html += '<div style="display:flex;justify-content:space-between;padding:0.5rem 1rem;border-bottom:1px solid rgba(255,255,255,0.04);font-size:0.85rem;">' +
+              '<span style="color:#c5cfe0;">🏳️ ' + entry[0] + '</span>' +
+              '<span style="color:#47d185;font-weight:600;">' + entry[1].toLocaleString() + '</span></div>';
+          });
+          html += '</div>';
+
+          activityEl.innerHTML = html;
+        }
+
+        // Chart — last 7 days of LIVE data
+        var labels = [];
+        var pvChart = [];
+        var uvChart = [];
+        for (var i = 6; i >= 0; i--) {
+          var d = new Date();
+          d.setDate(d.getDate() - i);
+          var dk = d.toISOString().split('T')[0];
+          labels.push(d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }));
+          if (dailyMap[dk]) {
+            pvChart.push(dailyMap[dk].pv);
+            uvChart.push(Object.keys(dailyMap[dk].visitors).length);
+          } else {
+            pvChart.push(0);
+            uvChart.push(0);
+          }
+        }
+
+        var ctx = document.getElementById('pulse-chart');
+        if (ctx && !ctx._chartInitialized) {
+          new Chart(ctx, {
+            type: 'line',
+            data: {
+              labels: labels,
+              datasets: [{
+                label: 'Pageviews',
+                data: pvChart,
+                borderColor: '#D4AF37',
+                backgroundColor: 'rgba(212,175,55,0.1)',
+                fill: true, tension: 0.4
+              }, {
+                label: 'Unique Visitors',
+                data: uvChart,
+                borderColor: '#7c6cff',
+                backgroundColor: 'rgba(124,108,255,0.08)',
+                fill: true, tension: 0.4
+              }]
+            },
+            options: {
+              responsive: true, maintainAspectRatio: false,
+              plugins: { legend: { labels: { color: '#8b95b0' } } },
+              scales: {
+                x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' } },
+                y: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#5a6380' }, beginAtZero: true }
+              }
+            }
+          });
+          ctx._chartInitialized = true;
+        }
+      })
+      .catch(function(err) {
+        console.error('Analytics load error:', err);
+        // Show baseline data even if Firestore query fails
+        document.getElementById('kpi-pageviews').textContent = ANALYTICS_BASELINE.totalPageviews.toLocaleString();
+        document.getElementById('kpi-visitors').textContent = ANALYTICS_BASELINE.totalVisitors.toLocaleString();
+        document.getElementById('kpi-avgday').textContent = Math.round(ANALYTICS_BASELINE.totalPageviews / 30).toLocaleString();
+      });
   }
 
   // ============================================
