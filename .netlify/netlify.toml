@@ -1,14 +1,13 @@
+functionsDirectory = "C:\\Users\\Chris\\Desktop\\WEBSITES\\Levy Poems\\netlify\\functions"
+functionsDirectoryOrigin = "config"
 plugins = []
 headers = []
 redirects = []
 
-[functions]
-
-[functions."*"]
-
 [build]
 publish = "C:\\Users\\Chris\\Desktop\\WEBSITES\\Levy Poems"
 publishOrigin = "default"
+functions = "C:\\Users\\Chris\\Desktop\\WEBSITES\\Levy Poems\\netlify\\functions"
 
 [build.environment]
 
@@ -23,3 +22,8 @@ publishOrigin = "default"
 [build.processing.js]
 
 [build.services]
+
+[functions]
+
+[functions."*"]
+node_bundler = "esbuild"
