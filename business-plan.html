@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Business Plan — Words That Heal LLC</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  @page {
+    size: letter;
+    margin: 0.65in 0.75in;
+  }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5pt;
+    line-height: 1.65;
+    color: #1a1a1a;
+    background: #fff;
+  }
+
+  .doc { max-width: 8.5in; margin: 0 auto; padding: 0.65in 0.75in; }
+
+  /* Cover Page */
+  .cover {
+    min-height: 9.5in;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    page-break-after: always;
+  }
+
+  .cover-logo {
+    width: 200px;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 4px 12px rgba(139,111,30,0.3));
+  }
+
+  .cover h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 36pt;
+    color: #8B6F1E;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+  }
+
+  .cover h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16pt;
+    color: #666;
+    font-weight: 400;
+    margin-bottom: 40px;
+  }
+
+  .cover-meta {
+    font-size: 10pt;
+    color: #999;
+    line-height: 2;
+  }
+
+  .cover-meta strong { color: #8B6F1E; }
+
+  .cover-divider {
+    width: 80px;
+    height: 3px;
+    background: linear-gradient(90deg, #8B6F1E, #D4AF37);
+    margin: 20px auto;
+    border-radius: 2px;
+  }
+
+  /* Section Headers */
+  h1.section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20pt;
+    color: #8B6F1E;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+    border-bottom: 2px solid #8B6F1E;
+    padding-bottom: 6px;
+    margin-top: 0;
+  }
+
+  h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13pt;
+    color: #8B6F1E;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 10.5pt;
+    font-weight: 700;
+    color: #333;
+    margin-top: 14px;
+    margin-bottom: 4px;
+  }
+
+  p { margin-bottom: 8px; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 14px;
+    font-size: 10pt;
+  }
+
+  th {
+    background: #8B6F1E;
+    color: white;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 9.5pt;
+  }
+
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #e8e4dd;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: #FDFAF5; }
+
+  /* Callout Boxes */
+  .gold-box {
+    background: linear-gradient(135deg, #FFF8E1, #FFF3CC);
+    border-left: 4px solid #D4AF37;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10pt;
+  }
+
+  .warm-box {
+    background: linear-gradient(135deg, #FDF8F0, #F5EDE0);
+    border-left: 4px solid #8B6F1E;
+    padding: 10px 14px;
+    margin: 12px 0;
+    border-radius: 0 6px 6px 0;
+    font-size: 10pt;
+  }
+
+  .metric-row {
+    display: flex;
+    gap: 12px;
+    margin: 12px 0;
+  }
+
+  .metric-card {
+    flex: 1;
+    background: linear-gradient(135deg, #FDF8F0, #FFF8E1);
+    border: 1px solid #E8E4DD;
+    border-radius: 8px;
+    padding: 12px;
+    text-align: center;
+  }
+
+  .metric-card .number {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22pt;
+    color: #8B6F1E;
+    font-weight: 700;
+    display: block;
+  }
+
+  .metric-card .label {
+    font-size: 8.5pt;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+
+  .page-break { page-break-after: always; }
+
+  .toc a {
+    color: #8B6F1E;
+    text-decoration: none;
+  }
+
+  .toc li {
+    margin-bottom: 6px;
+    font-size: 11pt;
+  }
+
+  ul, ol { margin-left: 20px; margin-bottom: 10px; }
+  li { margin-bottom: 4px; }
+
+  .footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 8.5pt;
+    color: #999;
+    border-top: 1px solid #e0e0e0;
+    padding-top: 10px;
+  }
+
+  /* Download bar */
+  .download-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid #E8E4DD;
+    padding: 12px 24px;
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    align-items: center;
+  }
+
+  .download-bar button {
+    padding: 10px 28px;
+    background: linear-gradient(135deg, #8B6F1E, #D4AF37);
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+  }
+
+  .download-bar span { color: #555; font-size: 0.8rem; }
+
+  @media print {
+    .doc { padding: 0; }
+    .download-bar { display: none !important; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .cover { min-height: auto; padding: 2in 0; }
+    .metric-row { display: flex !important; }
+    .metric-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="download-bar">
+  <span>Words That Heal LLC — Business Plan</span>
+  <button onclick="window.print()">⬇ Download as PDF</button>
+</div>
+
+<!-- ============================================
+     COVER PAGE
+     ============================================ -->
+<div class="doc" style="margin-top: 60px;">
+
+<div class="cover">
+  <img src="assets/logo.png" alt="Words That Heal Logo" class="cover-logo">
+  <h1>Words That Heal LLC</h1>
+  <h2>Poetry, Art & Creative Merchandise</h2>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <strong>Business Plan</strong><br>
+    Prepared June 2026<br><br>
+    <strong>Founder & Creative Director</strong><br>
+    Cadasia Ta'Nae Levy<br>
+    Rocky Mount, North Carolina<br><br>
+    <strong>Website</strong><br>
+    cadasia-levy-poetry.netlify.app<br><br>
+    <strong>Supported by</strong><br>
+    Think! Ventures Foundation · 501(c)(3)
+  </div>
+</div>
+
+<!-- ============================================
+     TABLE OF CONTENTS
+     ============================================ -->
+<h1 class="section-title">Table of Contents</h1>
+<ol class="toc">
+  <li><a href="#executive-summary">Executive Summary</a></li>
+  <li><a href="#mission">Mission & Vision</a></li>
+  <li><a href="#founder">Founder Profile</a></li>
+  <li><a href="#products">Products & Services</a></li>
+  <li><a href="#market">Market Opportunity</a></li>
+  <li><a href="#revenue">Revenue Model</a></li>
+  <li><a href="#marketing">Marketing Strategy</a></li>
+  <li><a href="#operations">Operations & Fulfillment</a></li>
+  <li><a href="#technology">Technology & Platform</a></li>
+  <li><a href="#financials">Financial Projections</a></li>
+  <li><a href="#milestones">Milestones & Timeline</a></li>
+  <li><a href="#support">Support & Partnership</a></li>
+</ol>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     1. EXECUTIVE SUMMARY
+     ============================================ -->
+<h1 class="section-title" id="executive-summary">1. Executive Summary</h1>
+
+<p><strong>Words That Heal LLC</strong> is a poetry, art, and creative merchandise brand founded by Cadasia Ta'Nae Levy of Rocky Mount, North Carolina. The company publishes original poetry, sells original artwork and gallery-quality art prints, and offers branded merchandise through an online store — all built around a mission of healing through creative expression.</p>
+
+<p>The brand operates through a multilingual website (English, Spanish, Chinese, Swahili) with integrated e-commerce, serving a global audience of poetry lovers, art collectors, and supporters of independent Black female artists.</p>
+
+<div class="metric-row">
+  <div class="metric-card">
+    <span class="number">$0</span>
+    <span class="label">Startup Cost</span>
+  </div>
+  <div class="metric-card">
+    <span class="number">100%</span>
+    <span class="label">Creator-Owned</span>
+  </div>
+  <div class="metric-card">
+    <span class="number">5+</span>
+    <span class="label">Revenue Streams</span>
+  </div>
+  <div class="metric-card">
+    <span class="number">4</span>
+    <span class="label">Languages</span>
+  </div>
+</div>
+
+<div class="gold-box">
+  <strong>Key differentiator:</strong> Words That Heal combines deeply personal poetry with original visual art and branded merchandise — an integrated creative brand, not just a poetry page. The multilingual platform and professional production quality position the brand for both domestic and international markets.
+</div>
+
+<!-- ============================================
+     2. MISSION & VISION
+     ============================================ -->
+<h1 class="section-title" id="mission">2. Mission & Vision</h1>
+
+<h2>Mission Statement</h2>
+<p>To transform pain into beauty through raw, honest poetry and art — creating a space where healing begins with words and self-expression becomes a pathway to empowerment.</p>
+
+<h2>Vision</h2>
+<p>To build a nationally recognized creative brand rooted in Rocky Mount, NC that inspires healing through poetry, art, and community — proving that powerful stories from small towns can reach the world.</p>
+
+<h2>Core Values</h2>
+<table>
+  <tr><th>Value</th><th>What It Means</th></tr>
+  <tr><td><strong>Authenticity</strong></td><td>Every poem and artwork comes from real lived experience — never fabricated</td></tr>
+  <tr><td><strong>Healing</strong></td><td>Creative expression as therapy, self-discovery, and empowerment</td></tr>
+  <tr><td><strong>Accessibility</strong></td><td>Art and poetry available in 4 languages, with free-tier access to selected works</td></tr>
+  <tr><td><strong>Community</strong></td><td>Supporting other creators and building connections through shared storytelling</td></tr>
+</table>
+
+<!-- ============================================
+     3. FOUNDER PROFILE
+     ============================================ -->
+<h1 class="section-title" id="founder">3. Founder Profile</h1>
+
+<p><strong>Cadasia Ta'Nae Levy</strong> is a poet, visual artist, and creative entrepreneur from Rocky Mount, North Carolina. Her work explores themes of love, loss, identity, faith, and self-discovery — drawing from deeply personal experiences to create art that resonates universally.</p>
+
+<p>Cadasia's artistic style blends intricate ink drawings — featuring dragons, florals, feminine portraits, and ornate lettering — with emotionally charged poetry that reads like spoken word on the page. Her unique combination of visual art and written word distinguishes her from traditional poets and visual artists alike.</p>
+
+<div class="warm-box">
+  <strong>Creative range:</strong> Original poetry (5+ published works) · Ink & pen illustration · Tattoo-inspired fine art · Abstract color compositions · Typographic art · Spoken word performance
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     4. PRODUCTS & SERVICES
+     ============================================ -->
+<h1 class="section-title" id="products">4. Products & Services</h1>
+
+<h2>Digital Products</h2>
+<table>
+  <tr><th>Product</th><th>Price</th><th>Platform</th></tr>
+  <tr><td>Poetry eBook — "Words That Heal" Collection</td><td>$9.99</td><td>Gumroad</td></tr>
+  <tr><td>Audio Poetry Collection (20 narrated poems, 4 languages)</td><td>$14.99</td><td>Gumroad</td></tr>
+  <tr><td>Digital Art Downloads (individual prints)</td><td>$4.99 – $9.99</td><td>Gumroad</td></tr>
+  <tr><td>Poetry Bundle (eBook + Audio)</td><td>$19.99</td><td>Gumroad</td></tr>
+</table>
+
+<h2>Physical Merchandise</h2>
+<table>
+  <tr><th>Product</th><th>Retail Price</th><th>Est. Cost</th><th>Est. Profit</th></tr>
+  <tr><td>"Breathe" Signature T-Shirt</td><td>$34.99</td><td>~$14</td><td>~$21</td></tr>
+  <tr><td>"Am I The Reason?" Ceramic Mug</td><td>$18.99</td><td>~$8</td><td>~$11</td></tr>
+  <tr><td>"Can I Escape?" Art Print</td><td>$29.99</td><td>~$7</td><td>~$23</td></tr>
+  <tr><td>Nubian Dragon Queen Print</td><td>$34.99</td><td>~$7</td><td>~$28</td></tr>
+  <tr><td>Poetry Book (Physical, Softcover)</td><td>$24.99</td><td>~$8</td><td>~$17</td></tr>
+</table>
+
+<h2>Future Products (Planned)</h2>
+<ul>
+  <li>Hoodie collection (Fall 2026)</li>
+  <li>Canvas gallery wraps</li>
+  <li>Poetry greeting cards (pack of 10)</li>
+  <li>Sticker packs</li>
+  <li>Tote bags with original art</li>
+  <li>Seasonal limited-edition drops</li>
+</ul>
+
+<!-- ============================================
+     5. MARKET OPPORTUNITY
+     ============================================ -->
+<h1 class="section-title" id="market">5. Market Opportunity</h1>
+
+<h2>Industry Overview</h2>
+<p>The poetry and spoken word market has experienced a renaissance driven by social media, with "Instapoetry" artists like Rupi Kaur selling millions of copies. The print-on-demand market is projected to reach $39.4 billion by 2030, with personalized and artist-driven products leading growth.</p>
+
+<h2>Target Audience</h2>
+<table>
+  <tr><th>Segment</th><th>Demographics</th><th>Why They Buy</th></tr>
+  <tr><td><strong>Primary: Poetry Lovers</strong></td><td>Women 18-45, social media active</td><td>Emotional connection, relatability, self-care</td></tr>
+  <tr><td><strong>Secondary: Art Collectors</strong></td><td>Adults 25-55, disposable income</td><td>Unique original art, support Black artists</td></tr>
+  <tr><td><strong>Tertiary: Gift Buyers</strong></td><td>All ages, holiday/event driven</td><td>Meaningful gifts — mugs, books, prints</td></tr>
+  <tr><td><strong>Community: Rocky Mount</strong></td><td>Local supporters, event attendees</td><td>Hometown pride, personal connection</td></tr>
+</table>
+
+<h2>Competitive Advantage</h2>
+<div class="warm-box">
+  <strong>What makes Words That Heal different:</strong><br>
+  • <strong>Dual medium:</strong> Both poet AND visual artist (rare combination)<br>
+  • <strong>Multilingual:</strong> 4 languages from day one (English, Spanish, Chinese, Swahili)<br>
+  • <strong>Audio narration:</strong> Every poem has professional narration<br>
+  • <strong>Zero overhead:</strong> Print-on-demand = no inventory risk<br>
+  • <strong>Premium platform:</strong> $21K+ website delivered at $0 cost through Think! Ventures
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     6. REVENUE MODEL
+     ============================================ -->
+<h1 class="section-title" id="revenue">6. Revenue Model</h1>
+
+<p>Words That Heal operates a <strong>multi-stream, 100% creator-owned</strong> revenue model:</p>
+
+<table>
+  <tr><th>Revenue Stream</th><th>Platform</th><th>Creator Share</th><th>Avg. Margin</th></tr>
+  <tr><td>Merchandise (apparel, mugs, prints)</td><td>Printify</td><td><strong>100%</strong></td><td>55-80%</td></tr>
+  <tr><td>Digital products (ebook, audio)</td><td>Gumroad</td><td><strong>90%</strong> (10% platform fee)</td><td>90%</td></tr>
+  <tr><td>Art print sales</td><td>Printify</td><td><strong>100%</strong></td><td>70-80%</td></tr>
+  <tr><td>Physical book sales</td><td>Printify / Direct</td><td><strong>100%</strong></td><td>65-70%</td></tr>
+  <tr><td>Tips & donations</td><td>CashApp</td><td><strong>100%</strong></td><td>100%</td></tr>
+</table>
+
+<div class="gold-box">
+  <strong>Revenue ownership:</strong> Cadasia keeps 100% of all revenue from every stream. All payments flow directly to her business bank account (Novo). The Foundation takes zero cut, zero commission, and zero equity — ever.
+</div>
+
+<h2>Pricing Strategy</h2>
+<p>Products are priced at premium-but-accessible levels, reflecting the quality of original art and poetry while remaining affordable for the target audience. Merch margins of 55-80% are achieved through print-on-demand efficiency (no inventory, no warehousing, no shipping labor).</p>
+
+<!-- ============================================
+     7. MARKETING STRATEGY
+     ============================================ -->
+<h1 class="section-title" id="marketing">7. Marketing Strategy</h1>
+
+<h2>Digital Marketing</h2>
+<table>
+  <tr><th>Channel</th><th>Strategy</th><th>Frequency</th></tr>
+  <tr><td><strong>Instagram</strong></td><td>Poetry cards, art reveals, behind-the-scenes, reels</td><td>3-5x/week</td></tr>
+  <tr><td><strong>TikTok</strong></td><td>Spoken word clips, art process videos, poetry readings</td><td>2-3x/week</td></tr>
+  <tr><td><strong>Facebook</strong></td><td>Community group, event promotion, merch drops</td><td>2-3x/week</td></tr>
+  <tr><td><strong>Email / Newsletter</strong></td><td>New poem alerts, exclusive content, merch announcements</td><td>Bi-weekly</td></tr>
+  <tr><td><strong>Website SEO</strong></td><td>Poetry content, multilingual reach, blog posts</td><td>Ongoing</td></tr>
+</table>
+
+<h2>Content Strategy</h2>
+<ul>
+  <li><strong>Freemium model:</strong> 1 poem free to read, others require purchase — builds audience while driving sales</li>
+  <li><strong>Audio snippets:</strong> 15-30 second narrated poetry clips for social media (drives full collection sales)</li>
+  <li><strong>Art process videos:</strong> Time-lapse drawing videos showcase talent and build following</li>
+  <li><strong>Seasonal drops:</strong> Limited-edition merch collections for holidays and events</li>
+</ul>
+
+<h2>Community & Events</h2>
+<ul>
+  <li>Open mic nights in Rocky Mount (quarterly)</li>
+  <li>Pop-up shops at local markets and festivals</li>
+  <li>Collaboration with Think! Ventures community partners</li>
+  <li>School and community workshop appearances</li>
+</ul>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     8. OPERATIONS
+     ============================================ -->
+<h1 class="section-title" id="operations">8. Operations & Fulfillment</h1>
+
+<h2>Business Model: Print-on-Demand</h2>
+<p>Words That Heal operates a <strong>zero-inventory, print-on-demand</strong> model. This eliminates the need for upfront product investment, warehousing, or shipping logistics.</p>
+
+<table>
+  <tr><th>Step</th><th>Who Does It</th><th>What Happens</th></tr>
+  <tr><td>1. Customer orders</td><td>Customer</td><td>Visits website → selects product → pays via Stripe</td></tr>
+  <tr><td>2. Order routes to Printify</td><td>Automatic</td><td>Order sent to print partner automatically</td></tr>
+  <tr><td>3. Product printed</td><td>Printify network</td><td>Item printed/produced within 2-5 business days</td></tr>
+  <tr><td>4. Shipped to customer</td><td>Printify partner</td><td>Direct-to-consumer shipping with tracking</td></tr>
+  <tr><td>5. Payment deposited</td><td>Automatic</td><td>Revenue deposited to Novo business account</td></tr>
+</table>
+
+<div class="warm-box">
+  <strong>Founder's daily role:</strong> Create content, engage on social media, respond to customer messages, and approve new product designs. All production, shipping, and payment processing is automated.
+</div>
+
+<h2>Digital Product Delivery</h2>
+<p>Digital products (ebook, audio collection, digital art) are delivered instantly through Gumroad. Customer pays → receives download link immediately → no shipping required.</p>
+
+<!-- ============================================
+     9. TECHNOLOGY
+     ============================================ -->
+<h1 class="section-title" id="technology">9. Technology & Platform</h1>
+
+<table>
+  <tr><th>Component</th><th>Technology</th><th>Cost</th></tr>
+  <tr><td>Website</td><td>Custom HTML/CSS/JS on Netlify</td><td>Free</td></tr>
+  <tr><td>Merch Store</td><td>Printify</td><td>Free</td></tr>
+  <tr><td>Digital Products</td><td>Gumroad</td><td>Free (10% per sale)</td></tr>
+  <tr><td>Payment Processing</td><td>Stripe (via platforms)</td><td>2.9% + $0.30/transaction</td></tr>
+  <tr><td>Business Banking</td><td>Novo</td><td>Free</td></tr>
+  <tr><td>Hosting & SSL</td><td>Netlify</td><td>Free</td></tr>
+  <tr><td>Domain</td><td>Custom domain (future)</td><td>~$12/year</td></tr>
+  <tr><td>Audio Narration</td><td>AI TTS (20 files, 4 languages)</td><td>Included</td></tr>
+  <tr><td>Tips & Donations</td><td>CashApp</td><td>Free</td></tr>
+</table>
+
+<div class="gold-box">
+  <strong>Total monthly operating cost: $0</strong> — all platforms operate on free tiers with per-transaction fees only. No fixed monthly expenses until the business grows to justify premium upgrades.
+</div>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     10. FINANCIAL PROJECTIONS
+     ============================================ -->
+<h1 class="section-title" id="financials">10. Financial Projections</h1>
+
+<h2>Year 1 Projections (Conservative)</h2>
+<table>
+  <tr><th>Revenue Stream</th><th>Monthly Est.</th><th>Annual Est.</th><th>Assumptions</th></tr>
+  <tr><td>Merch sales</td><td>$200 – $500</td><td>$2,400 – $6,000</td><td>10-25 items/month @ $20 avg profit</td></tr>
+  <tr><td>Digital products</td><td>$50 – $150</td><td>$600 – $1,800</td><td>5-15 downloads/month @ $10 avg</td></tr>
+  <tr><td>Art prints</td><td>$75 – $200</td><td>$900 – $2,400</td><td>3-8 prints/month @ $25 avg profit</td></tr>
+  <tr><td>Tips/donations</td><td>$25 – $75</td><td>$300 – $900</td><td>Consistent social media presence</td></tr>
+  <tr><td><strong>Total</strong></td><td><strong>$350 – $925</strong></td><td><strong>$4,200 – $11,100</strong></td><td></td></tr>
+</table>
+
+<h2>Year 2 Projections (Growth)</h2>
+<table>
+  <tr><th>Revenue Stream</th><th>Monthly Est.</th><th>Annual Est.</th></tr>
+  <tr><td>Merch sales</td><td>$500 – $1,200</td><td>$6,000 – $14,400</td></tr>
+  <tr><td>Digital products</td><td>$150 – $400</td><td>$1,800 – $4,800</td></tr>
+  <tr><td>Art prints</td><td>$200 – $500</td><td>$2,400 – $6,000</td></tr>
+  <tr><td>Physical book</td><td>$100 – $300</td><td>$1,200 – $3,600</td></tr>
+  <tr><td>Tips/donations</td><td>$50 – $150</td><td>$600 – $1,800</td></tr>
+  <tr><td><strong>Total</strong></td><td><strong>$1,000 – $2,550</strong></td><td><strong>$12,000 – $30,600</strong></td></tr>
+</table>
+
+<h2>Startup Costs</h2>
+<table>
+  <tr><th>Item</th><th>Cost</th><th>Paid By</th></tr>
+  <tr><td>NC LLC filing</td><td>$125</td><td>Cadasia</td></tr>
+  <tr><td>Website design & development ($21,400+ value)</td><td>$0</td><td>Think! Ventures Grant</td></tr>
+  <tr><td>Merch design & store setup</td><td>$0</td><td>Think! Ventures Grant</td></tr>
+  <tr><td>Audio narration (80 files)</td><td>$0</td><td>Think! Ventures Grant</td></tr>
+  <tr><td>Printify account</td><td>$0</td><td>Free tier</td></tr>
+  <tr><td>Gumroad account</td><td>$0</td><td>Free tier</td></tr>
+  <tr><td>Novo business banking</td><td>$0</td><td>Free</td></tr>
+  <tr><td><strong>Total out-of-pocket</strong></td><td><strong>$125</strong></td><td></td></tr>
+</table>
+
+<div class="gold-box">
+  <strong>ROI perspective:</strong> Cadasia invested $125 in LLC filing. She received $21,400+ in professional services at zero cost through Think! Ventures Foundation grants. Her breakeven on the LLC filing is approximately 5-6 merch sales.
+</div>
+
+<!-- ============================================
+     11. MILESTONES
+     ============================================ -->
+<h1 class="section-title" id="milestones">11. Milestones & Timeline</h1>
+
+<table>
+  <tr><th>Timeline</th><th>Milestone</th><th>Status</th></tr>
+  <tr><td>June 2026</td><td>LLC formed, EIN obtained, bank account opened</td><td>✅ Complete</td></tr>
+  <tr><td>June 2026</td><td>Website launched with 5 poems, gallery, and merch store</td><td>✅ Complete</td></tr>
+  <tr><td>June 2026</td><td>Audio narration in 4 languages</td><td>✅ Complete</td></tr>
+  <tr><td>July 2026</td><td>Printify & Gumroad stores connected and live</td><td>⏳ In Progress</td></tr>
+  <tr><td>July 2026</td><td>First merch sales and digital product downloads</td><td>⏳ Upcoming</td></tr>
+  <tr><td>August 2026</td><td>Social media launch — Instagram, TikTok, Facebook</td><td>⏳ Upcoming</td></tr>
+  <tr><td>Fall 2026</td><td>Physical poetry book published</td><td>📋 Planned</td></tr>
+  <tr><td>Fall 2026</td><td>First open mic / pop-up shop event in Rocky Mount</td><td>📋 Planned</td></tr>
+  <tr><td>Winter 2026</td><td>Holiday collection merch drop</td><td>📋 Planned</td></tr>
+  <tr><td>2027</td><td>Custom domain, expanded product line, speaking engagements</td><td>📋 Planned</td></tr>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ============================================
+     12. SUPPORT & PARTNERSHIP
+     ============================================ -->
+<h1 class="section-title" id="support">12. Support & Partnership</h1>
+
+<h2>Think! Ventures Foundation</h2>
+<p>Words That Heal LLC was launched through the <strong>Think! Ventures Foundation</strong>, a 501(c)(3) nonprofit business incubator that provides creative platform development, technology, and mentorship to underserved entrepreneurs at zero cost.</p>
+
+<h2>Services Provided (Grant-Funded)</h2>
+<table>
+  <tr><th>Service</th><th>Market Value</th></tr>
+  <tr><td>Custom multilingual website (4 languages)</td><td>$4,500+</td></tr>
+  <tr><td>Brand identity & logo integration</td><td>$1,200+</td></tr>
+  <tr><td>Poetry showcase with freemium model</td><td>$800+</td></tr>
+  <tr><td>AI audio narration (20 files × 4 languages)</td><td>$2,000+</td></tr>
+  <tr><td>Art gallery with lightbox viewer</td><td>$600+</td></tr>
+  <tr><td>Cinematic hero video</td><td>$1,500+</td></tr>
+  <tr><td>Merch design & store setup</td><td>$1,500+</td></tr>
+  <tr><td>Digital product storefront</td><td>$400+</td></tr>
+  <tr><td>Payment processing setup</td><td>$400+</td></tr>
+  <tr><td>SSL, hosting & deployment</td><td>$600+</td></tr>
+  <tr><td>SEO & community integration</td><td>$700+</td></tr>
+  <tr><td>Ongoing support (Year 1)</td><td>$7,200+</td></tr>
+  <tr><td><strong>Total market value</strong></td><td><strong>$21,400+</strong></td></tr>
+</table>
+
+<h2>Ongoing Support Options</h2>
+<table>
+  <tr><th>Plan</th><th>Monthly</th><th>What's Included</th></tr>
+  <tr><td><strong>Alumni Plan</strong></td><td>$150/mo</td><td>Hosting, SSL, tech support, website updates, new merch design</td></tr>
+  <tr><td><strong>Creator Plan</strong></td><td>$500/mo</td><td>Everything in Alumni + full-service marketing, new product lines, priority support</td></tr>
+  <tr><td><strong>Self-Manage</strong></td><td>$0</td><td>Participant takes over hosting and all operations independently</td></tr>
+</table>
+
+<div class="warm-box">
+  <strong>Foundation terms:</strong> Think! Ventures holds zero equity, takes zero revenue share, and imposes no restrictions on the business. Cadasia owns 100% of Words That Heal LLC, all creative works, and all revenue — forever. Either party may exit with 90 days notice.
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <strong>Words That Heal LLC</strong> · Rocky Mount, North Carolina<br>
+  Business Plan · Version 1.0 · June 2026<br>
+  Supported by Think! Ventures Foundation · 501(c)(3)
+</div>
+
+</div>
+
+</body>
+</html>
