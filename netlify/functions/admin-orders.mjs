@@ -96,6 +96,8 @@ export default async function handler(req) {
           visible: p.visible,
           is_locked: p.is_locked,
           created_at: p.created_at,
+          external_id: p.external_id || null,
+          url: p.url || null,
           sales_channel_properties: p.sales_channel_properties
         })),
         orders: orders.map(o => ({
