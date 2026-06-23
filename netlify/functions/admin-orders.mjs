@@ -46,7 +46,27 @@ export default async function handler(req) {
       const products = productsData.data || productsData || [];
 
       if (action === 'products') {
-        return json({ success: true, shop: shopTitle, shopId, products });
+        return json({
+          success: true,
+          shop: shopTitle,
+          shopId,
+          products: products.map(p => ({
+            id: p.id,
+            title: p.title,
+            description: p.description,
+            images: (p.images || []).map(img => img.src || img),
+            variants: (p.variants || []).map(v => ({
+              id: v.id,
+              title: v.title,
+              price: v.price,
+              is_enabled: v.is_enabled
+            })),
+            visible: p.visible,
+            external_id: p.external_id || null,
+            url: p.url || null,
+            sales_channel_properties: p.sales_channel_properties
+          }))
+        });
       }
 
       // GET ORDERS
