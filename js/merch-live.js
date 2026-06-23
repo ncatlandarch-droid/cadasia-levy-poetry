@@ -42,7 +42,7 @@
             if (!desc) desc = p.title || '';
 
             // Build purchase link — use external URL if available, fallback to Printify store
-            var link = 'https://wordsthatheal-llc.printify.me';
+            var link = 'https://words-that-heal.printify.me';
             if (p.sales_channel_properties && p.sales_channel_properties.length > 0) {
               p.sales_channel_properties.forEach(function (sc) {
                 if (sc.url) link = sc.url;

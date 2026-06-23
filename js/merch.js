@@ -12,7 +12,7 @@ window.LevyMerch = (function () {
       titleKey: 'merch.book.title',
       descKey: 'merch.book.desc',
       price: '$24.99',
-      link: 'https://wordsthatheal-llc.printify.me',
+      link: 'https://words-that-heal.printify.me',
       comingSoon: false
     },
     {
@@ -21,7 +21,7 @@ window.LevyMerch = (function () {
       titleKey: 'merch.tshirt.title',
       descKey: 'merch.tshirt.desc',
       price: '$34.99',
-      link: 'https://wordsthatheal-llc.printify.me',
+      link: 'https://words-that-heal.printify.me',
       comingSoon: false
     },
     {
@@ -30,7 +30,7 @@ window.LevyMerch = (function () {
       titleKey: 'merch.mug.title',
       descKey: 'merch.mug.desc',
       price: '$18.99',
-      link: 'https://wordsthatheal-llc.printify.me',
+      link: 'https://words-that-heal.printify.me',
       comingSoon: false
     },
     {
@@ -39,7 +39,7 @@ window.LevyMerch = (function () {
       titleKey: 'merch.artprint.title',
       descKey: 'merch.artprint.desc',
       price: '$29.99',
-      link: 'https://wordsthatheal-llc.printify.me',
+      link: 'https://words-that-heal.printify.me',
       comingSoon: false
     },
     {
@@ -48,7 +48,7 @@ window.LevyMerch = (function () {
       titleKey: 'merch.nubiandragon.title',
       descKey: 'merch.nubiandragon.desc',
       price: '$34.99',
-      link: 'https://wordsthatheal-llc.printify.me',
+      link: 'https://words-that-heal.printify.me',
       comingSoon: false
     }
   ];
