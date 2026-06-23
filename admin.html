@@ -1145,35 +1145,37 @@ select.form-control { cursor: pointer; }
           <h1>📦 Merch Orders</h1>
           <p>Printify merchandise — orders, products, and revenue</p>
         </div>
-        <div class="summary-row" id="orders-kpis">
-          <div class="summary-card"><div class="label">Total Orders</div><div class="value" id="kpi-orders">0</div><span class="icon-big">📦</span></div>
-          <div class="summary-card"><div class="label">Revenue</div><div class="value" id="kpi-revenue">$0</div><span class="icon-big">💰</span></div>
-          <div class="summary-card"><div class="label">Fulfilled</div><div class="value" id="kpi-fulfilled">0</div><span class="icon-big">✅</span></div>
-          <div class="summary-card"><div class="label">Pending</div><div class="value" id="kpi-pending">0</div><span class="icon-big">⏳</span></div>
+        <div class="summary-grid" id="orders-kpis">
+          <div class="summary-card"><div class="summary-card__label">Total Orders</div><div class="summary-card__value" style="color:#8b5cf6;" id="kpi-orders">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Revenue</div><div class="summary-card__value" style="color:#47d185;" id="kpi-revenue">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Fulfilled</div><div class="summary-card__value" style="color:#3b82f6;" id="kpi-fulfilled">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Pending</div><div class="summary-card__value" style="color:#f59e0b;" id="kpi-pending">—</div></div>
         </div>
         <div class="card">
           <div class="card-header">
+            <h3>Store Products</h3>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-sm btn-secondary" onclick="loadOrders()">↻ Refresh</button>
+              <a href="https://printify.com/app/dashboard" target="_blank" class="btn btn-sm btn-secondary">Open Printify →</a>
+            </div>
+          </div>
+          <div class="gallery-admin-grid" id="products-grid">
+            <div class="empty-state">
+              <div class="icon">📦</div>
+              <h3>Loading Products...</h3>
+              <p>Fetching from Printify API...</p>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem;">
+          <div class="card-header">
             <h3>Recent Orders</h3>
-            <button class="btn btn-sm btn-secondary" onclick="loadOrders()">↻ Refresh</button>
           </div>
           <div id="orders-table">
             <div class="empty-state">
               <div class="icon">📦</div>
-              <h3>No Orders Yet</h3>
-              <p>Orders will appear here once your Printify store is connected and customers start purchasing.</p>
-              <a href="https://printify.com/app/dashboard" target="_blank" class="btn btn-primary btn-sm">Open Printify →</a>
-            </div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <h3>Products</h3>
-          </div>
-          <div class="card-grid" id="products-grid">
-            <div class="empty-state">
-              <div class="icon">🎨</div>
-              <h3>Products Loading...</h3>
-              <p>Connect your Printify API key in Tools to see products.</p>
+              <h3>Loading Orders...</h3>
+              <p>Fetching from Printify API...</p>
             </div>
           </div>
         </div>
@@ -1596,6 +1598,8 @@ select.form-control { cursor: pointer; }
     if (panelName === 'content') loadGallery();
     // Load digital products when Digital Sales tab is shown
     if (panelName === 'digital') loadDigitalProducts();
+    // Load orders when Merch Orders tab is shown
+    if (panelName === 'orders') loadOrders();
   }
 
   // ============================================
@@ -2067,8 +2071,76 @@ select.form-control { cursor: pointer; }
   // MERCH ORDERS (Printify)
   // ============================================
   function loadOrders() {
-    toast('Refreshing orders...', 'info');
-    // Will connect to Netlify function once Printify API key is set
+    fetch('/api/admin-orders?action=all')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) {
+          document.getElementById('products-grid').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><h3>API Error</h3><p>' + esc(data.error) + '</p></div>';
+          return;
+        }
+
+        var kpis = data.kpis || {};
+        document.getElementById('kpi-orders').textContent = kpis.totalOrders || 0;
+        document.getElementById('kpi-revenue').textContent = '$' + (kpis.totalRevenue || '0.00');
+        document.getElementById('kpi-fulfilled').textContent = kpis.fulfilledOrders || 0;
+        document.getElementById('kpi-pending').textContent = kpis.pendingOrders || 0;
+
+        // Render product cards
+        var products = data.products || [];
+        var grid = document.getElementById('products-grid');
+        if (products.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><div class="icon">📦</div><h3>No Products</h3><p>Add products on Printify to see them here.</p></div>';
+        } else {
+          grid.innerHTML = products.map(function(p) {
+            var img = p.images && p.images.length > 0 ? p.images[0] : '';
+            var minPrice = null;
+            (p.variants || []).forEach(function(v) {
+              if (v.is_enabled && v.price) {
+                var vp = v.price / 100;
+                if (minPrice === null || vp < minPrice) minPrice = vp;
+              }
+            });
+            var priceStr = minPrice !== null ? '$' + minPrice.toFixed(2) : 'No price';
+            var status = p.visible ? '<span style="color:#47d185">● Live</span>' : '<span style="color:#f59e0b">● Draft</span>';
+            return '<div class="gallery-admin-card">' +
+              (img ? '<img src="' + esc(img) + '" alt="' + esc(p.title) + '">' : '<div style="height:160px;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:2rem;">📦</div>') +
+              '<div class="gallery-card-body">' +
+              '<h4>' + esc(p.title) + '</h4>' +
+              '<div class="meta">' + priceStr + ' · ' + status + '</div>' +
+              '</div></div>';
+          }).join('');
+        }
+
+        // Render orders table
+        var orders = data.orders || [];
+        var ordersContainer = document.getElementById('orders-table');
+        if (orders.length === 0) {
+          ordersContainer.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><h3>No Orders Yet</h3><p>Orders will appear when customers start purchasing.</p></div>';
+        } else {
+          var html = '<table class="data-table"><thead><tr><th>Order</th><th>Items</th><th>Customer</th><th style="text-align:right">Total</th><th>Status</th><th>Date</th></tr></thead><tbody>';
+          orders.forEach(function(o) {
+            var items = (o.line_items || []).map(function(li) { return li.title; }).join(', ') || '—';
+            var customer = o.address_to ? (o.address_to.first_name + ' ' + o.address_to.last_name) : '—';
+            var total = o.total_price ? '$' + (o.total_price / 100).toFixed(2) : '$0';
+            var status = o.status || 'unknown';
+            var statusColor = status === 'fulfilled' || status === 'shipped' || status === 'delivered' ? '#47d185' : status === 'canceled' ? '#ef4444' : '#f59e0b';
+            var date = o.created_at ? new Date(o.created_at).toLocaleDateString() : '—';
+            html += '<tr>' +
+              '<td style="font-weight:600;">#' + esc(String(o.id).slice(-6)) + '</td>' +
+              '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + esc(items) + '</td>' +
+              '<td>' + esc(customer) + '</td>' +
+              '<td style="text-align:right;color:#47d185;font-weight:600;">' + total + '</td>' +
+              '<td><span style="color:' + statusColor + ';font-weight:600;text-transform:capitalize;">' + esc(status) + '</span></td>' +
+              '<td style="color:var(--text-muted);">' + date + '</td></tr>';
+          });
+          html += '</tbody></table>';
+          ordersContainer.innerHTML = html;
+        }
+      })
+      .catch(function(err) {
+        console.error('Orders load error:', err);
+        document.getElementById('products-grid').innerHTML = '<div class="empty-state"><div class="icon">❌</div><h3>Error Loading</h3><p>' + esc(err.message) + '</p></div>';
+      });
   }
 
   // ============================================
