@@ -41,18 +41,14 @@
             if (desc.length > 120) desc = desc.substring(0, 117) + '...';
             if (!desc) desc = p.title || '';
 
-            // All products are "Coming Soon" until Cadasia connects a sales channel
-            // Once she publishes to a storefront, the link will auto-populate
-            var link = '';
-            var isLive = false;
-
-            // Check for external storefront URL
+            // Build purchase link — use external URL if available, fallback to Printify store
+            var link = 'https://wordsthatheal-llc.printify.me';
             if (p.sales_channel_properties && p.sales_channel_properties.length > 0) {
               p.sales_channel_properties.forEach(function (sc) {
-                if (sc.url) { link = sc.url; isLive = true; }
+                if (sc.url) link = sc.url;
               });
             }
-            if (p.url) { link = p.url; isLive = true; }
+            if (p.url) link = p.url;
 
             html += '<div class="merch-card reveal revealed" id="merch-live-' + p.id + '">';
             html += '  <div class="merch-card-image-wrapper">';
@@ -63,11 +59,7 @@
             html += '    <p class="merch-card-desc">' + desc + '</p>';
             html += '    <div class="merch-card-footer">';
             html += '      <span class="merch-card-price">' + priceStr + '</span>';
-            if (isLive) {
-              html += '    <a href="' + link + '" class="merch-card-btn" target="_blank" rel="noopener">Shop →</a>';
-            } else {
-              html += '    <span class="merch-card-btn">' + t('merch.comingSoon') + '</span>';
-            }
+            html += '    <a href="' + link + '" class="merch-card-btn" target="_blank" rel="noopener">Shop →</a>';
             html += '    </div>';
             html += '  </div>';
             html += '</div>';

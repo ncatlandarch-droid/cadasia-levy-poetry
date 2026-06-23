@@ -12,8 +12,8 @@ window.LevyMerch = (function () {
       titleKey: 'merch.book.title',
       descKey: 'merch.book.desc',
       price: '$24.99',
-      link: '#',
-      comingSoon: true
+      link: 'https://wordsthatheal-llc.printify.me',
+      comingSoon: false
     },
     {
       id: 'tshirt',
@@ -21,8 +21,8 @@ window.LevyMerch = (function () {
       titleKey: 'merch.tshirt.title',
       descKey: 'merch.tshirt.desc',
       price: '$34.99',
-      link: '#',
-      comingSoon: true
+      link: 'https://wordsthatheal-llc.printify.me',
+      comingSoon: false
     },
     {
       id: 'mug',
@@ -30,8 +30,8 @@ window.LevyMerch = (function () {
       titleKey: 'merch.mug.title',
       descKey: 'merch.mug.desc',
       price: '$18.99',
-      link: '#',
-      comingSoon: true
+      link: 'https://wordsthatheal-llc.printify.me',
+      comingSoon: false
     },
     {
       id: 'artprint',
@@ -39,8 +39,8 @@ window.LevyMerch = (function () {
       titleKey: 'merch.artprint.title',
       descKey: 'merch.artprint.desc',
       price: '$29.99',
-      link: '#',
-      comingSoon: true
+      link: 'https://wordsthatheal-llc.printify.me',
+      comingSoon: false
     },
     {
       id: 'nubian-dragon',
@@ -48,8 +48,8 @@ window.LevyMerch = (function () {
       titleKey: 'merch.nubiandragon.title',
       descKey: 'merch.nubiandragon.desc',
       price: '$34.99',
-      link: '#',
-      comingSoon: true
+      link: 'https://wordsthatheal-llc.printify.me',
+      comingSoon: false
     }
   ];
 
