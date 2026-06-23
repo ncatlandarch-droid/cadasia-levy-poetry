@@ -1185,22 +1185,38 @@ select.form-control { cursor: pointer; }
           <h1>🛒 Digital Sales</h1>
           <p>Gumroad digital products — ebooks, audio, art downloads</p>
         </div>
-        <div class="summary-row">
-          <div class="summary-card"><div class="label">Total Sales</div><div class="value" id="kpi-digital-sales">0</div><span class="icon-big">🛒</span></div>
-          <div class="summary-card"><div class="label">Revenue</div><div class="value" id="kpi-digital-revenue">$0</div><span class="icon-big">💵</span></div>
-          <div class="summary-card"><div class="label">Products Listed</div><div class="value" id="kpi-digital-products">0</div><span class="icon-big">📚</span></div>
-          <div class="summary-card"><div class="label">Avg Order</div><div class="value" id="kpi-digital-avg">$0</div><span class="icon-big">📊</span></div>
+        <div class="summary-grid" id="digital-kpis">
+          <div class="summary-card"><div class="summary-card__label">Total Sales</div><div class="summary-card__value" style="color:#8b5cf6;" id="kpi-digital-sales">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Revenue</div><div class="summary-card__value" style="color:#47d185;" id="kpi-digital-revenue">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Products Listed</div><div class="summary-card__value" style="color:#3b82f6;" id="kpi-digital-products">—</div></div>
+          <div class="summary-card"><div class="summary-card__label">Avg Order</div><div class="summary-card__value" style="color:#D4AF37;" id="kpi-digital-avg">—</div></div>
         </div>
         <div class="card">
           <div class="card-header">
             <h3>Digital Products</h3>
-            <a href="https://gumroad.com/dashboard" target="_blank" class="btn btn-sm btn-primary">Open Gumroad →</a>
+            <div style="display:flex;gap:8px;">
+              <button class="btn btn-sm btn-primary" onclick="showModal('add-digital')">+ Add Product</button>
+              <button class="btn btn-sm btn-secondary" onclick="loadDigitalProducts()">↻ Refresh</button>
+              <a href="https://gumroad.com/dashboard" target="_blank" class="btn btn-sm btn-secondary">Open Gumroad →</a>
+            </div>
           </div>
-          <div id="digital-products">
+          <div class="gallery-admin-grid" id="digital-products-grid">
             <div class="empty-state">
               <div class="icon">📚</div>
-              <h3>Ready to Add Products</h3>
-              <p>Your Gumroad account is set up. Add your first digital product — poetry eBook, audio collection, or digital art downloads.</p>
+              <h3>Loading Products...</h3>
+              <p>Fetching from Gumroad API...</p>
+            </div>
+          </div>
+        </div>
+        <div class="card" style="margin-top:1rem;">
+          <div class="card-header">
+            <h3>Recent Sales</h3>
+          </div>
+          <div id="digital-sales-table">
+            <div class="empty-state">
+              <div class="icon">🛒</div>
+              <h3>Sales Loading...</h3>
+              <p>Sales data will appear once products are listed.</p>
             </div>
           </div>
         </div>
@@ -1578,6 +1594,8 @@ select.form-control { cursor: pointer; }
 
     // Load gallery when Content tab is shown
     if (panelName === 'content') loadGallery();
+    // Load digital products when Digital Sales tab is shown
+    if (panelName === 'digital') loadDigitalProducts();
   }
 
   // ============================================
@@ -2054,6 +2072,129 @@ select.form-control { cursor: pointer; }
   }
 
   // ============================================
+  // DIGITAL SALES (Gumroad)
+  // ============================================
+  function loadDigitalProducts() {
+    // Fetch products
+    fetch('/api/gumroad-products?action=list')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.error) {
+          document.getElementById('digital-products-grid').innerHTML = '<div class="empty-state"><div class="icon">⚠️</div><h3>API Not Connected</h3><p>' + esc(data.error) + '</p></div>';
+          return;
+        }
+
+        var products = data.products || [];
+        document.getElementById('kpi-digital-products').textContent = products.length;
+
+        // Calculate revenue from products
+        var totalRevenue = 0;
+        var totalSales = 0;
+        products.forEach(function(p) {
+          totalSales += p.sales_count || 0;
+          totalRevenue += p.sales_usd_cents ? p.sales_usd_cents / 100 : 0;
+        });
+
+        document.getElementById('kpi-digital-sales').textContent = totalSales;
+        document.getElementById('kpi-digital-revenue').textContent = '$' + totalRevenue.toFixed(2);
+        document.getElementById('kpi-digital-avg').textContent = totalSales > 0 ? '$' + (totalRevenue / totalSales).toFixed(2) : '$0';
+
+        // Render product cards
+        var grid = document.getElementById('digital-products-grid');
+        if (products.length === 0) {
+          grid.innerHTML = '<div class="empty-state"><div class="icon">📚</div><h3>No Products Yet</h3><p>Click \"+ Add Product\" to create your first digital product.</p></div>';
+          return;
+        }
+
+        grid.innerHTML = products.map(function(p) {
+          var price = p.price ? '$' + (p.price / 100).toFixed(2) : 'Free';
+          var thumb = p.thumbnail_url || p.preview_url || '';
+          var status = p.published ? '<span style="color:#47d185">● Live</span>' : '<span style="color:#f59e0b">● Draft</span>';
+          return '<div class="gallery-admin-card">' +
+            (thumb ? '<img src="' + esc(thumb) + '" alt="' + esc(p.name) + '">' : '<div style="height:160px;background:var(--bg-primary);display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:2rem;">📄</div>') +
+            '<div class="gallery-card-body">' +
+            '<h4>' + esc(p.name) + '</h4>' +
+            '<div class="meta">' + price + ' · ' + (p.sales_count || 0) + ' sales · ' + status + '</div>' +
+            '</div>' +
+            '<div class="gallery-card-actions">' +
+            '<a href="' + esc(p.short_url || p.url || '#') + '" target="_blank" class="btn btn-sm btn-secondary">View →</a>' +
+            '<button class="btn btn-sm btn-danger" onclick="deleteDigitalProduct(\'' + esc(p.id) + '\',\'' + esc(p.name).replace(/'/g, "\\'") + '\')" title="Delete">🗑</button>' +
+            '</div></div>';
+        }).join('');
+      })
+      .catch(function(err) {
+        document.getElementById('digital-products-grid').innerHTML = '<div class="empty-state"><div class="icon">❌</div><h3>Error</h3><p>' + esc(err.message) + '</p></div>';
+      });
+
+    // Fetch sales
+    fetch('/api/gumroad-products?action=sales')
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        var sales = data.sales || [];
+        var container = document.getElementById('digital-sales-table');
+        if (sales.length === 0) {
+          container.innerHTML = '<div class="empty-state"><div class="icon">🛒</div><h3>No Sales Yet</h3><p>Sales will appear here once customers purchase your products.</p></div>';
+          return;
+        }
+        var html = '<table class="data-table"><thead><tr><th>Product</th><th>Customer</th><th style="text-align:right">Amount</th><th>Date</th></tr></thead><tbody>';
+        sales.slice(0, 20).forEach(function(s) {
+          var amount = s.price ? '$' + (s.price / 100).toFixed(2) : '$0';
+          var date = s.created_at ? new Date(s.created_at).toLocaleDateString() : '—';
+          html += '<tr><td>' + esc(s.product_name || '—') + '</td>' +
+            '<td>' + esc(s.email || '—') + '</td>' +
+            '<td style="text-align:right;color:#47d185;font-weight:600;">' + amount + '</td>' +
+            '<td style="color:var(--text-muted);">' + date + '</td></tr>';
+        });
+        html += '</tbody></table>';
+        container.innerHTML = html;
+      })
+      .catch(function() {});
+  }
+
+  function createDigitalProduct() {
+    var name = document.getElementById('m-digital-name').value.trim();
+    var price = parseFloat(document.getElementById('m-digital-price').value) || 0;
+    var desc = document.getElementById('m-digital-desc').value.trim();
+    var url = document.getElementById('m-digital-url').value.trim();
+
+    if (!name) return toast('Product name is required', 'error');
+
+    toast('Creating product on Gumroad...', 'info');
+
+    fetch('/api/gumroad-products?action=create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: name, price: price, description: desc, url: url })
+    })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          closeModal();
+          toast('Product created on Gumroad!', 'success');
+          loadDigitalProducts();
+        } else {
+          toast('Error: ' + (data.message || 'Failed to create'), 'error');
+        }
+      })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  function deleteDigitalProduct(id, name) {
+    if (!confirm('Delete "' + name + '" from Gumroad?')) return;
+    fetch('/api/gumroad-products?action=delete&id=' + id, { method: 'DELETE' })
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data.success) {
+          toast('Product deleted', 'success');
+          loadDigitalProducts();
+        } else {
+          toast('Error: ' + (data.message || 'Failed'), 'error');
+        }
+      })
+      .catch(function(err) { toast('Error: ' + err.message, 'error'); });
+  }
+
+  // ============================================
   // MODAL SYSTEM
   // ============================================
   function showModal(type) {
@@ -2096,6 +2237,16 @@ select.form-control { cursor: pointer; }
         '<div class="form-group"><label>Poem Name</label><input class="form-control" id="m-gallery-poem" placeholder="e.g., Breathe"></div>' +
         '<div class="form-group"><label>Description</label><textarea class="form-control" id="m-gallery-desc" placeholder="Brief description of the artwork"></textarea></div>' +
         '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="saveGalleryItem()">Save</button></div></div>';
+    }
+
+    if (type === 'add-digital') {
+      html = '<div class="modal"><h2>📚 Add Digital Product</h2>' +
+        '<div class="form-group"><label>Product Name</label><input class="form-control" id="m-digital-name" placeholder="e.g., Words That Heal Poetry Collection"></div>' +
+        '<div class="form-group"><label>Price ($)</label><input class="form-control" id="m-digital-price" type="number" step="0.01" placeholder="9.99"></div>' +
+        '<div class="form-group"><label>Custom URL slug</label><input class="form-control" id="m-digital-url" placeholder="e.g., words-that-heal-ebook"></div>' +
+        '<div class="form-group"><label>Description</label><textarea class="form-control" id="m-digital-desc" rows="4" placeholder="Describe your digital product..."></textarea></div>' +
+        '<p style="font-size:12px;color:var(--text-muted);margin-bottom:12px;">💡 After creating, upload the file on Gumroad directly.</p>' +
+        '<div class="modal-actions"><button class="btn btn-secondary" onclick="closeModal()">Cancel</button><button class="btn btn-primary" onclick="createDigitalProduct()">Create on Gumroad</button></div></div>';
     }
 
     root.innerHTML = html;
@@ -2277,6 +2428,9 @@ select.form-control { cursor: pointer; }
   window.saveGalleryItem = saveGalleryItem;
   window.deleteGalleryItem = deleteGalleryItem;
   window.loadGallery = loadGallery;
+  window.loadDigitalProducts = loadDigitalProducts;
+  window.createDigitalProduct = createDigitalProduct;
+  window.deleteDigitalProduct = deleteDigitalProduct;
 
 })();
 </script>
